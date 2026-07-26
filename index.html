@@ -405,6 +405,15 @@ body{margin:0;}
 .fb .exp{color:var(--ink-2); margin-top:4px;}
 @keyframes rise{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:none;}}
 
+.toast{
+  position:fixed; left:50%; bottom:26px; transform:translateX(-50%);
+  max-width:min(460px, calc(100vw - 32px));
+  background:var(--ink); color:var(--bg); border-radius:var(--r-m);
+  padding:12px 16px; font-size:13.5px; line-height:1.45; text-align:center;
+  box-shadow:var(--shadow-lift); z-index:30; pointer-events:none;
+  animation:rise .25s cubic-bezier(.2,.8,.2,1);
+}
+
 .xpfly{
   position:fixed; left:50%; bottom:22%; transform:translateX(-50%);
   font-family:var(--display); font-size:22px; letter-spacing:.06em; color:var(--accent);
@@ -1576,6 +1585,7 @@ BANK.maths = { label:"Maths", short:"MA", themes:[
 "use strict";
 
 const KEY   = "onze-v1";
+const ELEVE = "";                      // signe le bilan ; vidé dans le build public
 const BOXES = [0, 1, 3, 7, 14, 30];        // jours d'attente par boîte (1..5)
 const BOX_LABEL = ["neuf","chaque j.","3 jours","1 sem.","2 sem.","acquis"];
 const ORDER = ["francais","allemand","anglais","maths"];
@@ -1952,6 +1962,7 @@ function homeHTML(){
     </div>
 
     <div class="foot">
+      <button class="link" id="bil">Envoyer mon bilan</button>
       <button class="link" id="rst">Tout remettre à zéro</button>
     </div>
   </div>`;
@@ -2032,6 +2043,8 @@ function bindHome(){
   });
   const th = root.querySelector("#th");
   if (th) th.addEventListener("click", () => { setTheme(currentTheme() === "dark" ? "light" : "dark"); render(); });
+  const bil = root.querySelector("#bil");
+  if (bil) bil.addEventListener("click", envoyerBilan);
   const rst = root.querySelector("#rst");
   if (rst) rst.addEventListener("click", () => {
     if (confirm("Effacer la série, les XP et toutes les boîtes de révision ? On repart de zéro.")){
@@ -2039,6 +2052,106 @@ function bindHome(){
       save(); render();
     }
   });
+}
+
+/* ---------- le bilan : faire sortir la progression de l'appareil ----------
+   La progression vit dans localStorage, donc dans CE navigateur et nulle part
+   ailleurs. Le bilan est le seul pont : un fichier que l'élève envoie quand il
+   le décide. Rien ne part tout seul, aucun appel réseau — c'est la feuille de
+   partage du téléphone qui fait le travail. */
+function toast(msg){
+  const el = document.createElement("div");
+  el.className = "toast"; el.textContent = msg;
+  el.setAttribute("role", "status");
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 4200);
+}
+
+function bilan(){
+  const t0 = today();
+
+  const boites = {};
+  [1,2,3,4,5].forEach(b => { boites[BOX_LABEL[b]] = THEMES.filter(t => S.themes[t.id].box === b).length; });
+
+  const matieres = {};
+  ORDER.forEach(sk => {
+    matieres[SUB[sk].label] = {
+      maitrise: subjectMastery(sk),
+      notions_vues: BANK[sk].themes.filter(t => S.themes[t.id].box >= 1).length,
+      notions_total: BANK[sk].themes.length
+    };
+  });
+
+  const fragiles = seenThemes()
+    .map(t => ({ t, m: mastery(t) })).filter(x => x.m !== null)
+    .sort((a,b) => a.m - b.m).slice(0,5)
+    .map(x => ({
+      matiere: SUB[x.t.subject].label, notion: x.t.t, niveau: x.t.tier,
+      boite: S.themes[x.t.id].box, maitrise: x.m,
+      reussite: S.themes[x.t.id].right + "/" + S.themes[x.t.id].seen
+    }));
+
+  const activite = Object.keys(S.days).sort().slice(-21).map(d => ({
+    jour: d, blocs: (S.days[d].blocks || []).length,
+    justes: S.days[d].right, questions: S.days[d].total, xp: S.days[d].xp
+  }));
+
+  return {
+    app: "onze", format: 1, eleve: ELEVE, genere: t0,
+    depuis: S.start,
+    jours_avant_rentree: Math.max(0, diffDays(t0, SCHOOL_START)),
+    serie: { actuelle: S.streak, record: S.best },
+    xp: S.xp,
+    notions: { total: THEMES.length, vues: seenThemes().length,
+               acquises: THEMES.filter(t => S.themes[t.id].box === 5).length },
+    boites: boites,
+    matieres: matieres,
+    fragiles: fragiles,
+    activite: activite,
+    trophees: S.badges,
+    // sauvegarde intégrale : sans elle, vider le navigateur efface tout sans retour
+    etat: S
+  };
+}
+
+function envoyerBilan(){
+  let data, txt;
+  try{
+    data = bilan();
+    txt = JSON.stringify(data, null, 2);
+  }catch(e){
+    toast("Le bilan n'a pas pu être préparé. Montre l'app à un adulte.");
+    return;
+  }
+
+  const nom = "ONZE_bilan_" + (ELEVE || "eleve") + "_" + data.genere + ".json";
+  const blob = new Blob([txt], { type:"application/json" });
+
+  // 1) feuille de partage native : kDrive y apparaît comme destination
+  try{
+    const fichier = new File([blob], nom, { type:"application/json" });
+    if (navigator.canShare && navigator.canShare({ files:[fichier] })){
+      navigator.share({ files:[fichier], title:"Bilan ONZE" })
+        .then(() => toast("Bilan envoyé. Bravo — tu peux retourner réviser."))
+        .catch(err => { if (!err || err.name !== "AbortError") telecharger(blob, nom); });
+      return;
+    }
+  }catch(e){ /* File ou canShare indisponible : on télécharge */ }
+
+  telecharger(blob, nom);
+}
+
+function telecharger(blob, nom){
+  try{
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = nom;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 4000);
+    toast("Bilan enregistré : « " + nom + " ». Dépose-le dans kDrive.");
+  }catch(e){
+    toast("Impossible d'enregistrer le bilan sur cet appareil.");
+  }
 }
 
 /* ---------- session ---------- */
