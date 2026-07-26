@@ -1,0 +1,2330 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="ONZE">
+<meta name="theme-color" content="#EFF2F6" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0F151B" media="(prefers-color-scheme: dark)">
+<meta name="description" content="ONZE — entraînement quotidien de Ruben : français, allemand, anglais, maths.">
+<title>ONZE — cap sur la 11e</title>
+
+<style>
+/* ============================================================
+   ONZE — tableau d'entraînement scolaire (Ruben, 10VG → 11VG)
+   Tokens d'abord : thème clair par défaut, sombre redéfini
+   ============================================================ */
+:root{
+  color-scheme: light dark;
+
+  --bg:#EFF2F6;
+  --panel:#FFFFFF;
+  --panel-2:#E7ECF2;
+  --line:#D5DDE6;
+  --line-soft:#E4EAF1;
+  --ink:#141D26;
+  --ink-2:#495A6B;
+  --ink-3:#7A8B9C;
+
+  --accent:#D65B15;
+  --accent-2:#B44A0F;
+  --accent-ink:#FFFFFF;
+  --accent-soft:#FAE5D7;
+
+  --ok:#1B7F58;
+  --ok-soft:#DBF0E5;
+  --ko:#B8352A;
+  --ko-soft:#F8E3E0;
+
+  --fr:#AE3B66;   --fr-soft:#F7E2EB;
+  --de:#96690F;   --de-soft:#F6E9CE;
+  --en:#2A6389;   --en-soft:#DFEAF3;
+  --ma:#1A7D61;   --ma-soft:#D9EFE7;
+  --mix:#5F49AB;  --mix-soft:#E6E1F6;
+
+  --shadow: 0 1px 2px rgba(20,29,38,.06), 0 8px 24px rgba(20,29,38,.06);
+  --shadow-lift: 0 2px 4px rgba(20,29,38,.08), 0 14px 34px rgba(20,29,38,.12);
+
+  --r-s:8px; --r-m:12px; --r-l:18px; --r-xl:26px;
+
+  --display:"Avenir Next Condensed","Roboto Condensed","Arial Narrow","Helvetica Neue",Helvetica,sans-serif;
+  --body:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;
+}
+
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg:#0F151B;
+    --panel:#18212A;
+    --panel-2:#212C36;
+    --line:#2A3742;
+    --line-soft:#222D37;
+    --ink:#E7EEF4;
+    --ink-2:#A8B8C6;
+    --ink-3:#7A8B9A;
+
+    --accent:#FF8A3D;
+    --accent-2:#FFA469;
+    --accent-ink:#20140B;
+    --accent-soft:#3A2415;
+
+    --ok:#4FC98F;
+    --ok-soft:#173327;
+    --ko:#F0705F;
+    --ko-soft:#3A1F1C;
+
+    --fr:#EE7EA3;  --fr-soft:#3A1F2B;
+    --de:#E0B14C;  --de-soft:#33280F;
+    --en:#6FB1DC;  --en-soft:#152A38;
+    --ma:#4FCBA4;  --ma-soft:#123026;
+    --mix:#A796EC; --mix-soft:#252047;
+
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 10px 26px rgba(0,0,0,.34);
+    --shadow-lift: 0 2px 6px rgba(0,0,0,.45), 0 18px 40px rgba(0,0,0,.45);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0F151B; --panel:#18212A; --panel-2:#212C36; --line:#2A3742; --line-soft:#222D37;
+  --ink:#E7EEF4; --ink-2:#A8B8C6; --ink-3:#7A8B9A;
+  --accent:#FF8A3D; --accent-2:#FFA469; --accent-ink:#20140B; --accent-soft:#3A2415;
+  --ok:#4FC98F; --ok-soft:#173327; --ko:#F0705F; --ko-soft:#3A1F1C;
+  --fr:#EE7EA3; --fr-soft:#3A1F2B; --de:#E0B14C; --de-soft:#33280F;
+  --en:#6FB1DC; --en-soft:#152A38; --ma:#4FCBA4; --ma-soft:#123026;
+  --mix:#A796EC; --mix-soft:#252047;
+  --shadow: 0 1px 2px rgba(0,0,0,.4), 0 10px 26px rgba(0,0,0,.34);
+  --shadow-lift: 0 2px 6px rgba(0,0,0,.45), 0 18px 40px rgba(0,0,0,.45);
+}
+:root[data-theme="light"]{
+  --bg:#EFF2F6; --panel:#FFFFFF; --panel-2:#E7ECF2; --line:#D5DDE6; --line-soft:#E4EAF1;
+  --ink:#141D26; --ink-2:#495A6B; --ink-3:#7A8B9C;
+  --accent:#D65B15; --accent-2:#B44A0F; --accent-ink:#FFFFFF; --accent-soft:#FAE5D7;
+  --ok:#1B7F58; --ok-soft:#DBF0E5; --ko:#B8352A; --ko-soft:#F8E3E0;
+  --fr:#AE3B66; --fr-soft:#F7E2EB; --de:#96690F; --de-soft:#F6E9CE;
+  --en:#2A6389; --en-soft:#DFEAF3; --ma:#1A7D61; --ma-soft:#D9EFE7;
+  --mix:#5F49AB; --mix-soft:#E6E1F6;
+  --shadow: 0 1px 2px rgba(20,29,38,.06), 0 8px 24px rgba(20,29,38,.06);
+  --shadow-lift: 0 2px 4px rgba(20,29,38,.08), 0 14px 34px rgba(20,29,38,.12);
+}
+
+*{box-sizing:border-box;}
+body{margin:0;}
+#onze{
+  background:var(--bg); color:var(--ink); font-family:var(--body);
+  min-height:100vh; -webkit-text-size-adjust:100%;
+}
+.wrap{max-width:560px; margin:0 auto; padding:0 16px 56px;}
+
+/* ---------- Bandeau-score ---------- */
+.board{
+  background:var(--panel); border-bottom:1px solid var(--line);
+  padding:18px 0 0;
+}
+.board-in{max-width:560px; margin:0 auto; padding:0 16px 16px;}
+.brand{display:flex; align-items:baseline; justify-content:space-between; gap:12px;}
+.brand h1{
+  font-family:var(--display); font-size:30px; letter-spacing:.10em; text-transform:uppercase;
+  margin:0; font-weight:700; line-height:1;
+}
+.brand h1 span{color:var(--accent);}
+.brand .tag{
+  font-family:var(--display); text-transform:uppercase; letter-spacing:.12em;
+  font-size:11px; color:var(--ink-3);
+}
+.brand .tag sup{text-transform:lowercase; font-size:.7em;}
+.theme-btn{
+  background:transparent; border:1px solid var(--line); color:var(--ink-2);
+  border-radius:999px; width:32px; height:32px; font-size:14px; cursor:pointer; line-height:1;
+}
+.theme-btn:hover{border-color:var(--ink-3);}
+
+.scores{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:16px;}
+.score{
+  background:var(--panel-2); border-radius:var(--r-m); padding:10px 12px;
+  display:flex; flex-direction:column; gap:2px;
+}
+.score .k{
+  font-family:var(--display); text-transform:uppercase; letter-spacing:.1em;
+  font-size:10px; color:var(--ink-3);
+}
+.score .v{
+  font-family:var(--mono); font-variant-numeric:tabular-nums;
+  font-size:22px; font-weight:600; line-height:1.1;
+}
+.score.hot .v{color:var(--accent);}
+
+.weekbar{margin-top:14px;}
+.weekbar .lab{
+  display:flex; justify-content:space-between; align-items:baseline;
+  font-family:var(--display); text-transform:uppercase; letter-spacing:.1em;
+  font-size:10px; color:var(--ink-3); margin-bottom:6px;
+}
+.weekbar .lab span{white-space:nowrap;}
+.meter{height:6px; background:var(--panel-2); border-radius:999px; overflow:hidden;}
+.meter i{display:block; height:100%; background:var(--accent); border-radius:999px; transition:width .5s cubic-bezier(.2,.8,.2,1);}
+
+/* ---------- Sections ---------- */
+.sec{margin-top:26px;}
+.sec-h{
+  display:flex; align-items:baseline; justify-content:space-between; gap:10px; margin-bottom:10px;
+}
+.sec-h h2{
+  font-family:var(--display); text-transform:uppercase; letter-spacing:.12em;
+  font-size:12px; color:var(--ink-2); margin:0; font-weight:700;
+}
+.sec-h .note{font-size:11px; color:var(--ink-3); font-family:var(--mono);}
+
+/* ---------- Blocs du jour ---------- */
+.blocks{display:flex; flex-direction:column; gap:10px;}
+.block{
+  width:100%; text-align:left; cursor:pointer;
+  background:var(--panel); border:1px solid var(--line); border-radius:var(--r-l);
+  padding:14px 16px 14px 14px; box-shadow:var(--shadow);
+  display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:14px;
+  color:inherit; font:inherit;
+  transition:transform .16s cubic-bezier(.2,.8,.2,1), box-shadow .16s ease, border-color .16s ease;
+}
+.block:hover:not(:disabled){transform:translateY(-2px); box-shadow:var(--shadow-lift); border-color:var(--ink-3);}
+.block:focus-visible{outline:2px solid var(--accent); outline-offset:3px;}
+.block:disabled{cursor:default; opacity:.72;}
+.block .num{
+  font-family:var(--display); font-size:26px; line-height:1; color:var(--ink-3);
+  font-variant-numeric:tabular-nums; width:26px; text-align:center;
+}
+.block .ttl{display:block; font-family:var(--display); text-transform:uppercase; letter-spacing:.06em; font-size:17px; font-weight:700; line-height:1.15;}
+.block .sub{display:block; font-size:12.5px; color:var(--ink-2); margin-top:4px; line-height:1.4;}
+.block .go{
+  font-family:var(--display); text-transform:uppercase; letter-spacing:.08em; font-size:11px;
+  background:var(--accent); color:var(--accent-ink); border-radius:999px; padding:7px 12px; white-space:nowrap;
+}
+.block.done .go{background:var(--ok-soft); color:var(--ok);}
+.block .mid{min-width:0; overflow:hidden;}
+.block .chips{display:flex; gap:4px; flex-wrap:wrap; margin-top:7px; max-width:100%;}
+
+.chip{
+  font-family:var(--display); text-transform:uppercase; letter-spacing:.07em;
+  font-size:10px; font-weight:700; padding:3px 7px; border-radius:5px; white-space:nowrap;
+  display:inline-block; max-width:100%; overflow:hidden; text-overflow:ellipsis; vertical-align:middle;
+}
+.chip.francais{background:var(--fr-soft); color:var(--fr);}
+.chip.allemand{background:var(--de-soft); color:var(--de);}
+.chip.anglais{background:var(--en-soft); color:var(--en);}
+.chip.maths{background:var(--ma-soft); color:var(--ma);}
+.chip.mix{background:var(--mix-soft); color:var(--mix);}
+
+/* ---------- Maîtrise ---------- */
+.card{
+  background:var(--panel); border:1px solid var(--line); border-radius:var(--r-l);
+  padding:14px 16px; box-shadow:var(--shadow);
+}
+.mrow{display:grid; grid-template-columns:74px 1fr 78px; align-items:center; gap:10px; padding:9px 0;}
+.mrow + .mrow{border-top:1px solid var(--line-soft);}
+.mrow .nm{font-family:var(--display); text-transform:uppercase; letter-spacing:.07em; font-size:13px; font-weight:700;}
+.mrow .bar{height:8px; background:var(--panel-2); border-radius:999px; overflow:hidden;}
+.mrow .bar i{display:block; height:100%; border-radius:999px; transition:width .6s cubic-bezier(.2,.8,.2,1);}
+.mrow .val{font-family:var(--mono); font-variant-numeric:tabular-nums; font-size:12px; color:var(--ink-2); text-align:right;}
+.mrow .val b{color:var(--ink); font-weight:600;}
+
+.boxes{display:grid; grid-template-columns:repeat(5,1fr); gap:6px; margin-top:12px;}
+.boxcell{background:var(--panel-2); border-radius:var(--r-s); padding:8px 4px; text-align:center;}
+.boxcell .n{font-family:var(--mono); font-variant-numeric:tabular-nums; font-size:16px; font-weight:600;}
+.boxcell .l{font-family:var(--display); text-transform:uppercase; letter-spacing:.06em; font-size:9px; color:var(--ink-3); margin-top:2px;}
+.boxcell.b5 .n{color:var(--ok);}
+
+.weak{display:flex; flex-direction:column; gap:8px;}
+.weak-row{display:flex; align-items:center; justify-content:space-between; gap:10px; font-size:13px;}
+.weak-row .t{display:flex; align-items:center; gap:8px; min-width:0;}
+.weak-row .t span.nmm{overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+.weak-row .pc{font-family:var(--mono); font-variant-numeric:tabular-nums; font-size:12px; color:var(--ink-3); white-space:nowrap; flex:0 0 auto;}
+.weak-row .chip{flex:0 0 auto; max-width:none;}
+.empty{font-size:13px; color:var(--ink-3); line-height:1.5;}
+
+/* ---------- Calendrier ---------- */
+.cal-head{display:grid; grid-template-columns:repeat(7,1fr); gap:5px; margin-bottom:6px;}
+.cal-head div{
+  text-align:center; font-family:var(--display); text-transform:uppercase;
+  letter-spacing:.08em; font-size:9.5px; color:var(--ink-3);
+}
+.cal{display:grid; grid-template-columns:repeat(7,1fr); gap:5px;}
+.cd{
+  aspect-ratio:1; border-radius:var(--r-s); background:var(--panel-2);
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px;
+  font-family:var(--mono); font-variant-numeric:tabular-nums; font-size:11px; color:var(--ink-3);
+  position:relative;
+}
+.cd.void{background:transparent;}
+.cd.future{opacity:.5;}
+.cd.today{box-shadow:inset 0 0 0 2px var(--accent); color:var(--ink);}
+.cd.full{background:var(--accent); color:var(--accent-ink);}
+.cd.full .pips i{background:var(--accent-ink); opacity:.9;}
+.cd .pips{display:flex; gap:2.5px; height:4px;}
+.cd .pips i{width:4px; height:4px; border-radius:50%; background:var(--ink-3);}
+.cd .school{position:absolute; inset:0; border-radius:var(--r-s); box-shadow:inset 0 0 0 1.5px var(--ink-3);}
+
+.badges{display:flex; flex-wrap:wrap; gap:7px;}
+.badge{
+  display:flex; align-items:center; gap:6px; font-size:12px;
+  background:var(--panel-2); border-radius:999px; padding:6px 11px; color:var(--ink-2);
+}
+.badge.on{background:var(--accent-soft); color:var(--accent); font-weight:600;}
+.badge.on .em{filter:none;}
+.badge .em{filter:grayscale(1) opacity(.5);}
+
+.foot{margin-top:30px; display:flex; justify-content:center; gap:18px;}
+.link{
+  background:none; border:none; color:var(--ink-3); font-size:11.5px; cursor:pointer;
+  text-decoration:underline; text-underline-offset:3px; font-family:var(--body);
+}
+.link:hover{color:var(--ink-2);}
+
+/* ---------- Session ---------- */
+.s-top{
+  position:sticky; top:0; z-index:5; background:var(--bg);
+  padding:12px 0 10px; border-bottom:1px solid var(--line-soft);
+}
+.s-top-in{display:flex; align-items:center; gap:12px;}
+.quit{
+  background:transparent; border:1px solid var(--line); color:var(--ink-2); cursor:pointer;
+  width:30px; height:30px; border-radius:999px; font-size:15px; line-height:1; flex:0 0 auto;
+}
+.quit:hover{border-color:var(--ko); color:var(--ko);}
+.prog{flex:1; height:6px; background:var(--panel-2); border-radius:999px; overflow:hidden;}
+.prog i{display:block; height:100%; background:var(--accent); transition:width .35s cubic-bezier(.2,.8,.2,1);}
+.combo{
+  font-family:var(--mono); font-variant-numeric:tabular-nums; font-size:12px; color:var(--ink-3);
+  min-width:52px; text-align:right;
+}
+.combo.hot{color:var(--accent); font-weight:600;}
+
+.lesson{margin-top:18px;}
+.lesson .kicker{
+  font-family:var(--display); text-transform:uppercase; letter-spacing:.14em;
+  font-size:10px; color:var(--ink-3); margin-bottom:8px;
+}
+.lesson h3{
+  font-family:var(--display); text-transform:uppercase; letter-spacing:.04em;
+  font-size:24px; margin:0 0 4px; font-weight:700; text-wrap:balance; line-height:1.1;
+}
+.lesson .why{font-size:13px; color:var(--ink-2); margin-bottom:14px;}
+.pts{margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:10px;}
+.pts li{display:grid; grid-template-columns:auto 1fr; gap:10px; font-size:14.5px; line-height:1.5;}
+.pts li .d{
+  width:6px; height:6px; border-radius:50%; background:var(--accent); margin-top:8px;
+}
+.exbox{
+  margin-top:14px; background:var(--panel-2); border-radius:var(--r-m); padding:12px 14px;
+  font-size:13.5px; line-height:1.55; color:var(--ink-2);
+}
+.exbox b{color:var(--ink);}
+.lesson em, .exbox em{color:var(--accent); font-style:normal; font-weight:600;}
+.exbox .lab{
+  display:block; font-family:var(--display); text-transform:uppercase; letter-spacing:.12em;
+  font-size:9.5px; color:var(--ink-3); margin-bottom:5px;
+}
+.cta{
+  width:100%; margin-top:18px; background:var(--accent); color:var(--accent-ink);
+  border:none; border-radius:var(--r-m); padding:15px 18px; cursor:pointer;
+  font-family:var(--display); text-transform:uppercase; letter-spacing:.1em; font-size:15px; font-weight:700;
+  transition:transform .1s ease, background .2s ease;
+}
+.cta:hover{background:var(--accent-2);}
+.cta:active{transform:scale(.985);}
+.cta:disabled{opacity:.38; cursor:default;}
+.cta:disabled:hover{background:var(--accent);}
+.cta.ghost{background:transparent; color:var(--ink-2); border:1px solid var(--line);}
+.cta.ghost:hover{background:var(--panel-2); color:var(--ink);}
+.cta-row{display:flex; gap:10px; margin-top:14px;}
+.cta-row .cta{margin-top:0;}
+
+.q{margin-top:18px;}
+.q .meta{display:flex; align-items:center; gap:8px; margin-bottom:12px; flex-wrap:wrap;}
+.q .meta .th{font-size:11.5px; color:var(--ink-3); font-family:var(--mono);}
+.q .txt{
+  font-size:20px; line-height:1.45; font-weight:500; text-wrap:pretty; margin-bottom:18px;
+}
+.q .txt em{color:var(--accent); font-style:normal; font-weight:600;}
+.q .hint{font-size:12.5px; color:var(--ink-3); margin:-10px 0 16px;}
+
+.opts{display:flex; flex-direction:column; gap:8px;}
+.opt{
+  text-align:left; background:var(--panel); border:1px solid var(--line); color:var(--ink);
+  border-radius:var(--r-m); padding:13px 15px; font-size:15.5px; cursor:pointer; font-family:var(--body);
+  display:flex; align-items:center; gap:10px;
+  transition:border-color .15s ease, background .15s ease, transform .1s ease;
+}
+.opt:hover:not(:disabled){border-color:var(--ink-3); background:var(--panel-2);}
+.opt:active:not(:disabled){transform:scale(.99);}
+.opt:focus-visible{outline:2px solid var(--accent); outline-offset:2px;}
+.opt .key{
+  font-family:var(--mono); font-size:11px; color:var(--ink-3); border:1px solid var(--line);
+  border-radius:5px; width:20px; height:20px; display:flex; align-items:center; justify-content:center; flex:0 0 auto;
+}
+.opt:disabled{cursor:default;}
+.opt.good{background:var(--ok-soft); border-color:var(--ok); color:var(--ok);}
+.opt.good .key{border-color:var(--ok); color:var(--ok);}
+.opt.bad{background:var(--ko-soft); border-color:var(--ko); color:var(--ko);}
+.opt.bad .key{border-color:var(--ko); color:var(--ko);}
+
+.inp{
+  width:100%; padding:14px 15px; font-size:17px; border-radius:var(--r-m);
+  border:1px solid var(--line); background:var(--panel); color:var(--ink); font-family:var(--body);
+}
+.inp:focus{outline:2px solid var(--accent); outline-offset:1px; border-color:var(--accent);}
+.inp.good{border-color:var(--ok); background:var(--ok-soft);}
+.inp.bad{border-color:var(--ko); background:var(--ko-soft);}
+
+.words{display:flex; flex-wrap:wrap; gap:7px; margin-top:4px;}
+.word{
+  background:var(--panel); border:1px solid var(--line); color:var(--ink); cursor:pointer;
+  border-radius:var(--r-s); padding:9px 12px; font-size:15px; font-family:var(--body);
+}
+.word:hover:not(:disabled){border-color:var(--accent); color:var(--accent);}
+.word:disabled{opacity:.3; cursor:default;}
+.slot{
+  min-height:52px; border:1.5px dashed var(--line); border-radius:var(--r-m);
+  padding:8px; display:flex; flex-wrap:wrap; gap:7px; align-items:center; margin-bottom:10px;
+  background:var(--panel-2);
+}
+.slot.good{border-color:var(--ok); border-style:solid; background:var(--ok-soft);}
+.slot.bad{border-color:var(--ko); border-style:solid; background:var(--ko-soft);}
+.slot .ph{font-size:12.5px; color:var(--ink-3); padding:0 4px;}
+
+.fb{
+  margin-top:14px; border-radius:var(--r-m); padding:13px 15px; font-size:14px; line-height:1.5;
+  animation:rise .28s cubic-bezier(.2,.8,.2,1);
+}
+.fb .hd{
+  font-family:var(--display); text-transform:uppercase; letter-spacing:.1em; font-size:11px;
+  display:flex; align-items:center; gap:7px; margin-bottom:5px; font-weight:700;
+}
+.fb.ok{background:var(--ok-soft); color:var(--ok);}
+.fb.ko{background:var(--ko-soft); color:var(--ko);}
+.fb .sol{color:var(--ink); font-weight:600;}
+.fb .exp{color:var(--ink-2); margin-top:4px;}
+@keyframes rise{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:none;}}
+
+.xpfly{
+  position:fixed; left:50%; bottom:22%; transform:translateX(-50%);
+  font-family:var(--display); font-size:22px; letter-spacing:.06em; color:var(--accent);
+  pointer-events:none; animation:fly 1s ease-out forwards; z-index:20; font-weight:700;
+}
+@keyframes fly{0%{opacity:0; transform:translate(-50%,10px) scale(.9);} 25%{opacity:1;} 100%{opacity:0; transform:translate(-50%,-60px) scale(1.05);}}
+
+/* ---------- Bilan ---------- */
+.done-wrap{padding:34px 0 10px; text-align:center;}
+.done-wrap .ring{position:relative; width:132px; height:132px; margin:0 auto 18px;}
+.done-wrap .ring svg{transform:rotate(-90deg);}
+.done-wrap .ring .mid{
+  position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center;
+}
+.done-wrap .ring .pc{font-family:var(--mono); font-size:30px; font-weight:600; font-variant-numeric:tabular-nums;}
+.done-wrap .ring .of{font-family:var(--display); text-transform:uppercase; letter-spacing:.1em; font-size:10px; color:var(--ink-3);}
+.done-wrap h2{font-family:var(--display); text-transform:uppercase; letter-spacing:.06em; font-size:26px; margin:0 0 6px; text-wrap:balance;}
+.done-wrap .line{font-size:14px; color:var(--ink-2); margin-bottom:4px;}
+.gain{display:flex; justify-content:center; gap:10px; margin:16px 0 4px; flex-wrap:wrap;}
+.gain .g{background:var(--panel-2); border-radius:var(--r-m); padding:9px 13px; text-align:left;}
+.gain .g .k{font-family:var(--display); text-transform:uppercase; letter-spacing:.09em; font-size:9.5px; color:var(--ink-3);}
+.gain .g .v{font-family:var(--mono); font-variant-numeric:tabular-nums; font-size:17px; font-weight:600;}
+.moves{margin-top:18px; text-align:left;}
+.move{display:flex; align-items:center; gap:9px; font-size:13px; padding:7px 0; border-bottom:1px solid var(--line-soft);}
+.move:last-child{border-bottom:none;}
+.move .ar{font-family:var(--mono); font-size:12px; color:var(--ink-3);}
+.move .up{color:var(--ok); font-weight:600;}
+.move .dn{color:var(--ko); font-weight:600;}
+
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important;}
+}
+@media (max-width:400px){
+  .brand h1{font-size:26px;}
+  .q .txt{font-size:18.5px;}
+  .scores{gap:7px;}
+  .score{padding:9px 10px;}
+  .score .v{font-size:19px;}
+}
+</style>
+
+<div id="onze"></div>
+
+<script>
+/* Banque de contenu + générateurs. Rempli par les blocs qui suivent. */
+const BANK = {};
+const GENS = {};
+</script>
+<script>
+/* ===================== FRANÇAIS ===================== */
+BANK.francais = { label:"Français", short:"FR", themes:[
+
+{ id:"fr-classes", t:"Classes grammaticales", tier:"revision", gen:"fr-classes",
+  lesson:{ why:"Savoir nommer la nature d'un mot, c'est ce qui permet ensuite d'expliquer un accord.",
+    pts:["Le *nom* désigne (chat, courage) ; le *déterminant* l'accompagne (le, ma, trois, quelques).",
+      "L'*adjectif* qualifie un nom et s'accorde avec lui ; l'*adverbe* modifie un verbe ou un adjectif et ne change jamais.",
+      "Le *pronom* remplace (il, celui-ci, le mien, qui) ; la *préposition* introduit (à, de, pour, pendant).",
+      "La *conjonction* relie : mais, ou, et, donc, or, ni, car (coordination) ; que, quand, parce que (subordination)."],
+    ex:"Dans « Il court *très* vite », « vite » est un adverbe et « très » un adverbe qui modifie « vite » — aucun des deux ne s'accorde." },
+  items:[
+    {f:"qcm", q:"« vite » est…", o:["un adverbe","un adjectif","un nom"], a:"un adverbe", e:"Il modifie le verbe et reste invariable."},
+    {f:"qcm", q:"Dans « le mien », « mien » est…", o:["un pronom possessif","un déterminant","un adjectif qualificatif"], a:"un pronom possessif", e:"Il remplace le nom : « le mien » = mon vélo."},
+    {f:"qcm", q:"« pendant » dans « pendant la nuit » est…", o:["une préposition","une conjonction","un adverbe"], a:"une préposition", e:"Elle introduit un groupe nominal."},
+    {f:"qcm", q:"« mais » est…", o:["une conjonction de coordination","une préposition","un adverbe"], a:"une conjonction de coordination", e:"Mais, ou, et, donc, or, ni, car : les sept coordonnants."},
+    {f:"txt", q:"Classe grammaticale de « courageusement » ?", a:"adverbe", alt:["un adverbe"], e:"Les mots en -ment formés sur un adjectif sont des adverbes."},
+    {f:"qcm", q:"« quelques » dans « quelques amis » est…", o:["un déterminant indéfini","un pronom","un adjectif qualificatif"], a:"un déterminant indéfini", e:"Il précède le nom et en indique la quantité, sans la préciser."},
+    {f:"qcm", q:"Combien de verbes conjugués dans « Il pense qu'il pleuvra demain » ?", o:["2","1","3"], a:"2", e:"pense (principale) et pleuvra (subordonnée) : deux verbes conjugués, donc deux propositions."},
+    {f:"qcm", q:"« celui-ci » est…", o:["un pronom démonstratif","un déterminant démonstratif","un adverbe"], a:"un pronom démonstratif", e:"« ce livre-ci » = déterminant + nom ; « celui-ci » remplace tout le groupe."}
+  ]},
+
+{ id:"fr-conj", t:"Présent, imparfait, passé composé", tier:"revision", gen:"fr-conj",
+  lesson:{ why:"Les trois temps que tu utilises tous les jours — et où se logent la plupart des fautes.",
+    pts:["*Présent* : ce qui se passe maintenant, ou ce qui est toujours vrai.",
+      "*Imparfait* : le décor, l'habitude, l'action en train de se dérouler (« il pleuvait »).",
+      "*Passé composé* : l'action ponctuelle, terminée (« il est entré ») — auxiliaire avoir ou être + participe passé.",
+      "Les verbes de mouvement et d'état (aller, venir, partir, entrer, naître, mourir, rester…) et tous les pronominaux se conjuguent avec *être*."],
+    ex:"« Je *lisais* tranquillement quand le téléphone *a sonné* » : imparfait pour la scène, passé composé pour l'événement." },
+  items:[
+    {f:"gap", q:"Présent : nous (finir) ___ le travail.", a:"finissons", e:"Verbe du 2e groupe : -issons à la 1re personne du pluriel."},
+    {f:"gap", q:"Imparfait : vous (être) ___ en retard.", a:"étiez", e:"Être à l'imparfait : j'étais, tu étais, il était, nous étions, vous étiez, ils étaient."},
+    {f:"gap", q:"Passé composé : elles (venir) ___ hier.", a:"sont venues", e:"Venir se conjugue avec être → accord avec le sujet : elles sont venues."},
+    {f:"qcm", q:"« Je (aller) au cinéma demain » au futur proche :", o:["je vais aller","j'irai","j'allais aller"], a:"je vais aller", e:"Futur proche = aller au présent + infinitif. « J'irai » est le futur simple."},
+    {f:"gap", q:"Présent : tu (prendre) ___ le bus.", a:"prends", e:"Prendre : je prends, tu prends, il prend — pas de -s à la 3e personne."},
+    {f:"gap", q:"Imparfait : nous (faire) ___ nos devoirs.", a:"faisions", e:"On garde le radical fais- : nous faisions (et non « faisons », qui est le présent)."},
+    {f:"qcm", q:"Quels temps dans « Il mangeait quand je suis entré » ?", o:["imparfait puis passé composé","passé composé puis imparfait","imparfait puis plus-que-parfait"], a:"imparfait puis passé composé", e:"L'imparfait décrit l'action en cours, le passé composé celle qui l'interrompt."},
+    {f:"gap", q:"Passé composé : j'(pouvoir) ___ répondre.", a:"ai pu", e:"Participe passé de pouvoir : pu."}
+  ]},
+
+{ id:"fr-homo", t:"Homophones grammaticaux", tier:"revision",
+  lesson:{ why:"a/à, ou/où, ses/ces, sont/son… : la faute la plus fréquente en dictée, et la plus facile à éliminer avec un test de remplacement.",
+    pts:["*a* = verbe avoir (remplace par « avait ») ; *à* = préposition (ne se remplace pas).",
+      "*ou* = ou bien ; *où* = le lieu (« la ville où je vis »).",
+      "*son* = le sien ; *sont* = verbe être (remplace par « étaient »).",
+      "*ses* = les siens ; *ces* = ceux-là ; *c'est* = cela est ; *s'est* = il s'est (verbe pronominal).",
+      "*leur* pronom (= à eux) ne prend jamais de -s ; *leurs* + nom pluriel."],
+    ex:"« Il *a* pris son vélo pour aller *à* l'école » → « il *avait* pris » fonctionne, donc « a » sans accent." },
+  items:[
+    {f:"qcm", acc:1, q:"Il ___ raison et il rentre ___ pied.", hint:"L'accent fait toute la différence.", o:["a / à","à / a","à / à"], a:"a / à", e:"« il avait raison » fonctionne → a sans accent ; « à pied » est une préposition."},
+    {f:"qcm", q:"Marie est partie avec ___ parents.", o:["ses","ces","c'est"], a:"ses", e:"Les siens → possessif « ses ». « ces parents » voudrait dire ceux-là."},
+    {f:"gap", acc:1, q:"___ que tu vas, je te suis.", hint:"Écris l'accent s'il en faut un.", a:"où", e:"Il s'agit du lieu → « où » avec accent."},
+    {f:"qcm", q:"Il ___ trompé. ___ dommage.", o:["s'est / C'est","c'est / S'est","s'est / S'est"], a:"s'est / C'est", e:"« il s'est trompé » (se tromper) ; « c'est dommage » = cela est dommage."},
+    {f:"gap", q:"Elles ___ arrivées en retard.", a:"sont", e:"« elles étaient arrivées » fonctionne → sont, verbe être."},
+    {f:"qcm", q:"Je ne sais pas si tu ___ prêt.", o:["es","est","et"], a:"es", e:"tu es → verbe être, 2e personne. « et » relie deux mots."},
+    {f:"qcm", q:"Quelle phrase est juste ?", o:["Je leur ai donné leurs cahiers.","Je leurs ai donné leur cahiers.","Je leur ai donné leur cahiers."], a:"Je leur ai donné leurs cahiers.", e:"« leur » pronom = à eux, invariable ; « leurs cahiers » = déterminant devant un nom pluriel."},
+    {f:"gap", acc:1, q:"Je ne l'ai pas vu, il n'était pas ___.", hint:"Écris l'accent s'il en faut un.", a:"là", e:"Le lieu → « là » avec accent."}
+  ]},
+
+{ id:"fr-pp", t:"Accord du participe passé", tier:"consolidation",
+  lesson:{ why:"La règle qui départage tout le monde. Trois cas seulement — apprends-les dans cet ordre.",
+    pts:["Avec *être* : le participe s'accorde avec le *sujet* (« elles sont parties »).",
+      "Avec *avoir* : pas d'accord… sauf si le COD est placé *avant* le verbe (« les fleurs que j'ai cueillies »).",
+      "Verbes pronominaux : accord avec le COD s'il précède (« elle s'est blessée »), mais pas si le COD suit (« elle s'est coupé le doigt »).",
+      "Réflexe : cherche le COD, puis regarde s'il est avant ou après le verbe."],
+    ex:"« Les lettres que j'ai *reçues* » → « que » = les lettres, COD placé avant → accord au féminin pluriel." },
+  items:[
+    {f:"qcm", q:"« Les fleurs que j'ai cueillies ce matin. » Pourquoi l'accord ?", o:["Le COD « que » (= les fleurs) est placé avant le verbe","Le sujet est féminin pluriel","Avec « avoir » on accorde toujours"], a:"Le COD « que » (= les fleurs) est placé avant le verbe", e:"C'est la seule raison d'accorder avec l'auxiliaire avoir."},
+    {f:"gap", q:"Elles sont ___ (partir) à l'aube.", a:"parties", e:"Auxiliaire être → accord avec le sujet « elles »."},
+    {f:"gap", q:"Nous avons ___ (manger) toute la tarte.", a:"mangé", e:"Le COD « toute la tarte » est après le verbe → pas d'accord."},
+    {f:"qcm", q:"Quelle phrase est correcte ?", o:["La lettre que j'ai reçue hier.","La lettre que j'ai reçu hier.","La lettre que j'ai reçus hier."], a:"La lettre que j'ai reçue hier.", e:"« que » = la lettre, COD avant le verbe → reçue."},
+    {f:"gap", q:"Ma sœur s'est ___ (couper) le doigt.", a:"coupé", e:"Le COD « le doigt » suit le verbe → pas d'accord, même avec un pronominal."},
+    {f:"txt", q:"Accorde : « Les décisions qu'il a (prendre) sont bonnes. »", a:"prises", e:"« qu' » = les décisions, COD placé avant → prises."},
+    {f:"qcm", q:"« Les enfants ont couru vite. » Faut-il accorder « couru » ?", o:["Non, il n'y a pas de COD","Oui, avec « les enfants »","Oui, avec « vite »"], a:"Non, il n'y a pas de COD", e:"Courir est intransitif ici : rien à accorder."},
+    {f:"gap", q:"Ils se sont ___ (parler) longuement.", a:"parlé", e:"On parle À quelqu'un : « se » est COI → pas d'accord."}
+  ]},
+
+{ id:"fr-fonc", t:"Fonctions dans la phrase", tier:"consolidation",
+  lesson:{ why:"La nature d'un mot ne change pas ; sa fonction change selon la phrase. C'est ce qu'on te demande d'analyser en 11e.",
+    pts:["Le *sujet* fait l'action : pose la question « qui est-ce qui… ? » — il peut être placé après le verbe.",
+      "Le *COD* répond à « qui ? quoi ? » sans préposition ; le *COI* répond à « à qui ? de quoi ? ».",
+      "Le *complément circonstanciel* (temps, lieu, manière, cause) peut être déplacé ou supprimé.",
+      "Après un verbe d'état (être, sembler, devenir, paraître) on a un *attribut du sujet*, pas un COD."],
+    ex:"« Hier, Paul a offert des fleurs à sa mère » → Hier = CC de temps, des fleurs = COD, à sa mère = COI." },
+  items:[
+    {f:"qcm", q:"« Le chien de Paul mord le facteur. » Quel est le COD ?", o:["le facteur","le chien de Paul","de Paul"], a:"le facteur", e:"Il mord qui ? le facteur."},
+    {f:"qcm", q:"« Elle parle à son frère. » « à son frère » est…", o:["COI","COD","complément circonstanciel"], a:"COI", e:"Parler À quelqu'un : complément introduit par une préposition."},
+    {f:"qcm", q:"« Demain, nous partirons tôt. » « Demain » est…", o:["complément circonstanciel de temps","sujet","COD"], a:"complément circonstanciel de temps", e:"Il se déplace et se supprime : c'est un circonstanciel."},
+    {f:"txt", q:"Donne le sujet : « Sous la table dormait un chat. »", a:"un chat", alt:["chat","le chat"], e:"Qui est-ce qui dormait ? un chat — le sujet peut suivre le verbe."},
+    {f:"qcm", q:"« Ce gâteau est délicieux. » « délicieux » est…", o:["attribut du sujet","COD","épithète"], a:"attribut du sujet", e:"Après le verbe d'état « être » → attribut du sujet."},
+    {f:"qcm", q:"Dans « Il lui a offert des fleurs », « lui » est…", o:["COI","COD","sujet"], a:"COI", e:"« lui » = à elle / à lui."},
+    {f:"qcm", q:"Dans « un grand jardin », « grand » est…", o:["épithète","attribut","adverbe"], a:"épithète", e:"Il est collé au nom, sans verbe d'état → épithète."},
+    {f:"txt", q:"Trouve le COD : « Je regarde un film. »", a:"un film", alt:["film"], e:"Je regarde quoi ? un film."}
+  ]},
+
+{ id:"fr-fut", t:"Futur simple et conditionnel", tier:"consolidation",
+  lesson:{ why:"Un -ai ou un -ais : une lettre, deux sens complètement différents.",
+    pts:["*Futur simple* : ce qui va arriver — je ser*ai*, je fer*ai*, j'ir*ai*.",
+      "*Conditionnel présent* : ce qui arriverait sous condition — je ser*ais*, je fer*ais*, j'ir*ais*.",
+      "Après « si + imparfait », on emploie le *conditionnel* : « si j'avais le temps, je viendrais ».",
+      "Après « quand + futur », on emploie le *futur* : « quand tu arriveras, nous serons prêts ».",
+      "Test à la 1re personne : remplace par « nous » — « nous serons » (futur) ou « nous serions » (conditionnel)."],
+    ex:"« Je te dirai si je peux » (futur, promesse) ≠ « Je te dirais si je pouvais » (conditionnel, hypothèse)." },
+  items:[
+    {f:"gap", q:"Futur simple : je (voir) ___ demain.", a:"verrai", e:"Voir au futur : je verrai, tu verras, il verra — deux r."},
+    {f:"gap", q:"Conditionnel : si j'avais le temps, je (venir) ___.", a:"viendrais", e:"Si + imparfait → conditionnel présent."},
+    {f:"qcm", q:"Si tu partais maintenant, tu ___ à l'heure.", o:["serais","seras","serai"], a:"serais", e:"Si + imparfait → conditionnel."},
+    {f:"qcm", q:"Quand tu arriveras, nous ___ prêts.", o:["serons","serions","serions été"], a:"serons", e:"Quand + futur → futur."},
+    {f:"gap", q:"Futur : ils (faire) ___ un gâteau.", a:"feront", e:"Faire au futur garde le radical fer- : je ferai, ils feront."},
+    {f:"gap", q:"Conditionnel : nous (aimer) ___ vous voir.", a:"aimerions", e:"Radical du futur + terminaison de l'imparfait : -rions."},
+    {f:"txt", q:"Mets au futur simple : « tu es » →", a:"tu seras", alt:["seras"], e:"Être au futur : je serai, tu seras, il sera."},
+    {f:"qcm", q:"Où est la faute ? « Je te dirai si je peut. »", o:["« peut » → « peux »","« dirai » → « dirais »","aucune faute"], a:"« peut » → « peux »", e:"Avec « je », pouvoir donne « je peux »."}
+  ]},
+
+{ id:"fr-orth", t:"Orthographe : pluriels et pièges", tier:"consolidation",
+  lesson:{ why:"Des points faciles à gagner en dictée : les pluriels irréguliers et une poignée d'expressions figées.",
+    pts:["-al → -aux (cheval → chevaux), sauf bal, carnaval, festival, chacal, récital.",
+      "-eu → -eux (jeu → jeux), sauf pneu, bleu, landau ; -ou → -ous, sauf bijoux, cailloux, choux, genoux, hiboux, joujoux, poux.",
+      "*vingt* et *cent* prennent un -s quand ils sont multipliés et non suivis d'un autre nombre : quatre-vingt*s*, deux cent*s*, mais quatre-vingt-un.",
+      "*quel que soit* s'écrit en trois mots et « quel » s'accorde : quelle que soit la raison.",
+      "*davantage* (= plus) ≠ *d'avantage* (= de profit)."],
+    ex:"« Quatre-vingts élèves » mais « quatre-vingt-deux élèves » : le -s disparaît dès qu'un nombre suit." },
+  items:[
+    {f:"gap", q:"Pluriel de « un cheval » : des ___", a:"chevaux", e:"-al donne -aux."},
+    {f:"gap", q:"Pluriel de « un journal » : des ___", a:"journaux", e:"Même règle : -al → -aux."},
+    {f:"qcm", q:"Pluriel de « un pneu » :", o:["des pneus","des pneux","des pneaux"], a:"des pneus", e:"Pneu, bleu et landau font exception à -eu → -eux."},
+    {f:"qcm", q:"« Ils se sont ___ rendez-vous. »", o:["donné","donnés","donnée"], a:"donné", e:"Le COD « rendez-vous » suit le verbe → pas d'accord."},
+    {f:"txt", q:"Écris 80 en lettres :", a:"quatre-vingts", alt:["quatre vingts"], e:"Multiplié et non suivi d'un nombre → -s."},
+    {f:"qcm", q:"Quelle forme est correcte ?", o:["quelle que soit la raison","quelque soit la raison","quel que soit la raison"], a:"quelle que soit la raison", e:"Trois mots, et « quel » s'accorde avec « la raison »."},
+    {f:"gap", q:"Je vous envoie mes ___ (meilleur) salutations.", a:"meilleures", e:"L'adjectif s'accorde avec « salutations », féminin pluriel."},
+    {f:"qcm", q:"Il travaille ___ que l'an dernier.", o:["davantage","d'avantage","davantages"], a:"davantage", e:"« davantage » = plus ; « d'avantage » = de bénéfice."}
+  ]},
+
+{ id:"fr-texte", t:"Types de textes et connecteurs", tier:"consolidation",
+  lesson:{ why:"En 11e, une bonne partie des points se joue sur la compréhension et sur l'écriture d'un texte argumentatif.",
+    pts:["*Narratif* : raconte. *Descriptif* : fait voir. *Argumentatif* : défend une thèse. *Explicatif* : fait comprendre. *Injonctif* : dit de faire (recette, mode d'emploi).",
+      "Dans un texte argumentatif : la *thèse* (l'opinion défendue), les *arguments* (les raisons), les *exemples* (les preuves).",
+      "Les connecteurs marquent le raisonnement : *de plus* (ajout), *cependant / en revanche* (opposition), *car / parce que* (cause), *donc / par conséquent* (conséquence), *en effet* (explication).",
+      "Narrateur *interne* : il dit « je » et vit l'histoire. *Externe* : il observe du dehors. *Omniscient* : il sait tout, y compris les pensées."],
+    ex:"« Le vélo est idéal en ville. *En effet*, il ne pollue pas. *Cependant*, il faut des pistes cyclables. » → thèse, argument, concession." },
+  items:[
+    {f:"qcm", q:"Un texte qui défend une opinion avec des arguments est…", o:["argumentatif","narratif","descriptif"], a:"argumentatif", e:"Son but est de convaincre."},
+    {f:"qcm", q:"« Cependant » exprime…", o:["l'opposition","la cause","la conséquence"], a:"l'opposition", e:"Comme « en revanche », « toutefois », « pourtant »."},
+    {f:"qcm", q:"« Par conséquent » exprime…", o:["la conséquence","le but","la concession"], a:"la conséquence", e:"Synonyme de « donc », « c'est pourquoi »."},
+    {f:"qcm", q:"Un narrateur qui dit « je » et vit l'histoire est…", o:["interne","externe","omniscient"], a:"interne", e:"Le point de vue est limité à ce que ce personnage perçoit."},
+    {f:"txt", q:"Comment appelle-t-on l'opinion défendue dans un texte argumentatif ?", a:"la thèse", alt:["thèse","these","la these"], e:"Les arguments la soutiennent, les exemples l'illustrent."},
+    {f:"qcm", q:"Une recette de cuisine est un texte…", o:["injonctif","argumentatif","narratif"], a:"injonctif", e:"Il donne des instructions, souvent à l'impératif ou à l'infinitif."},
+    {f:"ord", q:"Remets la phrase dans l'ordre :", w:["D'abord","je","présente","mon","idée","principale"], a:"D'abord je présente mon idée principale", e:"Le connecteur d'ouverture se place en tête de phrase."},
+    {f:"qcm", q:"Quel connecteur pour ajouter un argument ?", o:["De plus","En revanche","Or"], a:"De plus", e:"« En revanche » oppose, « or » introduit une objection."}
+  ]},
+
+{ id:"fr-sub", t:"Phrase complexe et subordonnées", tier:"anticipation",
+  lesson:{ why:"C'est le cœur de l'analyse de phrase en 11e : reconnaître les propositions et le rôle de chacune.",
+    pts:["Autant de verbes conjugués = autant de propositions.",
+      "*Relative* : elle complète un nom et commence par qui, que, dont, où, lequel (« le livre *que* je lis »).",
+      "*Conjonctive complétive* : elle commence par « que » et complète le verbe (« je pense *qu'il* a raison » → COD).",
+      "*Circonstancielle* : elle indique la cause (parce que, comme), le but (pour que, afin que + subjonctif), le temps (quand, lorsque), la condition (si).",
+      "Pronoms relatifs : *qui* = sujet, *que* = COD, *dont* remplace un complément en « de », *où* un lieu ou un moment."],
+    ex:"« C'est le film *dont* je t'ai parlé » : on parle *de* quelque chose → dont, et jamais « que je t'ai parlé »." },
+  items:[
+    {f:"qcm", q:"« Le livre que je lis est passionnant. » La subordonnée est…", o:["une relative","une conjonctive complétive","une circonstancielle de cause"], a:"une relative", e:"Elle complète le nom « livre »."},
+    {f:"qcm", q:"« Je pense qu'il a raison. » « qu'il a raison » est…", o:["une conjonctive complétive COD","une relative","une circonstancielle"], a:"une conjonctive complétive COD", e:"Je pense quoi ? → elle complète le verbe."},
+    {f:"gap", q:"Complète : « La ville ___ je suis né est petite. »", a:"où", e:"Un lieu → où."},
+    {f:"gap", q:"Complète : « C'est le film ___ je t'ai parlé. »", a:"dont", e:"Parler DE quelque chose → dont."},
+    {f:"qcm", q:"« Comme il pleuvait, nous sommes restés. » La subordonnée exprime…", o:["la cause","le but","la conséquence"], a:"la cause", e:"« comme » en tête de phrase a le sens de « parce que »."},
+    {f:"qcm", q:"« Il travaille pour qu'il réussisse. » exprime…", o:["le but","la cause","le temps"], a:"le but", e:"« pour que » + subjonctif exprime le but."},
+    {f:"ord", q:"Remets la phrase dans l'ordre :", w:["Je","ne","sais","pas","s'il","viendra"], a:"Je ne sais pas s'il viendra", e:"Interrogative indirecte : pas d'inversion, pas de point d'interrogation."},
+    {f:"txt", q:"Combien de propositions dans « Quand il arrive, tout le monde se lève » ?", a:"2", alt:["deux"], e:"Deux verbes conjugués (arrive, se lève) → deux propositions."}
+  ]},
+
+{ id:"fr-subj", t:"Le subjonctif présent", tier:"anticipation",
+  lesson:{ why:"Le temps du souhait, de l'obligation et du doute — et l'un des premiers points nouveaux de la 11e.",
+    pts:["Formation : radical de la 3e personne du pluriel du présent + -e, -es, -e, -ions, -iez, -ent. (ils prenn*ent* → que je prenn*e*)",
+      "Déclencheurs : *il faut que*, *je veux que*, *bien que*, *pour que*, *avant que*, *à condition que*, *je doute que*.",
+      "Irréguliers à connaître : que je *sois*, que j'*aie*, que j'*aille*, que je *fasse*, que je *puisse*, que je *sache*.",
+      "Piège : *espérer que* est suivi de l'*indicatif* (« j'espère qu'il viendra »), alors que *souhaiter que* demande le subjonctif."],
+    ex:"« Il faut que tu *sois* à l'heure pour que nous *puissions* partir. »" },
+  items:[
+    {f:"gap", q:"Il faut que tu (venir) ___.", a:"viennes", e:"ils viennent → que tu viennes."},
+    {f:"gap", q:"Je veux que nous (être) ___ à l'heure.", a:"soyons", e:"Être au subjonctif : que je sois, que nous soyons."},
+    {f:"qcm", q:"Laquelle de ces formes est au subjonctif ?", o:["que j'aille","je vais","j'irai"], a:"que j'aille", e:"Aller au subjonctif est irrégulier : que j'aille, que nous allions."},
+    {f:"gap", q:"Bien qu'il (faire) ___ froid, nous sortons.", a:"fasse", e:"« bien que » impose le subjonctif : que je fasse."},
+    {f:"qcm", q:"Après « j'espère que », on emploie…", o:["l'indicatif","le subjonctif","le conditionnel"], a:"l'indicatif", e:"« J'espère qu'il viendra » — c'est « souhaiter que » qui demande le subjonctif."},
+    {f:"gap", q:"Pour que tu (pouvoir) ___ réussir, travaille.", a:"puisses", e:"Pouvoir au subjonctif : que je puisse."},
+    {f:"gap", q:"Il faut que vous (savoir) ___ la leçon.", a:"sachiez", e:"Savoir au subjonctif : que je sache, que vous sachiez."},
+    {f:"qcm", q:"« Il faut que j'ai fini » : correct ?", o:["Non : « que j'aie fini »","Oui","Non : « que j'ai finis »"], a:"Non : « que j'aie fini »", e:"Avoir au subjonctif : que j'aie."}
+  ]}
+
+]};
+
+/* --- générateurs français : réserve infinie --- */
+(function(){
+  const P = ["je","tu","il","nous","vous","ils"];
+  const V = [
+    {i:"être",    pr:["suis","es","est","sommes","êtes","sont"],            im:["étais","étais","était","étions","étiez","étaient"],                pp:"été",   aux:"a"},
+    {i:"avoir",   pr:["ai","as","a","avons","avez","ont"],                  im:["avais","avais","avait","avions","aviez","avaient"],                pp:"eu",    aux:"a"},
+    {i:"aller",   pr:["vais","vas","va","allons","allez","vont"],           im:["allais","allais","allait","allions","alliez","allaient"],          pp:"allé",  aux:"e"},
+    {i:"faire",   pr:["fais","fais","fait","faisons","faites","font"],      im:["faisais","faisais","faisait","faisions","faisiez","faisaient"],    pp:"fait",  aux:"a"},
+    {i:"prendre", pr:["prends","prends","prend","prenons","prenez","prennent"], im:["prenais","prenais","prenait","prenions","preniez","prenaient"], pp:"pris", aux:"a"},
+    {i:"pouvoir", pr:["peux","peux","peut","pouvons","pouvez","peuvent"],   im:["pouvais","pouvais","pouvait","pouvions","pouviez","pouvaient"],    pp:"pu",    aux:"a"},
+    {i:"venir",   pr:["viens","viens","vient","venons","venez","viennent"], im:["venais","venais","venait","venions","veniez","venaient"],          pp:"venu",  aux:"e"},
+    {i:"voir",    pr:["vois","vois","voit","voyons","voyez","voient"],      im:["voyais","voyais","voyait","voyions","voyiez","voyaient"],          pp:"vu",    aux:"a"},
+    {i:"finir",   pr:["finis","finis","finit","finissons","finissez","finissent"], im:["finissais","finissais","finissait","finissions","finissiez","finissaient"], pp:"fini", aux:"a"},
+    {i:"écrire",  pr:["écris","écris","écrit","écrivons","écrivez","écrivent"], im:["écrivais","écrivais","écrivait","écrivions","écriviez","écrivaient"], pp:"écrit", aux:"a"}
+  ];
+  const AVOIR = ["ai","as","a","avons","avez","ont"];
+  const ETRE  = ["suis","es","est","sommes","êtes","sont"];
+  const rnd = n => Math.floor(Math.random()*n);
+  const eli = (p, f) => (p === "je" && /^[aeiouéêh]/i.test(f)) ? "j'"+f : p+" "+f;
+
+  GENS["fr-conj"] = function(){
+    const v = V[rnd(V.length)], p = rnd(6);
+    const which = rnd(3);
+    if (which === 0)
+      return { f:"gap", q:"Présent : *"+P[p]+"* ("+v.i+") ___", a:v.pr[p],
+               e:"« "+eli(P[p], v.pr[p])+" » au présent." };
+    if (which === 1)
+      return { f:"gap", q:"Imparfait : *"+P[p]+"* ("+v.i+") ___", a:v.im[p],
+               e:"« "+eli(P[p], v.im[p])+" » à l'imparfait." };
+    const aux = v.aux === "e" ? ETRE[p] : AVOIR[p];
+    const pp  = v.aux === "e" ? (p >= 3 ? v.pp+"s" : v.pp) : v.pp;
+    return { f:"gap", q:"Passé composé : *"+P[p]+"* ("+v.i+") ___", a:aux+" "+pp,
+             e:v.aux === "e" ? "Avec l'auxiliaire être, le participe s'accorde avec le sujet." : "Auxiliaire avoir + participe passé « "+v.pp+" »." };
+  };
+
+  const NAT = [
+    ["rapidement","adverbe"],["maison","nom"],["bleu","adjectif"],["celui","pronom"],
+    ["sous","préposition"],["mais","conjonction"],["trois","déterminant"],["chanter","verbe"],
+    ["heureusement","adverbe"],["courage","nom"],["mon","déterminant"],["qui","pronom"],
+    ["pendant","préposition"],["donc","conjonction"],["fragile","adjectif"],["nous","pronom"]
+  ];
+  GENS["fr-classes"] = function(){
+    const [w, nat] = NAT[rnd(NAT.length)];
+    const all = ["nom","verbe","adjectif","adverbe","pronom","déterminant","préposition","conjonction"];
+    const wrong = all.filter(x => x !== nat);
+    const o = [nat, wrong[rnd(wrong.length)], wrong[rnd(wrong.length)]].filter((v,i,a) => a.indexOf(v) === i);
+    while (o.length < 3){ const c = wrong[rnd(wrong.length)]; if (!o.includes(c)) o.push(c); }
+    return { f:"qcm", q:"Classe grammaticale de « *"+w+"* » ?", o:o.sort(() => Math.random()-.5), a:nat,
+             e:"« "+w+" » est un "+nat+"." };
+  };
+})();
+</script>
+<script>
+/* ===================== ALLEMAND ===================== */
+BANK.allemand = { label:"Allemand", short:"DE", themes:[
+
+{ id:"de-praesens", t:"Präsens et verbes forts", tier:"revision", gen:"de-praesens",
+  lesson:{ why:"Le présent allemand est régulier… sauf pour une vingtaine de verbes très fréquents qui changent de voyelle.",
+    pts:["Terminaisons : ich -*e*, du -*st*, er/sie/es -*t*, wir -*en*, ihr -*t*, sie/Sie -*en*.",
+      "Verbes forts : la voyelle change à la 2e et 3e personne du singulier — a → *ä* (fahren : du fährst), e → *i/ie* (sprechen : du sprichst, lesen : du liest).",
+      "*sein* : ich bin, du bist, er ist, wir sind, ihr seid, sie sind. *haben* : ich habe, du hast, er hat.",
+      "Si le radical finit par -t ou -d, on ajoute un e : du arbeit*e*st, er arbeit*e*t."],
+    ex:"fahren → ich fahre, du *fährst*, er *fährt*, wir fahren : seules les deux formes du milieu changent." },
+  items:[
+    {f:"gap", q:"Er (fahren) ___ nach Bern.", a:"fährt", e:"Verbe fort : a → ä à la 3e personne du singulier."},
+    {f:"gap", q:"Du (sprechen) ___ gut Deutsch.", a:"sprichst", e:"e → i : ich spreche, du sprichst, er spricht."},
+    {f:"gap", q:"Wir (haben) ___ keine Zeit.", a:"haben", e:"Au pluriel, haben est régulier."},
+    {f:"qcm", q:"Ich ___ Schweizer.", o:["bin","ist","bist"], a:"bin", e:"sein : ich bin, du bist, er ist."},
+    {f:"gap", q:"Ihr (lesen) ___ ein Buch.", a:"lest", e:"lesen : du liest, er liest, mais ihr lest."},
+    {f:"gap", q:"Er (nehmen) ___ den Bus.", a:"nimmt", e:"nehmen est doublement irrégulier : er nimmt."},
+    {f:"qcm", q:"Welche Form ist richtig?", o:["du siehst","du sehst","du sieht"], a:"du siehst", e:"sehen : ich sehe, du siehst, er sieht."},
+    {f:"gap", q:"Ich (arbeiten) ___ am Montag.", a:"arbeite", e:"Radical en -t → on garde le e : ich arbeite, du arbeitest."}
+  ]},
+
+{ id:"de-artikel", t:"Articles, genres et pluriels", tier:"revision",
+  lesson:{ why:"Sans le bon genre, aucune déclinaison ne tombe juste. Il y a heureusement des indices de terminaison.",
+    pts:["Masculin *der*, féminin *die*, neutre *das*, pluriel *die* pour les trois.",
+      "Indices fiables : -ung, -heit, -keit, -schaft, -ei, -ion → *die* ; -chen, -lein, -ment, -um → *das* ; -er (métier), -ling → *der*.",
+      "Indéfini : *ein* (masc./neutre), *eine* (fém.) ; négation : *kein*, *keine* — même terminaisons que ein.",
+      "Pluriels fréquents : -e (Tag → Tage), -er + Umlaut (Mann → Männer), -n/-en (Frau → Frauen), -s (Auto → Autos)."],
+    ex:"die Zeit*ung*, das Mäd*chen*, die Freund*schaft* : la terminaison donne le genre sans hésiter." },
+  items:[
+    {f:"qcm", q:"___ Mädchen ist klein.", o:["Das","Die","Der"], a:"Das", e:"Tous les noms en -chen sont neutres, même pour une personne."},
+    {f:"qcm", q:"___ Buch", o:["das","der","die"], a:"das", e:"das Buch, die Bücher."},
+    {f:"qcm", q:"___ Zeitung", o:["die","der","das"], a:"die", e:"Les noms en -ung sont féminins."},
+    {f:"gap", q:"Pluriel de « das Kind » : die ___", a:"Kinder", e:"Pluriel en -er, sans Umlaut ici."},
+    {f:"gap", q:"Pluriel de « der Mann » : die ___", a:"Männer", e:"Pluriel en -er avec Umlaut."},
+    {f:"qcm", q:"Négation : « Ich habe ___ Auto. »", o:["kein","nicht","keine"], a:"kein", e:"kein s'emploie devant un nom ; das Auto est neutre → kein."},
+    {f:"gap", q:"Pluriel de « die Stadt » : die ___", a:"Städte", e:"Umlaut + -e."},
+    {f:"qcm", q:"___ Lehrerin (une enseignante)", o:["eine","ein","einen"], a:"eine", e:"Féminin au nominatif → eine."}
+  ]},
+
+{ id:"de-v2", t:"La place du verbe (V2)", tier:"revision",
+  lesson:{ why:"C'est LA règle de l'allemand : dans une phrase principale, le verbe conjugué est toujours en deuxième position.",
+    pts:["Si la phrase commence par autre chose que le sujet, le sujet passe *après* le verbe : « *Heute gehe ich* ins Kino ».",
+      "Question en W- : mot interrogatif, puis verbe, puis sujet — « *Wo wohnst du?* ».",
+      "Verbe à particule séparable : la particule part *à la fin* — « Ich stehe um sieben Uhr *auf* ».",
+      "Avec un modal : le modal est conjugué en 2e position, l'infinitif va *à la fin* — « Er *kann* heute nicht *kommen* ».",
+      "Ordre des compléments : temps, manière, lieu (« Ich fahre *morgen mit dem Zug nach Bern* »)."],
+    ex:"« Ich gehe heute ins Kino » → « *Heute* gehe *ich* ins Kino » : le verbe ne bouge pas, le sujet recule." },
+  items:[
+    {f:"ord", q:"Remets la phrase dans l'ordre :", w:["Heute","gehe","ich","ins","Kino"], a:"Heute gehe ich ins Kino", e:"Le verbe reste en 2e position ; le sujet passe après."},
+    {f:"ord", q:"Remets la phrase dans l'ordre :", w:["Am","Samstag","spielt","er","Fussball"], a:"Am Samstag spielt er Fussball", e:"« Am Samstag » occupe la 1re place, donc le verbe la 2e."},
+    {f:"qcm", q:"Welcher Satz ist richtig?", o:["Morgen fahren wir nach Zürich.","Morgen wir fahren nach Zürich.","Wir morgen fahren nach Zürich."], a:"Morgen fahren wir nach Zürich.", e:"Verbe en 2e position, sujet juste après."},
+    {f:"ord", q:"Remets la phrase dans l'ordre :", w:["Ich","stehe","um","sieben","Uhr","auf"], a:"Ich stehe um sieben Uhr auf", e:"aufstehen : la particule « auf » va à la fin."},
+    {f:"gap", q:"Frage: ___ wohnst du? (où)", a:"Wo", e:"Wo = où (position). Wohin = vers où."},
+    {f:"ord", q:"Remets la question dans l'ordre :", w:["Was","machst","du","am","Wochenende"], a:"Was machst du am Wochenende", e:"Mot interrogatif, verbe, sujet."},
+    {f:"qcm", q:"Wo steht das konjugierte Verb im Hauptsatz?", o:["an zweiter Stelle","am Ende","an erster Stelle"], a:"an zweiter Stelle", e:"C'est la règle V2, valable pour toute phrase principale."},
+    {f:"ord", q:"Remets la phrase dans l'ordre :", w:["Er","kann","heute","nicht","kommen"], a:"Er kann heute nicht kommen", e:"Modal en 2e position, infinitif à la fin."}
+  ]},
+
+{ id:"de-akk", t:"L'accusatif", tier:"consolidation", gen:"de-kasus",
+  lesson:{ why:"Le premier cas à automatiser : celui du complément direct.",
+    pts:["Seul le *masculin* change visiblement : der → *den*, ein → *einen*, mein → *meinen*.",
+      "Féminin, neutre et pluriel gardent la forme du nominatif : die, das, die.",
+      "Verbes usuels + accusatif : haben, sehen, kaufen, lesen, besuchen, kennen, trinken, essen.",
+      "Prépositions toujours + accusatif : *für, ohne, gegen, um, durch* (mnémo : FOGUD)."],
+    ex:"« *Der* Mann liest *den* Brief » : le sujet est au nominatif, le complément direct à l'accusatif." },
+  items:[
+    {f:"qcm", q:"Ich sehe ___ Mann.", o:["den","der","dem"], a:"den", e:"Masculin accusatif : der → den."},
+    {f:"qcm", q:"Er kauft ___ Auto.", o:["ein","einen","einem"], a:"ein", e:"das Auto est neutre : pas de changement à l'accusatif."},
+    {f:"gap", q:"Wir haben ___ Hund. (ein / der Hund)", a:"einen", e:"Masculin accusatif : ein → einen."},
+    {f:"qcm", q:"Ich trinke ___ Milch. (die Milch)", o:["die","der","dem"], a:"die", e:"Le féminin ne change pas à l'accusatif."},
+    {f:"gap", q:"Ich besuche ___ Freundin. (mein)", a:"meine", e:"Féminin accusatif : meine."},
+    {f:"qcm", q:"Welche Präposition verlangt immer Akkusativ?", o:["für","mit","bei"], a:"für", e:"mit et bei demandent le datif."},
+    {f:"gap", q:"Er liest ___ Zeitung. (die)", a:"die", e:"Féminin : forme inchangée."},
+    {f:"qcm", q:"Ich kenne ___ Lehrer.", o:["den","dem","der"], a:"den", e:"kennen + accusatif, masculin → den."}
+  ]},
+
+{ id:"de-dat", t:"Le datif", tier:"consolidation", gen:"de-kasus",
+  lesson:{ why:"Le cas du complément d'attribution — et le cas qu'imposent beaucoup de prépositions courantes.",
+    pts:["Formes : der → *dem*, die → *der*, das → *dem*, pluriel die → *den* (+ un -n au nom : den Kinder*n*).",
+      "Indéfinis : einem (masc./neutre), einer (fém.) ; possessifs : meinem, meiner, meinem, meinen.",
+      "Verbes toujours + datif : *helfen, danken, gefallen, gehören, antworten, passen*.",
+      "Prépositions toujours + datif : *mit, nach, aus, bei, seit, von, zu* (mnémo : MiNAuBeSeiVoZu)."],
+    ex:"« Ich gebe *dem* Mann *das* Buch » : à qui ? au datif ; quoi ? à l'accusatif." },
+  items:[
+    {f:"qcm", q:"Ich helfe ___ Mann.", o:["dem","den","der"], a:"dem", e:"helfen commande le datif : dem Mann."},
+    {f:"qcm", q:"Ich gebe ___ Frau das Buch.", o:["der","die","den"], a:"der", e:"Féminin datif : die → der."},
+    {f:"gap", q:"Wir fahren mit ___ Bus. (der Bus)", a:"dem", e:"mit + datif."},
+    {f:"qcm", q:"Welche Verben stehen immer mit Dativ?", o:["helfen, danken, gefallen","sehen, haben, kaufen","besuchen, lesen, trinken"], a:"helfen, danken, gefallen", e:"À apprendre par cœur : ils ne prennent jamais l'accusatif."},
+    {f:"gap", q:"Das Buch gehört ___ Kind. (das Kind)", a:"dem", e:"gehören + datif ; neutre → dem."},
+    {f:"qcm", q:"Ich spreche mit ___ Kindern.", o:["den","die","dem"], a:"den", e:"Datif pluriel : den + -n au nom."},
+    {f:"gap", q:"Ich komme aus ___ Schweiz. (die Schweiz)", a:"der", e:"aus + datif ; féminin → der."},
+    {f:"qcm", q:"Ich schenke ___ Bruder ein Buch. (mein)", o:["meinem","meinen","mein"], a:"meinem", e:"Masculin datif : meinem."}
+  ]},
+
+{ id:"de-perfekt", t:"Le Perfekt", tier:"consolidation",
+  lesson:{ why:"C'est le passé de l'oral : à l'oral, un Allemand raconte presque tout au Perfekt.",
+    pts:["Formation : *haben* ou *sein* conjugué + *participe passé* placé à la fin de la phrase.",
+      "Participe régulier : ge- + radical + -t (spielen → *gespielt*). Irrégulier : ge- + radical modifié + -en (schreiben → *geschrieben*).",
+      "*sein* s'emploie avec les verbes de déplacement et de changement d'état : gehen, fahren, kommen, bleiben, aufstehen, werden.",
+      "Pas de ge- pour les préfixes inséparables (be-, ver-, ent-, er-) ni pour les verbes en -ieren : *besucht*, *verstanden*, *telefoniert*.",
+      "Verbe à particule séparable : la particule se colle devant le ge- — aufstehen → *aufgestanden*."],
+    ex:"« Ich *habe* gestern Deutsch *gelernt* » — auxiliaire en 2e position, participe tout à la fin." },
+  items:[
+    {f:"gap", q:"Ich habe Fussball ___ (spielen).", a:"gespielt", e:"Verbe faible : ge- + spiel + -t."},
+    {f:"gap", q:"Er ist nach Bern ___ (fahren).", a:"gefahren", e:"Déplacement → sein, participe fort en -en."},
+    {f:"qcm", q:"Welches Hilfsverb? « Wir ___ ins Kino gegangen. »", o:["sind","haben","werden"], a:"sind", e:"gehen = déplacement → sein."},
+    {f:"gap", q:"Sie hat einen Brief ___ (schreiben).", a:"geschrieben", e:"Participe fort : geschrieben."},
+    {f:"ord", q:"Remets la phrase dans l'ordre :", w:["Ich","habe","gestern","Deutsch","gelernt"], a:"Ich habe gestern Deutsch gelernt", e:"Le participe ferme la phrase."},
+    {f:"gap", q:"Wir haben viel ___ (essen).", a:"gegessen", e:"essen → gegessen."},
+    {f:"qcm", q:"Welche Verben haben kein « ge- » im Partizip?", o:["verstehen, besuchen, telefonieren","spielen, lernen, machen","gehen, kommen, fahren"], a:"verstehen, besuchen, telefonieren", e:"Préfixes inséparables et verbes en -ieren."},
+    {f:"gap", q:"Ich bin um sieben Uhr ___ (aufstehen).", a:"aufgestanden", e:"Particule séparable : auf + gestanden."}
+  ]},
+
+{ id:"de-praet", t:"Präteritum et verbes de modalité", tier:"consolidation",
+  lesson:{ why:"À l'écrit et pour sein / haben / les modaux, c'est le Präteritum qu'on emploie, pas le Perfekt.",
+    pts:["*sein* → ich war, du warst, er war, wir waren. *haben* → ich hatte, wir hatten.",
+      "Modaux au Präteritum : können → *konnte*, müssen → *musste*, wollen → *wollte*, dürfen → *durfte*, sollen → *sollte* (l'Umlaut disparaît).",
+      "Verbes forts : gehen → *ging*, kommen → *kam*, sehen → *sah*, geben → *gab*, fahren → *fuhr*.",
+      "*möchten* = j'aimerais (poli) ; *mögen* = aimer bien.",
+      "Un modal envoie toujours l'infinitif à la fin : « Ich *musste* gestern arbeiten »."],
+    ex:"À l'oral : « Ich *habe* gespielt » (Perfekt), mais « Ich *war* müde » et « Ich *konnte* nicht » (Präteritum)." },
+  items:[
+    {f:"gap", q:"Präteritum: ich (sein) ___ krank.", a:"war", e:"ich war, du warst, er war."},
+    {f:"gap", q:"Präteritum: wir (haben) ___ Glück.", a:"hatten", e:"ich hatte, wir hatten."},
+    {f:"gap", q:"Präteritum: er (können) ___ nicht kommen.", a:"konnte", e:"L'Umlaut tombe au Präteritum : konnte."},
+    {f:"qcm", q:"« Ich musste arbeiten » signifie :", o:["Je devais travailler","Je voulais travailler","Je pouvais travailler"], a:"Je devais travailler", e:"müssen = devoir, obligation."},
+    {f:"gap", q:"Präteritum: sie (gehen) ___ nach Hause.", a:"ging", e:"gehen → ging, gegangen."},
+    {f:"qcm", q:"« Ich ___ ein Eis. » (j'aimerais)", o:["möchte","möchtet","mag"], a:"möchte", e:"möchten : ich möchte, du möchtest."},
+    {f:"gap", q:"Präteritum: es (geben) ___ viele Leute.", a:"gab", e:"es gibt → es gab."},
+    {f:"qcm", q:"Wann benutzt man beim Sprechen meist das Perfekt?", o:["für die Vergangenheit","für die Zukunft","für Befehle"], a:"für die Vergangenheit", e:"À l'oral le Perfekt domine ; le Präteritum reste pour sein, haben, les modaux et l'écrit."}
+  ]},
+
+{ id:"de-praep", t:"Prépositions et cas", tier:"consolidation",
+  lesson:{ why:"Une préposition mal apprise fait rater tout le groupe qui suit. Elles se mémorisent par familles.",
+    pts:["Toujours *datif* : mit, nach, aus, bei, seit, von, zu, gegenüber.",
+      "Toujours *accusatif* : für, ohne, gegen, um, durch, bis, entlang.",
+      "*Wechselpräpositionen* (in, an, auf, unter, über, vor, hinter, neben, zwischen) : accusatif si mouvement (*wohin?*), datif si position (*wo?*).",
+      "Contractions courantes : in dem → *im*, in das → *ins*, an dem → *am*, zu dem → *zum*, zu der → *zur*."],
+    ex:"« Ich gehe *in die* Schule » (wohin ? accusatif) ≠ « Ich bin *in der* Schule » (wo ? datif)." },
+  items:[
+    {f:"qcm", q:"Wohin gehst du? « Ich gehe ___. »", o:["in die Schule","in der Schule","in den Schule"], a:"in die Schule", e:"Mouvement → accusatif."},
+    {f:"qcm", q:"Wo bist du? « Ich bin ___. »", o:["in der Schule","in die Schule","in dem Schule"], a:"in der Schule", e:"Position → datif ; féminin datif = der."},
+    {f:"gap", q:"Ich mache das für ___ Freund. (mein)", a:"meinen", e:"für + accusatif, masculin → meinen."},
+    {f:"gap", q:"Wir wohnen bei ___ Grosseltern. (die, pluriel)", a:"den", e:"bei + datif ; datif pluriel = den."},
+    {f:"qcm", q:"Welche Präpositionen stehen immer mit Dativ?", o:["mit, nach, aus, bei, seit, von, zu","für, ohne, gegen, um","in, an, auf, unter"], a:"mit, nach, aus, bei, seit, von, zu", e:"La série à réciter."},
+    {f:"gap", q:"Das Buch liegt auf ___ Tisch. (position, der Tisch)", a:"dem", e:"Wo ? → datif : auf dem Tisch."},
+    {f:"gap", q:"Ich lege das Buch auf ___ Tisch. (mouvement)", a:"den", e:"Wohin ? → accusatif : auf den Tisch."},
+    {f:"qcm", q:"« ohne » verlangt…", o:["Akkusativ","Dativ","Genitiv"], a:"Akkusativ", e:"ohne fait partie de la série für, ohne, gegen, um, durch."}
+  ]},
+
+{ id:"de-neben", t:"Subordonnées : weil, dass, wenn, ob", tier:"anticipation",
+  lesson:{ why:"Point-clé de la 11e : dès qu'une subordonnée commence, le verbe conjugué file à la fin.",
+    pts:["Après *weil* (parce que), *dass* (que), *wenn* (si / quand), *ob* (si — question), *obwohl* (bien que) : verbe conjugué *à la fin*.",
+      "« Ich bleibe zu Hause, *weil* ich krank *bin*. » — comparer à « Ich bin krank » dans une principale.",
+      "*ob* s'emploie pour une question indirecte : « Ich weiss nicht, *ob* er kommt » (je ne sais pas s'il vient).",
+      "Si la subordonnée est en tête, elle occupe la 1re position : le verbe de la principale vient juste après — « *Wenn es regnet, bleiben wir* zu Hause ».",
+      "Avec un modal : le modal conjugué passe tout à la fin — « … weil ich arbeiten *muss* »."],
+    ex:"« Er sagt, dass er müde *ist* » et jamais « dass er ist müde »." },
+  items:[
+    {f:"ord", q:"Remets la phrase dans l'ordre (sans virgule) :", w:["Ich","bleibe","zu","Hause","weil","ich","krank","bin"], a:"Ich bleibe zu Hause weil ich krank bin", e:"Après weil, le verbe conjugué va à la fin. À l'écrit, virgule avant weil."},
+    {f:"qcm", q:"Wo steht das Verb nach « weil »?", o:["am Ende","an zweiter Stelle","direkt nach weil"], a:"am Ende", e:"C'est la marque de la subordonnée."},
+    {f:"ord", q:"Remets la phrase dans l'ordre (sans virgule) :", w:["Ich","glaube","dass","er","heute","kommt"], a:"Ich glaube dass er heute kommt", e:"dass + verbe en fin de proposition."},
+    {f:"gap", q:"Ergänze: « Ich weiss nicht, ___ er kommt. » (s'il)", a:"ob", e:"Question indirecte → ob, jamais wenn."},
+    {f:"qcm", q:"« Wenn » signifie…", o:["si / quand (condition ou répétition)","parce que","que"], a:"si / quand (condition ou répétition)", e:"Pour une question indirecte, on emploie ob."},
+    {f:"ord", q:"Remets la phrase dans l'ordre (sans virgule) :", w:["Wenn","es","regnet","bleiben","wir","zu","Hause"], a:"Wenn es regnet bleiben wir zu Hause", e:"La subordonnée en tête compte comme 1re position : le verbe de la principale suit."},
+    {f:"qcm", q:"Welcher Satz ist richtig?", o:["Er sagt, dass er müde ist.","Er sagt, dass er ist müde.","Er sagt, dass ist er müde."], a:"Er sagt, dass er müde ist.", e:"Le verbe conjugué ferme la subordonnée."},
+    {f:"gap", q:"« Ich lerne Deutsch, ___ ich in die Schweiz fahre. » (parce que)", a:"weil", e:"weil + verbe à la fin."}
+  ]},
+
+{ id:"de-adj", t:"Déclinaison de l'adjectif", tier:"anticipation",
+  lesson:{ why:"Le dernier gros morceau de grammaire allemande de la scolarité obligatoire. On commence par le nominatif et l'accusatif.",
+    pts:["Un adjectif *attribut* (après sein, werden, bleiben) ne prend jamais de terminaison : « Das Haus ist *neu* ».",
+      "Devant un nom, il en prend toujours une. Après l'article défini au nominatif singulier : -*e* (der alt*e* Mann, die jung*e* Frau, das neu*e* Haus).",
+      "Après l'article indéfini, l'adjectif porte la marque du genre : ein alt*er* Mann, eine jung*e* Frau, ein neu*es* Haus.",
+      "À l'accusatif, seul le masculin bouge : den alt*en* Mann, einen alt*en* Mann.",
+      "Au pluriel après der/die/das ou un possessif : toujours -*en* (die klein*en* Kinder)."],
+    ex:"der alt*e* Mann → Ich sehe den alt*en* Mann : c'est le masculin accusatif qui trahit ceux qui n'ont pas appris le tableau." },
+  items:[
+    {f:"qcm", q:"der ___ Mann (alt)", o:["alte","alter","alten"], a:"alte", e:"Nominatif singulier après article défini : -e."},
+    {f:"qcm", q:"ein ___ Haus (neu)", o:["neues","neue","neuen"], a:"neues", e:"Après ein au neutre, l'adjectif porte la marque : -es."},
+    {f:"qcm", q:"Ich sehe den ___ Hund. (klein)", o:["kleinen","kleine","kleines"], a:"kleinen", e:"Masculin accusatif : -en."},
+    {f:"gap", q:"die ___ Blume (schön)", a:"schöne", e:"Féminin nominatif après article défini : -e."},
+    {f:"qcm", q:"eine ___ Frau (jung)", o:["junge","junger","jungen"], a:"junge", e:"Féminin après eine : -e."},
+    {f:"gap", q:"Ich habe einen ___ Bruder. (gross)", a:"grossen", e:"Masculin accusatif après einen : -en."},
+    {f:"qcm", q:"die ___ Kinder (klein)", o:["kleinen","kleine","kleines"], a:"kleinen", e:"Pluriel après article défini : toujours -en."},
+    {f:"qcm", q:"Wann bekommt das Adjektiv keine Endung?", o:["als Prädikat: « Das Haus ist neu »","immer","nach dem Artikel"], a:"als Prädikat: « Das Haus ist neu »", e:"Après sein, werden, bleiben : forme nue."}
+  ]},
+
+{ id:"de-vok", t:"Vocabulaire courant", tier:"revision", gen:"de-vok",
+  lesson:{ why:"Le vocabulaire s'apprend *avec son article* — sinon toutes les déclinaisons tombent à côté.",
+    pts:["Apprends toujours le triplet : *article + nom + pluriel* (der Tisch, die Tische).",
+      "Les verbes s'apprennent avec leurs trois formes : machen – machte – gemacht ; gehen – ging – gegangen.",
+      "Thèmes du programme : l'école, la famille, les loisirs, la maison, la nourriture, les voyages, le temps qu'il fait.",
+      "Astuce : un mot revu 4 fois à quelques jours d'intervalle tient bien mieux qu'un mot vu 20 fois le même soir."],
+    ex:"« der Bahnhof, die Bahnhöfe » — la gare : sans l'article, tu ne saurais pas dire « mit *dem* Bahnhof »." },
+  items:[
+    {f:"txt", q:"Traduis avec l'article : la table", a:"der Tisch", alt:["tisch"], e:"der Tisch, die Tische."},
+    {f:"txt", q:"Traduis avec l'article : la ville", a:"die Stadt", alt:["stadt"], e:"die Stadt, die Städte."},
+    {f:"qcm", q:"« das Zeugnis » bedeutet…", o:["le bulletin scolaire","la salle de classe","le devoir"], a:"le bulletin scolaire", e:"das Zeugnis, die Zeugnisse."},
+    {f:"txt", q:"Traduis en allemand : apprendre", a:"lernen", e:"lernen – lernte – gelernt."},
+    {f:"qcm", q:"« die Ferien » sind…", o:["les vacances","le week-end","les devoirs"], a:"les vacances", e:"Toujours au pluriel en allemand."},
+    {f:"txt", q:"Traduis avec l'article : le train", a:"der Zug", alt:["zug"], e:"der Zug, die Züge."},
+    {f:"qcm", q:"« Es ist mir kalt » — was stimmt?", o:["« Mir ist kalt » ist die richtige Form","Es ist korrekt","Man sagt « Ich bin kalt »"], a:"« Mir ist kalt » ist die richtige Form", e:"En allemand, la sensation se dit au datif : mir ist kalt."},
+    {f:"txt", q:"Traduis en allemand : la semaine (avec l'article)", a:"die Woche", alt:["woche"], e:"die Woche, die Wochen."}
+  ]}
+
+]};
+
+/* --- générateurs allemand --- */
+(function(){
+  const rnd = n => Math.floor(Math.random()*n);
+  const PR = ["ich","du","er","wir","ihr","sie"];
+  const DV = [
+    {i:"fahren",  f:["fahre","fährst","fährt","fahren","fahrt","fahren"]},
+    {i:"sprechen",f:["spreche","sprichst","spricht","sprechen","sprecht","sprechen"]},
+    {i:"lesen",   f:["lese","liest","liest","lesen","lest","lesen"]},
+    {i:"nehmen",  f:["nehme","nimmst","nimmt","nehmen","nehmt","nehmen"]},
+    {i:"sein",    f:["bin","bist","ist","sind","seid","sind"]},
+    {i:"haben",   f:["habe","hast","hat","haben","habt","haben"]},
+    {i:"machen",  f:["mache","machst","macht","machen","macht","machen"]},
+    {i:"arbeiten",f:["arbeite","arbeitest","arbeitet","arbeiten","arbeitet","arbeiten"]},
+    {i:"geben",   f:["gebe","gibst","gibt","geben","gebt","geben"]},
+    {i:"laufen",  f:["laufe","läufst","läuft","laufen","lauft","laufen"]}
+  ];
+  GENS["de-praesens"] = function(){
+    const v = DV[rnd(DV.length)], p = rnd(6);
+    return { f:"gap", q:"Präsens: *"+PR[p]+"* ("+v.i+") ___", a:v.f[p],
+             e:PR[p]+" "+v.f[p]+"." };
+  };
+
+  /* cas : accusatif / datif sur des noms au genre connu */
+  const N = [
+    {w:"Mann",   g:"m"}, {w:"Hund",  g:"m"}, {w:"Bruder", g:"m"}, {w:"Lehrer", g:"m"},
+    {w:"Frau",   g:"f"}, {w:"Schwester", g:"f"}, {w:"Lehrerin", g:"f"}, {w:"Stadt", g:"f"},
+    {w:"Kind",   g:"n"}, {w:"Buch",  g:"n"}, {w:"Auto",  g:"n"}, {w:"Haus", g:"n"}
+  ];
+  const ART = {
+    nom:{m:"der", f:"die", n:"das"},
+    akk:{m:"den", f:"die", n:"das"},
+    dat:{m:"dem", f:"der", n:"dem"}
+  };
+  const AKK_V = ["Ich sehe", "Ich kenne", "Er kauft", "Wir besuchen"];
+  const DAT_V = ["Ich helfe", "Ich danke", "Das gehört", "Es gefällt"];
+  const DAT_P = ["mit", "nach dem Kurs bei", "aus", "zu"];
+  GENS["de-kasus"] = function(){
+    const n = N[rnd(N.length)];
+    const dat = Math.random() < 0.5;
+    const opts = [ART.nom[n.g], ART.akk[n.g], ART.dat[n.g]].filter((v,i,a) => a.indexOf(v) === i);
+    if (dat){
+      const useVerb = Math.random() < 0.6;
+      const head = useVerb ? DAT_V[rnd(DAT_V.length)] : "Ich fahre "+DAT_P[0];
+      return { f:"qcm", q:head+" ___ "+n.w+".", o:opts.sort(() => Math.random()-.5), a:ART.dat[n.g],
+               e:(useVerb ? "Ce verbe commande le datif" : "mit + datif")+" → "+ART.dat[n.g]+" "+n.w+"." };
+    }
+    return { f:"qcm", q:AKK_V[rnd(AKK_V.length)]+" ___ "+n.w+".", o:opts.sort(() => Math.random()-.5), a:ART.akk[n.g],
+             e:"Complément direct → accusatif : "+ART.akk[n.g]+" "+n.w+"." };
+  };
+
+  const VOK = [
+    ["la maison","das Haus"],["l'école","die Schule"],["le livre","das Buch"],["la voiture","das Auto"],
+    ["le frère","der Bruder"],["la sœur","die Schwester"],["le jour","der Tag"],["l'année","das Jahr"],
+    ["la nuit","die Nacht"],["l'eau","das Wasser"],["le pain","das Brot"],["la montagne","der Berg"],
+    ["le lac","der See"],["le temps (météo)","das Wetter"],["l'argent","das Geld"],["le travail","die Arbeit"],
+    ["l'ami","der Freund"],["la clé","der Schlüssel"],["la porte","die Tür"],["la question","die Frage"]
+  ];
+  GENS["de-vok"] = function(){
+    const [fr, de] = VOK[rnd(VOK.length)];
+    return { f:"txt", q:"Traduis avec l'article : *"+fr+"*", a:de, alt:[de.split(" ")[1]],
+             e:de+"." };
+  };
+})();
+</script>
+<script>
+/* ===================== ANGLAIS ===================== */
+BANK.anglais = { label:"Anglais", short:"EN", themes:[
+
+{ id:"en-present", t:"Present simple vs continuous", tier:"revision",
+  lesson:{ why:"Deux présents, deux emplois — la confusion la plus fréquente en début de 11e.",
+    pts:["*Present simple* : habitudes et vérités générales. 3e personne du singulier : + *-s* (he play*s*), + *-es* après o, s, ch, sh, x (he go*es*), y → *ies* (he stud*ies*).",
+      "*Present continuous* : am / is / are + *-ing*, pour ce qui se passe maintenant (« Look! He *is running* »).",
+      "Les verbes d'état ne se mettent pas au continu : like, love, know, want, need, understand, think (= opinion), have (= posséder).",
+      "Négation et question du simple : *don't / doesn't*, *do / does* + base verbale.",
+      "Les adverbes de fréquence (always, usually, often, never) se placent *avant* le verbe, mais *après* « be »."],
+    ex:"« I *play* football on Saturdays » (habitude) ≠ « I *am playing* football right now » (en ce moment)." },
+  items:[
+    {f:"gap", q:"She ___ (play) tennis every Sunday.", a:"plays", e:"Habitude → present simple, 3e personne : + -s."},
+    {f:"gap", q:"Look! He ___ (run) very fast.", a:"is running", e:"Action en cours → be + -ing (double consonne : running)."},
+    {f:"qcm", q:"Which sentence is correct?", o:["I don't like coffee.","I am not liking coffee.","I no like coffee."], a:"I don't like coffee.", e:"« like » est un verbe d'état : jamais au continu."},
+    {f:"gap", q:"They ___ (not / watch) TV at the moment.", a:"aren't watching", alt:["are not watching"], e:"« at the moment » → continuous."},
+    {f:"qcm", q:"Pour donner une opinion, on dit…", o:["I think","I am thinking","les deux"], a:"I think", e:"« I'm thinking » = je suis en train de réfléchir."},
+    {f:"gap", q:"___ she live in Geneva?", a:"Does", e:"Question au present simple, 3e personne → does + base verbale."},
+    {f:"txt", q:"Mets au present simple : « he (study) »", a:"he studies", alt:["studies"], e:"Consonne + y → -ies."},
+    {f:"qcm", q:"« always, usually, never » se placent…", o:["avant le verbe principal","à la fin de la phrase","avant le sujet"], a:"avant le verbe principal", e:"He always plays — mais : He is always late."}
+  ]},
+
+{ id:"en-past", t:"Past simple et verbes irréguliers", tier:"revision", gen:"en-irr",
+  lesson:{ why:"Le temps du récit. Les 60 verbes irréguliers les plus fréquents valent chacun des points en test.",
+    pts:["Réguliers : + *-ed* (played, worked) ; -y → -ied (study → stud*ied*) ; consonne finale doublée (stop → stop*ped*).",
+      "Irréguliers : à apprendre en triplets — go / *went* / gone, take / *took* / taken, write / *wrote* / written.",
+      "Négation et question avec *did* + *base verbale* : « I did*n't* go », « *Did* you go? » — jamais « didn't went ».",
+      "Le verbe *be* fait exception : I/he *was*, you/we/they *were*, négation wasn't / weren't.",
+      "Un repère de temps terminé (yesterday, last week, in 2020, ago) impose le past simple."],
+    ex:"« I *went* to Italy last year » — jamais « I have gone to Italy last year » : le temps est terminé." },
+  items:[
+    {f:"gap", q:"Past simple: I ___ (go) to Italy last year.", a:"went", e:"go – went – gone."},
+    {f:"gap", q:"Past simple: she ___ (buy) a new bike.", a:"bought", e:"buy – bought – bought."},
+    {f:"qcm", q:"___ you see the film?", o:["Did","Do","Have"], a:"Did", e:"Question au passé → did + base verbale."},
+    {f:"gap", q:"He ___ (not / come) yesterday.", a:"didn't come", alt:["did not come"], e:"didn't + base verbale."},
+    {f:"txt", q:"Prétérit de « take » ?", a:"took", e:"take – took – taken."},
+    {f:"txt", q:"Prétérit de « write » ?", a:"wrote", e:"write – wrote – written."},
+    {f:"qcm", q:"Which is correct?", o:["I didn't go.","I didn't went.","I not went."], a:"I didn't go.", e:"Après « did », la base verbale."},
+    {f:"gap", q:"We ___ (be) at home yesterday.", a:"were", e:"we / you / they → were."}
+  ]},
+
+{ id:"en-quest", t:"Questions et réponses courtes", elem:true, tier:"revision",
+  lesson:{ why:"Construire une question anglaise correcte : c'est mécanique, une fois l'ordre compris.",
+    pts:["Ordre : *mot interrogatif – auxiliaire – sujet – verbe* (« *Where do you live?* »).",
+      "L'auxiliaire porte le temps, le verbe reste à la base : « Where *does* she *work*? » — jamais « works ».",
+      "Réponse courte : on reprend l'auxiliaire — « Do you like pizza? » → « Yes, I *do* » ; « Are you ready? » → « Yes, I *am* ».",
+      "Avec *be*, pas d'auxiliaire : on inverse simplement — « *Are* you Swiss? ».",
+      "Question tag : on reprend l'auxiliaire à la forme opposée — « You are Swiss, *aren't* you? »."],
+    ex:"« What *did* she *say*? » : did porte le passé, say reste nu." },
+  items:[
+    {f:"ord", q:"Remets la question dans l'ordre :", w:["Where","do","you","live"], a:"Where do you live", e:"Mot interrogatif, auxiliaire, sujet, verbe."},
+    {f:"ord", q:"Remets la question dans l'ordre :", w:["What","did","she","say"], a:"What did she say", e:"did porte le passé ; « say » reste à la base."},
+    {f:"qcm", q:"Réponse courte à « Do you like pizza? »", o:["Yes, I do.","Yes, I like.","Yes, I am."], a:"Yes, I do.", e:"On reprend l'auxiliaire de la question."},
+    {f:"gap", q:"___ he play football? (present simple)", a:"Does", e:"3e personne du singulier → does."},
+    {f:"qcm", q:"Which question is correct?", o:["How long have you been here?","How long you are here?","How long you have here?"], a:"How long have you been here?", e:"Auxiliaire avant le sujet."},
+    {f:"ord", q:"Remets la question dans l'ordre :", w:["Who","is","your","best","friend"], a:"Who is your best friend", e:"Avec « who » sujet, pas d'auxiliaire supplémentaire."},
+    {f:"gap", q:"You are Swiss, ___ you?", a:"aren't", alt:["are not"], e:"Question tag : auxiliaire à la forme opposée."},
+    {f:"qcm", q:"Corrige : « Where does she works? »", o:["Where does she work?","Where does she working?","Where she works?"], a:"Where does she work?", e:"Le -s est déjà porté par « does »."}
+  ]},
+
+{ id:"en-comp", t:"Comparatifs et superlatifs", tier:"consolidation",
+  lesson:{ why:"Règle courte, très rentable : elle tombe dans presque chaque test écrit.",
+    pts:["Adjectif court (1 syllabe) : + *-er* / *the …-est* — big → bigg*er* → *the biggest*.",
+      "Adjectif long (3 syllabes ou plus) : *more* … / *the most* … — expensive → *more* expensive → *the most* expensive.",
+      "En -y : y → *-ier* / *the …-iest* — happy → happ*ier* → the happ*iest*.",
+      "Irréguliers : good → *better* → *the best* ; bad → *worse* → *the worst* ; far → further.",
+      "Égalité : *as* … *as* (« He is *as* tall *as* his brother ») ; comparaison : *than*."],
+    ex:"« This film is *better than* the other one, it's *the best* of the year. »" },
+  items:[
+    {f:"txt", q:"Comparatif de « big » :", a:"bigger", e:"Adjectif court : on double la consonne finale."},
+    {f:"txt", q:"Comparatif de « good » :", a:"better", e:"good – better – the best."},
+    {f:"txt", q:"Superlatif de « expensive » :", a:"the most expensive", alt:["most expensive"], e:"Adjectif long → the most + adjectif."},
+    {f:"qcm", q:"She is ___ than me.", o:["taller","more tall","tallest"], a:"taller", e:"tall est court → -er."},
+    {f:"txt", q:"Comparatif de « happy » :", a:"happier", e:"-y → -ier."},
+    {f:"qcm", q:"« as … as » exprime…", o:["l'égalité","la supériorité","le superlatif"], a:"l'égalité", e:"He is as tall as his brother."},
+    {f:"txt", q:"Superlatif de « bad » :", a:"the worst", alt:["worst"], e:"bad – worse – the worst."},
+    {f:"qcm", q:"Which is correct?", o:["This is the best film I've seen.","This is the most best film.","This is the better film I've seen."], a:"This is the best film I've seen.", e:"Superlatif irrégulier : the best, sans « most »."}
+  ]},
+
+{ id:"en-quant", t:"Quantifieurs : some, any, much, many", tier:"consolidation",
+  lesson:{ why:"Tout dépend d'une seule question : le nom est-il dénombrable ou non ?",
+    pts:["*Dénombrables* (a book, two books) : many, a few, how many. *Indénombrables* (water, money, time, information, homework) : much, a little, how much.",
+      "*some* en phrase affirmative ; *any* en négation et en question — « I don't have *any* time », « Do you have *any* money? ».",
+      "Exception utile : *some* dans une offre ou une demande polie — « Would you like *some* tea? ».",
+      "Pièges d'indénombrables : information, advice, news, furniture, homework, money — jamais de -s.",
+      "*a few* = quelques (dénombrable) ; *a little* = un peu (indénombrable)."],
+    ex:"« How *much* money? » mais « How *many* people? » — l'argent ne se compte pas en anglais, les gens si." },
+  items:[
+    {f:"qcm", q:"How ___ money do you have?", o:["much","many","a lot"], a:"much", e:"money est indénombrable."},
+    {f:"qcm", q:"How ___ people were there?", o:["many","much","a little"], a:"many", e:"people est dénombrable (pluriel)."},
+    {f:"gap", q:"I don't have ___ time. (some / any)", a:"any", e:"Phrase négative → any."},
+    {f:"gap", q:"Would you like ___ tea? (some / any)", a:"some", e:"Offre polie → some."},
+    {f:"qcm", q:"« a few » s'emploie avec…", o:["les dénombrables","les indénombrables","les deux"], a:"les dénombrables", e:"a few friends / a little water."},
+    {f:"qcm", q:"There isn't ___ bread left.", o:["any","some","many"], a:"any", e:"Négation + indénombrable → any."},
+    {f:"qcm", q:"« information » est…", o:["indénombrable","dénombrable","les deux"], a:"indénombrable", e:"« some information », jamais « informations »."},
+    {f:"txt", q:"Complète : « I have ___ friends in London. » (quelques)", a:"a few", alt:["few","some"], e:"a few + dénombrable pluriel."}
+  ]},
+
+{ id:"en-modals", t:"Modaux : can, must, should, have to", tier:"consolidation",
+  lesson:{ why:"Les modaux disent la permission, l'obligation et le conseil — et ils ne se conjuguent pas.",
+    pts:["Après un modal : *base verbale*, sans « to » et sans -s — « She can *swim* ».",
+      "*can* / *could* : capacité, permission. *must* : obligation forte. *should* : conseil. *may / might* : possibilité.",
+      "*have to* remplace must aux autres temps : « I *had to* go », « I will *have to* go ».",
+      "Attention à la négation : *mustn't* = c'est interdit ; *don't have to* = ce n'est pas nécessaire.",
+      "Pas de forme en -ing, pas d'infinitif : on passe par « be able to » (« I want to *be able to* swim »)."],
+    ex:"« You *mustn't* be late » (interdit) ≠ « You *don't have to* come » (libre à toi)." },
+  items:[
+    {f:"qcm", q:"You ___ wear a helmet. (obligation)", o:["must","can","might"], a:"must", e:"Obligation forte → must."},
+    {f:"qcm", q:"I ___ swim when I was five.", o:["could","can","must"], a:"could", e:"Capacité dans le passé → could."},
+    {f:"gap", q:"Traduis « tu devrais » : you ___", a:"should", e:"Conseil → should + base verbale."},
+    {f:"qcm", q:"« You mustn't smoke » signifie…", o:["c'est interdit","ce n'est pas nécessaire","tu peux si tu veux"], a:"c'est interdit", e:"« don't have to » = ce n'est pas nécessaire."},
+    {f:"qcm", q:"Après un modal, on met…", o:["la base verbale","to + infinitif","le verbe en -ing"], a:"la base verbale", e:"He can swim, et jamais « can to swim »."},
+    {f:"gap", q:"« Je dois partir » : I ___ go. (have to / has to)", a:"have to", e:"1re personne → have to."},
+    {f:"qcm", q:"« She doesn't have to come » signifie…", o:["ce n'est pas obligatoire","c'est interdit","elle ne peut pas"], a:"ce n'est pas obligatoire", e:"L'interdiction serait « she mustn't come »."},
+    {f:"qcm", q:"Which is correct?", o:["He can swim.","He cans swim.","He can to swim."], a:"He can swim.", e:"Un modal ne prend jamais de -s."}
+  ]},
+
+{ id:"en-future", t:"Le futur : will et going to", tier:"consolidation",
+  lesson:{ why:"Trois façons de parler du futur, et un choix qui dépend de ce que tu veux dire.",
+    pts:["*will* + base verbale : prédiction, décision prise sur le moment, promesse — « I *will* help you ».",
+      "*be going to* + base verbale : intention déjà prévue, ou indice visible dans le présent — « Look at those clouds, it *is going to* rain ».",
+      "*Present continuous* pour un rendez-vous fixé — « I *am meeting* Tom at six ».",
+      "Négation : *won't* (= will not).",
+      "Après *if*, *when*, *as soon as*, on emploie le *présent*, jamais le futur — « When I *arrive*, I will call you »."],
+    ex:"« I *will* have a coffee » (décidé maintenant) ≠ « I *am going to* have a coffee » (c'était prévu)." },
+  items:[
+    {f:"qcm", q:"Look at those clouds! It ___ rain.", o:["is going to","will","would"], a:"is going to", e:"Indice visible dans le présent → going to."},
+    {f:"qcm", q:"I ___ help you, don't worry. (décision immédiate)", o:["will","am going to","would"], a:"will", e:"Décision prise sur le moment → will."},
+    {f:"gap", q:"Plan prévu : I ___ (visit) my cousin next week. (going to)", a:"am going to visit", e:"be going to + base verbale."},
+    {f:"qcm", q:"Après « if » (condition réelle), on met…", o:["le présent","le futur","le conditionnel"], a:"le présent", e:"If it rains, we will stay at home."},
+    {f:"gap", q:"Tomorrow I ___ (be) fifteen.", a:"will be", e:"Prédiction / fait à venir → will."},
+    {f:"qcm", q:"« I'm meeting Tom at six » exprime…", o:["un rendez-vous déjà fixé","une prédiction","une obligation"], a:"un rendez-vous déjà fixé", e:"Present continuous à valeur de futur programmé."},
+    {f:"txt", q:"Forme contractée négative de « will » ?", a:"won't", alt:["will not"], e:"will not → won't."},
+    {f:"qcm", q:"Which is correct?", o:["When I arrive, I will call you.","When I will arrive, I will call you.","When I arrived, I will call you."], a:"When I arrive, I will call you.", e:"Après when : présent."}
+  ]},
+
+{ id:"en-prep", t:"Prépositions et phrasal verbs", tier:"consolidation",
+  lesson:{ why:"Les prépositions ne se traduisent pas : elles s'apprennent collées au mot qui les précède.",
+    pts:["Temps : *at* + heure (at 6), *on* + jour ou date (on Monday), *in* + mois, saison, année (in July) — mais *at* night.",
+      "Adjectif + préposition : good *at*, interested *in*, afraid *of*, proud *of*, different *from*, married *to*.",
+      "Verbe + préposition : listen *to*, wait *for*, look *at*, depend *on*, arrive *in* (une ville) / *at* (un lieu précis).",
+      "Phrasal verbs fréquents : give *up* (abandonner), look *after* (s'occuper de), look *for* (chercher), turn *on/off*, find *out*, get *up*.",
+      "Le sens du phrasal verb n'a souvent rien à voir avec le verbe seul : à apprendre comme un mot unique."],
+    ex:"« I'm looking *for* my keys » (je les cherche) ≠ « I'm looking *after* my brother » (je m'occupe de lui)." },
+  items:[
+    {f:"gap", q:"I'm good ___ maths.", a:"at", e:"good at + domaine."},
+    {f:"gap", q:"She's interested ___ music.", a:"in", e:"interested in."},
+    {f:"gap", q:"We arrive ___ Monday.", a:"on", e:"on + jour de la semaine."},
+    {f:"qcm", q:"___ the morning", o:["in","on","at"], a:"in", e:"in the morning / in the afternoon, mais at night."},
+    {f:"qcm", q:"« give up » signifie…", o:["abandonner","se lever","rendre"], a:"abandonner", e:"« get up » = se lever."},
+    {f:"qcm", q:"« look after » signifie…", o:["s'occuper de","chercher","regarder derrière"], a:"s'occuper de", e:"« look for » = chercher."},
+    {f:"gap", q:"Turn ___ the light, it's dark. (on / off)", a:"on", e:"turn on = allumer."},
+    {f:"txt", q:"Complète : « to wait ___ somebody » (attendre quelqu'un)", a:"for", e:"wait for, sans traduction littérale du français."}
+  ]},
+
+{ id:"en-perfect", t:"Present perfect", tier:"anticipation",
+  lesson:{ why:"Le temps qui n'existe pas en français, et le premier vrai obstacle de la 11e.",
+    pts:["Formation : *have / has* + *participe passé* (I have finish*ed*, she *has gone*).",
+      "Emploi : une action passée qui a un lien avec le présent — résultat, expérience de vie, durée qui continue.",
+      "*since* + point de départ (since 2019, since Monday) ; *for* + durée (for three days).",
+      "Mots-repères : ever, never, just, already, yet (yet en fin de phrase, en négation ou question).",
+      "Opposition à retenir : un temps passé *terminé* (yesterday, last year, in 2020) impose le *past simple*."],
+    ex:"« I *have lived* here *for* five years » (j'y habite encore) ≠ « I *lived* there *in* 2019 » (fini)." },
+  items:[
+    {f:"gap", q:"I have lived here ___ 2019. (since / for)", a:"since", e:"Point de départ → since."},
+    {f:"gap", q:"She has been ill ___ three days. (since / for)", a:"for", e:"Durée → for."},
+    {f:"gap", q:"Have you ever ___ (be) to London?", a:"been", e:"be – was – been."},
+    {f:"qcm", q:"Quelle phrase est correcte ?", o:["I saw him yesterday.","I have seen him yesterday.","I have saw him yesterday."], a:"I saw him yesterday.", e:"« yesterday » = temps terminé → past simple."},
+    {f:"gap", q:"He ___ (finish) his homework. (present perfect)", a:"has finished", e:"has + participe passé."},
+    {f:"qcm", q:"« yet » se place…", o:["à la fin, en phrase négative ou interrogative","au début de la phrase","avant le verbe"], a:"à la fin, en phrase négative ou interrogative", e:"I haven't finished yet."},
+    {f:"txt", q:"Participe passé de « see » ?", a:"seen", e:"see – saw – seen."},
+    {f:"qcm", q:"Which is correct?", o:["I have known her for ten years.","I know her since ten years.","I am knowing her for ten years."], a:"I have known her for ten years.", e:"Durée qui continue → present perfect + for."}
+  ]},
+
+{ id:"en-vocab", t:"Vocabulaire et faux amis", tier:"revision", gen:"en-vok",
+  lesson:{ why:"Les faux amis coûtent des points à chaque rédaction — et ils sont peu nombreux.",
+    pts:["*actually* = en fait (et non actuellement = *currently*).",
+      "*sensible* = raisonnable (et non sensible = *sensitive*).",
+      "*to pass an exam* = réussir ; *to take an exam* = passer l'épreuve.",
+      "*borrow* = emprunter ; *lend* = prêter.",
+      "L'âge se dit avec *be* : « She *is* fifteen », jamais « she has fifteen »."],
+    ex:"« *Actually*, I *passed* my exam » = en fait, j'ai réussi mon examen." },
+  items:[
+    {f:"txt", q:"Traduis en anglais : les devoirs", a:"homework", e:"Indénombrable : « my homework », jamais « homeworks »."},
+    {f:"qcm", q:"« actually » signifie…", o:["en fait","actuellement","activement"], a:"en fait", e:"« actuellement » = currently."},
+    {f:"txt", q:"Traduis : emprunter", a:"borrow", alt:["to borrow"], e:"borrow from somebody ; lend to somebody."},
+    {f:"qcm", q:"« to lend » signifie…", o:["prêter","emprunter","rendre"], a:"prêter", e:"Can you lend me your pen?"},
+    {f:"txt", q:"Traduis en anglais : la santé", a:"health", e:"healthy = en bonne santé."},
+    {f:"qcm", q:"« sensible » en anglais signifie…", o:["raisonnable","émotif","perceptible"], a:"raisonnable", e:"« sensible » (émotif) = sensitive."},
+    {f:"txt", q:"Traduis : réussir un examen", a:"to pass an exam", alt:["pass an exam","pass"], e:"« passer un examen » = to take an exam."},
+    {f:"qcm", q:"Quelle version est correcte ?", o:["She is fifteen years old.","She has fifteen years.","She is fifteen years."], a:"She is fifteen years old.", e:"L'âge se dit avec « be »."}
+  ]}
+
+]};
+
+/* --- générateurs anglais --- */
+(function(){
+  const rnd = n => Math.floor(Math.random()*n);
+  const IRR = [
+    ["go","went","gone"],["take","took","taken"],["write","wrote","written"],["see","saw","seen"],
+    ["buy","bought","bought"],["bring","brought","brought"],["come","came","come"],["do","did","done"],
+    ["drink","drank","drunk"],["eat","ate","eaten"],["find","found","found"],["get","got","got"],
+    ["give","gave","given"],["know","knew","known"],["leave","left","left"],["make","made","made"],
+    ["meet","met","met"],["read","read","read"],["say","said","said"],["sing","sang","sung"],
+    ["speak","spoke","spoken"],["swim","swam","swum"],["teach","taught","taught"],["think","thought","thought"],
+    ["wear","wore","worn"],["win","won","won"],["break","broke","broken"],["choose","chose","chosen"],
+    ["fly","flew","flown"],["forget","forgot","forgotten"]
+  ];
+  GENS["en-irr"] = function(){
+    const v = IRR[rnd(IRR.length)];
+    if (Math.random() < 0.5)
+      return { f:"txt", q:"Prétérit (past simple) de « *"+v[0]+"* » ?", a:v[1], e:v[0]+" – "+v[1]+" – "+v[2]+"." };
+    return { f:"txt", q:"Participe passé de « *"+v[0]+"* » ?", a:v[2], e:v[0]+" – "+v[1]+" – "+v[2]+"." };
+  };
+
+  const VOK = [
+  ["la semaine","week"],["le voyage","trip"],["le travail","work"],["la santé","health"],
+  ["l'école","school"],["l'année","year"],["le monde","world"],["la ville","city"],
+  ["le pays","country"],["l'argent","money"],["le temps (durée)","time"],["la nourriture","food"],
+  ["le choix","choice"],["la réponse","answer"],["la question","question"],["l'ami","friend"],
+  ["apprendre","learn"],["essayer","try"],["choisir","choose"],["expliquer","explain"],
+  ["se souvenir","remember"],["oublier","forget"],["améliorer","improve"],["comprendre","understand"]
+  ];
+  GENS["en-vok"] = function(){
+    const [fr, en] = VOK[rnd(VOK.length)];
+    return { f:"txt", q:"Traduis en anglais : *"+fr+"*", a:en, alt:["the "+en, "to "+en],
+             e:fr+" → "+en+"." };
+  };
+})();
+</script>
+<script>
+/* ===================== MATHS ===================== */
+BANK.maths = { label:"Maths", short:"MA", themes:[
+
+{ id:"ma-rel", t:"Nombres relatifs et priorités", tier:"revision", gen:"ma-rel",
+  lesson:{ why:"Une faute de signe ou de priorité et tout l'exercice tombe. C'est la base de tout le calcul de 11e.",
+    pts:["Priorités : *parenthèses*, puis *puissances*, puis *× et ÷* (de gauche à droite), puis *+ et −*.",
+      "Deux signes identiques donnent +, deux signes différents donnent − : (−3) × (−4) = *+12*, (−3) × 4 = *−12*.",
+      "Soustraire, c'est ajouter l'opposé : 5 − (−3) = 5 + 3 = *8*.",
+      "Un signe − devant une parenthèse change *tous* les signes à l'intérieur : −(2x − 5) = −2x + 5."],
+    ex:"−7 + 3 × (−4) = −7 + (−12) = *−19* — et surtout pas (−7 + 3) × (−4)." },
+  items:[
+    {f:"txt", m:1, q:"Calcule : (−5) × (−3)", a:"15", e:"Deux signes identiques → résultat positif."},
+    {f:"txt", m:1, q:"Calcule : 8 − (−6)", a:"14", e:"Soustraire un négatif revient à ajouter : 8 + 6."},
+    {f:"txt", m:1, q:"Calcule : −4 + 2 × 5", a:"6", e:"La multiplication d'abord : 2 × 5 = 10, puis −4 + 10."},
+    {f:"txt", m:1, q:"Calcule : 3 × (−2 + 7)", a:"15", e:"Parenthèse d'abord : −2 + 7 = 5, puis 3 × 5."},
+    {f:"qcm", q:"−(3x − 4) s'écrit aussi…", o:["−3x + 4","−3x − 4","3x + 4"], a:"−3x + 4", e:"Le signe − change tous les signes de la parenthèse."},
+    {f:"txt", m:1, q:"Calcule : (−12) ÷ 4", a:"-3", alt:["−3"], e:"Signes différents → quotient négatif."},
+    {f:"txt", m:1, q:"Calcule : 10 − 2 × 3 + 1", a:"5", e:"2 × 3 = 6 d'abord, puis 10 − 6 + 1."},
+    {f:"qcm", q:"Quel calcul vaut −20 ?", o:["(−4) × 5","(−4) × (−5)","−4 − 5"], a:"(−4) × 5", e:"Signes différents → produit négatif."}
+  ]},
+
+{ id:"ma-frac", t:"Fractions", tier:"revision", gen:"ma-frac",
+  lesson:{ why:"Les fractions reviennent partout en 11e : équations, proportions, probabilités.",
+    pts:["Additionner : *même dénominateur obligatoire*. 2/3 + 1/4 → 8/12 + 3/12 = *11/12*.",
+      "Multiplier : numérateurs entre eux, dénominateurs entre eux (2/3 × 4/5 = 8/15). Simplifier avant, c'est plus rapide.",
+      "Diviser : on multiplie par l'inverse — 3/4 ÷ 2/5 = 3/4 × 5/2 = *15/8*.",
+      "Simplifier : diviser numérateur et dénominateur par leur plus grand diviseur commun (18/24 = *3/4*).",
+      "Une fraction n'est vraiment terminée que *simplifiée*."],
+    ex:"2/3 + 1/4 : dénominateur commun 12 → 8/12 + 3/12 = 11/12, déjà irréductible." },
+  items:[
+    {f:"txt", m:1, q:"Calcule et simplifie : 1/2 + 1/3", a:"5/6", e:"Dénominateur commun 6 : 3/6 + 2/6."},
+    {f:"txt", m:1, q:"Simplifie : 18/24", a:"3/4", e:"On divise les deux par 6."},
+    {f:"txt", m:1, q:"Calcule : 2/3 × 3/4", a:"1/2", alt:["6/12"], e:"6/12 se simplifie en 1/2."},
+    {f:"txt", m:1, q:"Calcule : 3/4 ÷ 1/2", a:"3/2", alt:["1.5","6/4"], e:"Diviser, c'est multiplier par l'inverse : 3/4 × 2/1."},
+    {f:"qcm", q:"Quelle fraction est égale à 0,25 ?", o:["1/4","1/2","2/5"], a:"1/4", e:"1 ÷ 4 = 0,25."},
+    {f:"txt", m:1, q:"Calcule : 5/6 − 1/3", a:"1/2", alt:["3/6"], e:"1/3 = 2/6, donc 5/6 − 2/6 = 3/6 = 1/2."},
+    {f:"qcm", q:"Laquelle est la plus grande ?", o:["3/4","2/3","5/8"], a:"3/4", e:"Sur 24 : 18/24, 16/24, 15/24."},
+    {f:"txt", m:1, q:"Écris 7/2 en nombre décimal", a:"3.5", alt:["3,5"], e:"7 ÷ 2 = 3,5."}
+  ]},
+
+{ id:"ma-prop", t:"Proportionnalité et pourcentages", tier:"revision", gen:"ma-pct",
+  lesson:{ why:"Le chapitre le plus utile de la vie courante — et un classique des épreuves cantonales.",
+    pts:["Proportionnalité : on passe d'une colonne à l'autre en multipliant par un *coefficient* constant.",
+      "Produit en croix : si a/b = c/d, alors a × d = b × c.",
+      "*p % d'un nombre* = nombre × p ÷ 100. 15 % de 240 = 240 × 0,15 = *36*.",
+      "Augmenter de p % → multiplier par (1 + p/100) ; diminuer de p % → multiplier par (1 − p/100).",
+      "Deux baisses ou hausses successives ne s'additionnent pas : +10 % puis −10 % ne ramène pas au prix de départ."],
+    ex:"80 CHF augmenté de 25 % : 80 × 1,25 = *100 CHF*. Puis remise de 20 % : 100 × 0,8 = 80 CHF." },
+  items:[
+    {f:"txt", m:1, q:"Calcule 20 % de 350", a:"70", e:"350 × 0,20 = 70."},
+    {f:"txt", m:1, q:"Un pull coûte 60 CHF, remise de 25 %. Nouveau prix (CHF) ?", a:"45", e:"60 × 0,75 = 45."},
+    {f:"txt", m:1, q:"4 cahiers coûtent 12 CHF. Combien coûtent 7 cahiers (CHF) ?", a:"21", e:"Prix unitaire 3 CHF, donc 7 × 3 = 21."},
+    {f:"qcm", q:"Augmenter de 15 %, c'est multiplier par…", o:["1,15","0,15","1,5"], a:"1,15", e:"1 + 15/100."},
+    {f:"txt", m:1, q:"25 est quel pourcentage de 200 ? (donne le nombre)", a:"12.5", alt:["12,5"], e:"25 ÷ 200 = 0,125 = 12,5 %."},
+    {f:"qcm", q:"Un prix baisse de 10 % puis remonte de 10 %. Le prix final est…", o:["plus bas qu'au départ","identique","plus haut"], a:"plus bas qu'au départ", e:"×0,9 puis ×1,1 = ×0,99."},
+    {f:"txt", m:1, q:"3 kg de pommes coûtent 7,50 CHF. Prix de 5 kg (CHF) ?", a:"12.5", alt:["12,5","12.50"], e:"2,50 CHF le kilo → 5 × 2,50 = 12,50."},
+    {f:"qcm", q:"Sur une carte à l'échelle 1 : 25 000, 4 cm représentent…", o:["1 km","400 m","25 km"], a:"1 km", e:"4 × 25 000 = 100 000 cm = 1 km."}
+  ]},
+
+{ id:"ma-pow", t:"Puissances et notation scientifique", tier:"consolidation", gen:"ma-pow",
+  lesson:{ why:"Indispensable pour les sciences, et les règles sont peu nombreuses.",
+    pts:["aⁿ = a × a × … (n facteurs). a⁰ = *1* pour tout a ≠ 0.",
+      "Même base : aᵘ × aᵛ = a^(u+*v*) ; aᵘ ÷ aᵛ = a^(u−v) ; (aᵘ)ᵛ = a^(u×v).",
+      "Exposant négatif : a^(−n) = 1/aⁿ. Ainsi 10⁻³ = 0,001.",
+      "Notation scientifique : un seul chiffre non nul avant la virgule, × une puissance de 10 — 45 000 = *4,5 × 10⁴*.",
+      "Attention : (−2)⁴ = +16 mais −2⁴ = −16 ; la parenthèse change tout."],
+    ex:"2³ × 2⁴ = 2⁷ = 128 — on additionne les exposants, on ne multiplie jamais les bases." },
+  items:[
+    {f:"txt", m:1, q:"Calcule : 2⁵", a:"32", e:"2×2×2×2×2 = 32."},
+    {f:"txt", m:1, q:"Calcule : 3³", a:"27", e:"3×3×3 = 27."},
+    {f:"qcm", q:"2³ × 2⁴ = ?", o:["2⁷","2¹²","4⁷"], a:"2⁷", e:"Même base → on additionne les exposants."},
+    {f:"txt", m:1, q:"Calcule : 5⁰", a:"1", e:"Toute puissance d'exposant 0 vaut 1."},
+    {f:"qcm", q:"45 000 en notation scientifique :", o:["4,5 × 10⁴","45 × 10³","4,5 × 10⁵"], a:"4,5 × 10⁴", e:"Un seul chiffre avant la virgule."},
+    {f:"qcm", q:"10⁻³ vaut…", o:["0,001","−1000","0,0001"], a:"0,001", e:"Exposant négatif → inverse de 10³."},
+    {f:"txt", m:1, q:"Calcule : (−2)⁴", a:"16", e:"Exposant pair → résultat positif."},
+    {f:"qcm", q:"(3²)³ = ?", o:["3⁶","3⁵","9³"], a:"3⁶", e:"On multiplie les exposants : 2 × 3 = 6."}
+  ]},
+
+{ id:"ma-lit", t:"Calcul littéral", tier:"consolidation", gen:"ma-lit",
+  lesson:{ why:"Développer, réduire, factoriser : l'outil de base de toute la 11e, puis du gymnase.",
+    pts:["*Réduire* : on additionne uniquement les termes semblables — 3x + 5 − x + 2 = *2x + 7* (x et constantes séparés).",
+      "*Développer* (distributivité) : a(b + c) = ab + ac. Ainsi 3(2x + 5) = *6x + 15*.",
+      "Double distributivité : (x + 3)(x + 2) = x² + 2x + 3x + 6 = *x² + 5x + 6*.",
+      "*Factoriser* : on met en évidence le facteur commun — 6x + 9 = *3(2x + 3)*.",
+      "Attention au signe : −2(x − 4) = −2x *+* 8."],
+    ex:"3(2x + 5) − 4x = 6x + 15 − 4x = *2x + 15*." },
+  items:[
+    {f:"txt", m:1, q:"Réduis : 3x + 5 − x + 2", a:"2x+7", alt:["7+2x"], e:"3x − x = 2x et 5 + 2 = 7."},
+    {f:"txt", m:1, q:"Développe : 4(x + 3)", a:"4x+12", e:"4 × x et 4 × 3."},
+    {f:"txt", m:1, q:"Développe : −2(x − 5)", a:"-2x+10", alt:["−2x+10","10-2x"], e:"Le signe − change les deux signes."},
+    {f:"txt", m:1, q:"Factorise : 6x + 9", a:"3(2x+3)", e:"Facteur commun 3."},
+    {f:"qcm", q:"(x + 3)(x + 2) = ?", o:["x² + 5x + 6","x² + 6","x² + 5x + 5"], a:"x² + 5x + 6", e:"Double distributivité, puis on réduit 2x + 3x."},
+    {f:"txt", m:1, q:"Réduis : 5a − 2a + 3", a:"3a+3", e:"5a − 2a = 3a."},
+    {f:"txt", m:1, q:"Développe : 2(3x − 4) + 5", a:"6x-3", alt:["6x−3"], e:"6x − 8 + 5 = 6x − 3."},
+    {f:"qcm", q:"Factorise : 10x − 15", o:["5(2x − 3)","5(2x + 3)","10(x − 15)"], a:"5(2x − 3)", e:"Facteur commun 5."}
+  ]},
+
+{ id:"ma-eq", t:"Équations du premier degré", tier:"consolidation", gen:"ma-eq",
+  lesson:{ why:"L'outil qui transforme un problème en réponse. Le raisonnement est toujours le même.",
+    pts:["On garde l'*égalité* : ce qu'on fait d'un côté, on le fait de l'autre.",
+      "Méthode : développer, regrouper les x d'un côté et les nombres de l'autre, puis diviser par le coefficient de x.",
+      "4x + 7 = 31 → 4x = 24 → x = *6*.",
+      "Si les x s'annulent et qu'il reste une égalité fausse, il n'y a *aucune solution* ; si l'égalité est toujours vraie, *tout nombre* est solution.",
+      "Toujours *vérifier* en remplaçant x par la valeur trouvée."],
+    ex:"3(x − 2) = x + 8 → 3x − 6 = x + 8 → 2x = 14 → x = *7*. Vérification : 3(5) = 15 = 7 + 8. ✓" },
+  items:[
+    {f:"txt", m:1, q:"Résous : x + 7 = 12. x = ?", a:"5", e:"On retire 7 des deux côtés."},
+    {f:"txt", m:1, q:"Résous : 4x = 20. x = ?", a:"5", e:"On divise les deux côtés par 4."},
+    {f:"txt", m:1, q:"Résous : 3x − 5 = 16. x = ?", a:"7", e:"3x = 21, donc x = 7."},
+    {f:"txt", m:1, q:"Résous : 2x + 3 = x + 9. x = ?", a:"6", e:"On retire x et 3 : x = 6."},
+    {f:"txt", m:1, q:"Résous : 5(x − 1) = 20. x = ?", a:"5", e:"5x − 5 = 20 → 5x = 25."},
+    {f:"txt", m:1, q:"Résous : −3x = 12. x = ?", a:"-4", alt:["−4"], e:"On divise par −3."},
+    {f:"qcm", q:"Un nombre augmenté de 8 donne le double de ce nombre. Quelle équation ?", o:["x + 8 = 2x","2x + 8 = x","x + 8 = x/2"], a:"x + 8 = 2x", e:"La solution est x = 8."},
+    {f:"txt", m:1, q:"Résous : x/3 = 4. x = ?", a:"12", e:"On multiplie les deux côtés par 3."}
+  ]},
+
+{ id:"ma-pyth", t:"Théorème de Pythagore", tier:"consolidation", gen:"ma-pyth",
+  lesson:{ why:"Le théorème le plus rentable de la scolarité : longueurs, diagonales, vérification d'angle droit.",
+    pts:["Dans un triangle *rectangle* : hypoténuse² = côté² + côté² (a² + b² = c²).",
+      "L'*hypoténuse* est le côté opposé à l'angle droit — c'est toujours le plus long.",
+      "Pour trouver un côté de l'angle droit, on *soustrait* : b² = c² − a².",
+      "Réciproque : si a² + b² = c², le triangle *est* rectangle — c'est ainsi qu'on vérifie un angle droit.",
+      "Triplets à reconnaître d'un coup d'œil : 3-4-5, 6-8-10, 5-12-13, 8-15-17, 7-24-25."],
+    ex:"Côtés 6 et 8 : 36 + 64 = 100, donc l'hypoténuse vaut *10*." },
+  items:[
+    {f:"txt", m:1, q:"Triangle rectangle, côtés 3 et 4. Hypoténuse ?", a:"5", e:"9 + 16 = 25 → √25 = 5."},
+    {f:"txt", m:1, q:"Triangle rectangle, côtés 5 et 12. Hypoténuse ?", a:"13", e:"25 + 144 = 169 → 13."},
+    {f:"txt", m:1, q:"Hypoténuse 10, un côté 6. L'autre côté ?", a:"8", e:"100 − 36 = 64 → 8."},
+    {f:"qcm", q:"Le triangle de côtés 7, 24, 25 est-il rectangle ?", o:["Oui : 49 + 576 = 625","Non","On ne peut pas savoir"], a:"Oui : 49 + 576 = 625", e:"La réciproque du théorème le confirme."},
+    {f:"qcm", q:"Dans un triangle rectangle, l'hypoténuse est…", o:["le côté opposé à l'angle droit","le plus court côté","toujours vertical"], a:"le côté opposé à l'angle droit", e:"C'est aussi le plus long des trois."},
+    {f:"txt", m:1, q:"Un carré de côté 5. Longueur de la diagonale au carré ?", a:"50", e:"25 + 25 = 50 (la diagonale vaut √50)."},
+    {f:"txt", m:1, q:"Triangle rectangle, côtés 8 et 15. Hypoténuse ?", a:"17", e:"64 + 225 = 289 → 17."},
+    {f:"qcm", q:"Le triangle de côtés 4, 5, 6 est…", o:["quelconque","rectangle","isocèle"], a:"quelconque", e:"16 + 25 = 41 ≠ 36 : pas rectangle."}
+  ]},
+
+{ id:"ma-aire", t:"Périmètres, aires et volumes", tier:"consolidation", gen:"ma-vol",
+  lesson:{ why:"Des formules à connaître par cœur — et une erreur d'unité coûte tout le point.",
+    pts:["Rectangle : périmètre 2(L + l), aire L × l. Carré : périmètre 4c, aire c².",
+      "Triangle : aire = (base × hauteur) ÷ 2. Disque : périmètre 2πr, aire πr².",
+      "Pavé droit : volume L × l × h. Cube : c³. Cylindre : πr² × h.",
+      "Prisme et cylindre : volume = *aire de la base × hauteur*. Pyramide et cône : on divise par 3.",
+      "Unités : une aire est en cm², un volume en cm³ ; 1 litre = 1 dm³ = 1000 cm³."],
+    ex:"Rectangle 8 × 5 : périmètre 26 cm, aire 40 cm². Un pavé 8 × 5 × 2 : volume 80 cm³." },
+  items:[
+    {f:"txt", m:1, q:"Aire d'un rectangle 7 cm × 4 cm (en cm²) ?", a:"28", e:"L × l = 28."},
+    {f:"txt", m:1, q:"Périmètre d'un rectangle 7 cm × 4 cm (en cm) ?", a:"22", e:"2 × (7 + 4) = 22."},
+    {f:"txt", m:1, q:"Aire d'un triangle : base 10 cm, hauteur 6 cm (cm²) ?", a:"30", e:"(10 × 6) ÷ 2 = 30."},
+    {f:"txt", m:1, q:"Volume d'un cube d'arête 4 cm (cm³) ?", a:"64", e:"4³ = 64."},
+    {f:"qcm", q:"Aire d'un disque de rayon r :", o:["πr²","2πr","πd"], a:"πr²", e:"2πr est le périmètre."},
+    {f:"txt", m:1, q:"Volume d'un pavé 5 × 3 × 2 cm (cm³) ?", a:"30", e:"L × l × h = 30."},
+    {f:"qcm", q:"1 litre correspond à…", o:["1 dm³","1 cm³","1 m³"], a:"1 dm³", e:"1 dm³ = 1000 cm³ = 1 litre."},
+    {f:"qcm", q:"Volume d'un cylindre :", o:["πr² × h","2πr × h","πr² ÷ 3"], a:"πr² × h", e:"Aire de la base × hauteur."}
+  ]},
+
+{ id:"ma-sys", t:"Systèmes de deux équations", tier:"anticipation", gen:"ma-sys",
+  lesson:{ why:"Le grand nouveau chapitre de la 11e : deux inconnues, deux équations.",
+    pts:["Deux méthodes : *substitution* (on exprime une inconnue et on la remplace) et *addition / soustraction* (on élimine une inconnue).",
+      "Substitution : de x + y = 10 on tire y = 10 − x, puis on remplace dans la seconde équation.",
+      "Élimination : si x + y = 10 et x − y = 4, additionner donne 2x = 14 → x = *7*, puis y = 3.",
+      "On peut multiplier une équation entière par un nombre pour faire apparaître des coefficients opposés.",
+      "Toujours *vérifier le couple (x ; y)* dans les *deux* équations."],
+    ex:"x + y = 10 et x − y = 4 → 2x = 14, x = 7, y = 3. Vérification : 7 + 3 = 10 ✓ et 7 − 3 = 4 ✓" },
+  items:[
+    {f:"txt", m:1, q:"x + y = 10 et x − y = 2. Donne x.", a:"6", e:"Addition : 2x = 12 → x = 6, puis y = 4."},
+    {f:"txt", m:1, q:"x + y = 9 et x − y = 1. Donne y.", a:"4", e:"2x = 10 → x = 5, donc y = 4."},
+    {f:"txt", m:1, q:"y = 2x et x + y = 12. Donne x.", a:"4", e:"Substitution : x + 2x = 12 → 3x = 12."},
+    {f:"qcm", q:"Pour éliminer y dans x + y = 7 et 2x − y = 5, on…", o:["additionne les deux équations","les soustrait","multiplie la première par 2"], a:"additionne les deux équations", e:"+y et −y s'annulent : 3x = 12."},
+    {f:"txt", m:1, q:"2x + y = 11 et y = 3. Donne x.", a:"4", e:"2x = 8 → x = 4."},
+    {f:"qcm", q:"Deux stylos et un cahier coûtent 11 CHF ; un stylo coûte 3 CHF. Le cahier coûte…", o:["5 CHF","8 CHF","4 CHF"], a:"5 CHF", e:"2 × 3 = 6, donc 11 − 6 = 5."},
+    {f:"txt", m:1, q:"x + y = 20 et x = 3y. Donne y.", a:"5", e:"3y + y = 20 → 4y = 20."},
+    {f:"qcm", q:"Un système de deux équations peut avoir…", o:["une solution, aucune, ou une infinité","toujours une solution","toujours deux solutions"], a:"une solution, aucune, ou une infinité", e:"Selon que les droites se coupent, sont parallèles ou confondues."}
+  ]},
+
+{ id:"ma-stat", t:"Statistiques et probabilités", tier:"anticipation", gen:"ma-stat",
+  lesson:{ why:"Deux notions simples et très rentables : les indicateurs d'une série, et la probabilité d'un événement.",
+    pts:["*Moyenne* = somme des valeurs ÷ nombre de valeurs.",
+      "*Médiane* = valeur du milieu quand la série est *rangée dans l'ordre* (moyenne des deux valeurs centrales si le nombre est pair).",
+      "*Étendue* = plus grande valeur − plus petite valeur. *Mode* = la valeur la plus fréquente.",
+      "Probabilité d'un événement = *cas favorables ÷ cas possibles*, un nombre entre 0 et 1.",
+      "Avec un dé équilibré : P(obtenir 4) = 1/6 ; P(nombre pair) = 3/6 = *1/2*."],
+    ex:"Série 3, 7, 4, 9, 5 → rangée : 3, 4, 5, 7, 9 → médiane *5*, moyenne 28/5 = 5,6, étendue 6." },
+  items:[
+    {f:"txt", m:1, q:"Moyenne de 4, 7, 10, 3 ?", a:"6", e:"24 ÷ 4 = 6."},
+    {f:"txt", m:1, q:"Médiane de 3, 7, 4, 9, 5 ?", a:"5", e:"Rangée : 3, 4, 5, 7, 9 → la valeur du milieu est 5."},
+    {f:"txt", m:1, q:"Étendue de 12, 5, 20, 8 ?", a:"15", e:"20 − 5 = 15."},
+    {f:"txt", m:1, q:"Dé équilibré : probabilité d'obtenir un nombre pair ? (fraction simplifiée)", a:"1/2", alt:["3/6","0.5","0,5"], e:"3 cas favorables sur 6."},
+    {f:"qcm", q:"Une probabilité est toujours…", o:["entre 0 et 1","entre 0 et 100","supérieure à 1"], a:"entre 0 et 1", e:"0 = impossible, 1 = certain."},
+    {f:"txt", m:1, q:"Sac de 3 boules rouges et 5 bleues. Probabilité de tirer une rouge ? (fraction)", a:"3/8", e:"3 cas favorables sur 8 possibles."},
+    {f:"qcm", q:"Quel indicateur est le moins sensible à une valeur extrême ?", o:["la médiane","la moyenne","l'étendue"], a:"la médiane", e:"Une valeur très grande tire la moyenne, pas la médiane."},
+    {f:"txt", m:1, q:"Moyenne de 2, 8, 8, 6 ?", a:"6", e:"24 ÷ 4 = 6."}
+  ]}
+
+]};
+
+/* --- générateurs maths : réserve infinie --- */
+(function(){
+  const ri = (a,b) => a + Math.floor(Math.random()*(b-a+1));
+  const rnd = n => Math.floor(Math.random()*n);
+  const par = n => n < 0 ? "("+n+")" : String(n);
+  function gcd(a,b){ a = Math.abs(a); b = Math.abs(b); while(b){ const t = b; b = a % b; a = t; } return a || 1; }
+  function frac(n,d){ const g = gcd(n,d); n = n/g; d = d/g; if (d < 0){ n = -n; d = -d; } return d === 1 ? String(n) : n+"/"+d; }
+
+  GENS["ma-rel"] = function(){
+    const t = rnd(4);
+    if (t === 0){ const a = ri(-9,9), b = ri(-9,-2), c = ri(2,9);
+      return { f:"txt", m:1, q:"Calcule : "+a+" + "+par(b)+" × "+c, a:String(a+b*c),
+        e:"Multiplication d'abord : "+b+" × "+c+" = "+(b*c)+", puis "+a+" + ("+(b*c)+") = "+(a+b*c)+"." }; }
+    if (t === 1){ const a = ri(-9,9), b = ri(-9,-1);
+      return { f:"txt", m:1, q:"Calcule : "+a+" − "+par(b), a:String(a-b),
+        e:"Soustraire un négatif, c'est ajouter : "+a+" + "+(-b)+" = "+(a-b)+"." }; }
+    if (t === 2){ const a = ri(-9,-2), b = ri(-9,-2);
+      return { f:"txt", m:1, q:"Calcule : "+par(a)+" × "+par(b), a:String(a*b),
+        e:"Deux négatifs → produit positif : "+(a*b)+"." }; }
+    const a = ri(2,9), b = ri(-9,-1), c = ri(2,9);
+    return { f:"txt", m:1, q:"Calcule : "+a+" × ("+b+" + "+c+")", a:String(a*(b+c)),
+      e:"Parenthèse d'abord : "+b+" + "+c+" = "+(b+c)+", puis "+a+" × "+(b+c)+" = "+(a*(b+c))+"." };
+  };
+
+  GENS["ma-frac"] = function(){
+    const b = ri(2,9), d = ri(2,9), a = ri(1,b-1), c = ri(1,d-1);
+    const t = rnd(3);
+    if (t === 0) return { f:"txt", m:1, q:"Calcule et simplifie : "+a+"/"+b+" + "+c+"/"+d,
+      a:frac(a*d + c*b, b*d), alt:[(a*d+c*b)+"/"+(b*d)],
+      e:"Dénominateur commun "+(b*d)+" : "+(a*d)+"/"+(b*d)+" + "+(c*b)+"/"+(b*d)+" = "+frac(a*d+c*b, b*d)+"." };
+    if (t === 1) return { f:"txt", m:1, q:"Calcule et simplifie : "+a+"/"+b+" × "+c+"/"+d,
+      a:frac(a*c, b*d), alt:[(a*c)+"/"+(b*d)],
+      e:"Numérateurs entre eux, dénominateurs entre eux : "+(a*c)+"/"+(b*d)+" = "+frac(a*c,b*d)+"." };
+    const k = ri(2,6);
+    return { f:"txt", m:1, q:"Simplifie : "+(a*k)+"/"+(b*k), a:frac(a,b),
+      e:"On divise les deux termes par "+gcd(a*k,b*k)+" → "+frac(a,b)+"." };
+  };
+
+  GENS["ma-pct"] = function(){
+    const t = rnd(3);
+    const pcts = [5,10,15,20,25,40,50,75];
+    if (t === 0){ const p = pcts[rnd(pcts.length)], base = 20*ri(2,20);
+      return { f:"txt", m:1, q:"Calcule "+p+" % de "+base, a:String(base*p/100),
+        e:base+" × "+(p/100).toString().replace(".",",")+" = "+(base*p/100)+"." }; }
+    if (t === 1){ const p = [10,20,25,50][rnd(4)], base = 20*ri(2,15);
+      const down = Math.random() < 0.5;
+      const res = down ? base*(1-p/100) : base*(1+p/100);
+      return { f:"txt", m:1, q:"Un article coûte "+base+" CHF. "+(down ? "Remise" : "Hausse")+" de "+p+" %. Nouveau prix (CHF) ?",
+        a:String(res), e:base+" × "+(down ? (1-p/100) : (1+p/100)).toString().replace(".",",")+" = "+res+" CHF." }; }
+    const u = ri(2,9), n = ri(2,6), m = ri(2,9);
+    return { f:"txt", m:1, q:n+" articles identiques coûtent "+(n*u)+" CHF. Prix de "+m+" articles (CHF) ?",
+      a:String(m*u), e:"Prix unitaire "+u+" CHF, donc "+m+" × "+u+" = "+(m*u)+" CHF." };
+  };
+
+  GENS["ma-pow"] = function(){
+    const t = rnd(3);
+    if (t === 0){ const a = ri(2,6), n = ri(2,4);
+      return { f:"txt", m:1, q:"Calcule : "+a+"^"+n, a:String(Math.pow(a,n)),
+        e:a+" multiplié "+n+" fois par lui-même = "+Math.pow(a,n)+"." }; }
+    if (t === 1){ const a = ri(2,7); let u = ri(2,6), v = ri(2,6);
+      if (u + v === u * v) v = v + 1;
+      return { f:"qcm", q:a+"^"+u+" × "+a+"^"+v+" = ?", o:[a+"^"+(u+v), a+"^"+(u*v), (a*a)+"^"+(u+v)].sort(() => Math.random()-.5),
+        a:a+"^"+(u+v), e:"Même base → on additionne les exposants : "+u+" + "+v+" = "+(u+v)+"." }; }
+    const mant = ri(11,99)/10, e = ri(3,6);
+    const val = mant * Math.pow(10,e);
+    return { f:"qcm", q:"Écris "+val.toLocaleString("fr-CH")+" en notation scientifique :",
+      o:[String(mant).replace(".",",")+" × 10^"+e, String(mant*10).replace(".",",")+" × 10^"+(e-1), String(mant).replace(".",",")+" × 10^"+(e+1)].sort(() => Math.random()-.5),
+      a:String(mant).replace(".",",")+" × 10^"+e, e:"Un seul chiffre non nul avant la virgule." };
+  };
+
+  GENS["ma-lit"] = function(){
+    const t = rnd(4);
+    if (t === 0){ const a = ri(2,7), b = ri(2,9);
+      return { f:"txt", m:1, q:"Développe : "+a+"(x + "+b+")", a:(a)+"x+"+(a*b),
+        e:a+" × x = "+a+"x et "+a+" × "+b+" = "+(a*b)+"." }; }
+    if (t === 1){ const a = ri(2,7), b = ri(2,9);
+      return { f:"txt", m:1, q:"Développe : −"+a+"(x − "+b+")", a:"-"+a+"x+"+(a*b), alt:["−"+a+"x+"+(a*b), (a*b)+"-"+a+"x"],
+        e:"Le signe − change les deux signes : −"+a+"x + "+(a*b)+"." }; }
+    if (t === 2){ const a = ri(2,9), b = ri(1,9), c = ri(1,a-1 > 0 ? a-1 : 1), d = ri(1,9);
+      const x = a - c, n = b + d;
+      return { f:"txt", m:1, q:"Réduis : "+a+"x + "+b+" − "+c+"x + "+d, a:(x === 1 ? "x" : x+"x")+"+"+n,
+        e:a+"x − "+c+"x = "+(x === 1 ? "x" : x+"x")+" et "+b+" + "+d+" = "+n+"." }; }
+    const k = [2,3,4,5,6][rnd(5)], p = ri(2,7), q = ri(2,9);
+    return { f:"txt", m:1, q:"Factorise : "+(k*p)+"x + "+(k*q), a:k+"("+p+"x+"+q+")",
+      e:"Facteur commun "+k+" → "+k+"("+p+"x + "+q+")." };
+  };
+
+  GENS["ma-eq"] = function(){
+    const t = rnd(3);
+    if (t === 0){ const a = ri(2,9), x = ri(-6,9), b = ri(-9,9);
+      const c = a*x + b;
+      return { f:"txt", m:1, q:"Résous : "+a+"x "+(b < 0 ? "− "+(-b) : "+ "+b)+" = "+c+". x = ?", a:String(x),
+        e:a+"x = "+(c-b)+", donc x = "+(c-b)+" ÷ "+a+" = "+x+"." }; }
+    if (t === 1){ const a = ri(2,6), b = ri(-8,8), x = ri(-5,8);
+      const c = a*(x + b);
+      return { f:"txt", m:1, q:"Résous : "+a+"(x "+(b < 0 ? "− "+(-b) : "+ "+b)+") = "+c+". x = ?", a:String(x),
+        e:"On divise par "+a+" : x "+(b < 0 ? "− "+(-b) : "+ "+b)+" = "+(c/a)+", donc x = "+x+"." }; }
+    const a = ri(3,9), d = ri(1,a-1), x = ri(-5,9), b = ri(-9,9);
+    const c = (a-d)*x + b;   // a·x + b = d·x + c  ⇔  (a−d)x = c − b
+    return { f:"txt", m:1, q:"Résous : "+a+"x "+(b < 0 ? "− "+(-b) : "+ "+b)+" = "+d+"x + "+c+". x = ?", a:String(x),
+      e:"On regroupe : "+(a-d)+"x = "+(c-b)+", donc x = "+x+"." };
+  };
+
+  GENS["ma-pyth"] = function(){
+    const TR = [[3,4,5],[6,8,10],[5,12,13],[9,12,15],[8,15,17],[7,24,25],[12,16,20],[20,21,29],[9,40,41],[12,35,37]];
+    const t = TR[rnd(TR.length)];
+    const k = Math.random() < 0.25 ? 2 : 1;
+    const a = t[0]*k, b = t[1]*k, c = t[2]*k;
+    if (Math.random() < 0.6)
+      return { f:"txt", m:1, q:"Triangle rectangle, côtés de l'angle droit "+a+" et "+b+". Hypoténuse ?", a:String(c),
+        e:a+"² + "+b+"² = "+(a*a)+" + "+(b*b)+" = "+(c*c)+", donc l'hypoténuse vaut "+c+"." };
+    const known = Math.random() < 0.5 ? a : b, other = known === a ? b : a;
+    return { f:"txt", m:1, q:"Triangle rectangle : hypoténuse "+c+", un côté "+known+". L'autre côté ?", a:String(other),
+      e:c+"² − "+known+"² = "+(c*c)+" − "+(known*known)+" = "+(other*other)+", donc "+other+"." };
+  };
+
+  GENS["ma-vol"] = function(){
+    const t = rnd(4);
+    if (t === 0){ const L = ri(3,14), l = ri(2,12);
+      return { f:"txt", m:1, q:"Aire d'un rectangle "+L+" cm × "+l+" cm (en cm²) ?", a:String(L*l),
+        e:L+" × "+l+" = "+(L*l)+" cm²." }; }
+    if (t === 1){ const L = ri(3,14), l = ri(2,12);
+      return { f:"txt", m:1, q:"Périmètre d'un rectangle "+L+" cm × "+l+" cm (en cm) ?", a:String(2*(L+l)),
+        e:"2 × ("+L+" + "+l+") = "+(2*(L+l))+" cm." }; }
+    if (t === 2){ const b = 2*ri(2,9), h = ri(3,12);
+      return { f:"txt", m:1, q:"Aire d'un triangle : base "+b+" cm, hauteur "+h+" cm (cm²) ?", a:String(b*h/2),
+        e:"("+b+" × "+h+") ÷ 2 = "+(b*h/2)+" cm²." }; }
+    const L = ri(2,9), l = ri(2,9), h = ri(2,9);
+    return { f:"txt", m:1, q:"Volume d'un pavé droit "+L+" × "+l+" × "+h+" cm (cm³) ?", a:String(L*l*h),
+      e:L+" × "+l+" × "+h+" = "+(L*l*h)+" cm³." };
+  };
+
+  GENS["ma-sys"] = function(){
+    const x = ri(1,12), y = ri(1,12);
+    const t = rnd(3);
+    if (t === 0)
+      return { f:"txt", m:1, q:"x + y = "+(x+y)+" et x − y = "+(x-y)+". Donne x.", a:String(x),
+        e:"On additionne : 2x = "+(2*x)+", donc x = "+x+" (et y = "+y+")." };
+    if (t === 1){ const k = ri(2,4);
+      return { f:"txt", m:1, q:"y = "+k+"x et x + y = "+(x + k*x)+". Donne x.", a:String(x),
+        e:"Substitution : x + "+k+"x = "+(x+k*x)+", donc "+(k+1)+"x = "+(x+k*x)+" et x = "+x+"." }; }
+    const a = ri(2,5);
+    return { f:"txt", m:1, q:a+"x + y = "+(a*x+y)+" et y = "+y+". Donne x.", a:String(x),
+      e:a+"x = "+(a*x)+", donc x = "+x+"." };
+  };
+
+  GENS["ma-stat"] = function(){
+    const t = rnd(4);
+    if (t === 0){ const n = 4, vals = [], m = ri(3,12);
+      let sum = 0;
+      for (let i = 0; i < n-1; i++){ const v = ri(1, 2*m); vals.push(v); sum += v; }
+      const last = n*m - sum;
+      if (last < 0 || last > 30) return GENS["ma-stat"]();
+      vals.push(last);
+      return { f:"txt", m:1, q:"Moyenne de "+vals.join(", ")+" ?", a:String(m),
+        e:"Somme "+(n*m)+" ÷ "+n+" = "+m+"." }; }
+    if (t === 1){ const vals = []; while (vals.length < 5){ const v = ri(1,30); if (!vals.includes(v)) vals.push(v); }
+      const med = vals.slice().sort((a,b) => a-b)[2];
+      return { f:"txt", m:1, q:"Médiane de "+vals.join(", ")+" ?", a:String(med),
+        e:"Rangée : "+vals.slice().sort((a,b) => a-b).join(", ")+" → la valeur du milieu est "+med+"." }; }
+    if (t === 2){ const vals = []; for (let i = 0; i < 4; i++) vals.push(ri(1,40));
+      const et = Math.max.apply(null, vals) - Math.min.apply(null, vals);
+      return { f:"txt", m:1, q:"Étendue de "+vals.join(", ")+" ?", a:String(et),
+        e:Math.max.apply(null,vals)+" − "+Math.min.apply(null,vals)+" = "+et+"." }; }
+    const r = ri(2,7), b = ri(2,8);
+    return { f:"txt", m:1, q:"Sac de "+r+" boules rouges et "+b+" bleues. Probabilité de tirer une rouge ? (fraction)",
+      a:frac(r, r+b), alt:[r+"/"+(r+b)], e:r+" cas favorables sur "+(r+b)+" → "+frac(r,r+b)+"." };
+  };
+})();
+</script>
+<!-- CONTENT_SLOT -->
+<script>
+/* ============================================================
+   ONZE — moteur
+   Modèle : coquille quotidienne (série / XP / 3 blocs de 5 min)
+            + répétition espacée à 5 boîtes sur les notions
+            + carte de maîtrise par matière
+   ============================================================ */
+(function(){
+"use strict";
+
+const KEY   = "onze-ruben-v1";
+const BOXES = [0, 1, 3, 7, 14, 30];        // jours d'attente par boîte (1..5)
+const BOX_LABEL = ["neuf","chaque j.","3 jours","1 sem.","2 sem.","acquis"];
+const ORDER = ["francais","allemand","anglais","maths"];
+const SCHOOL_START = "2026-08-24";          // rentrée : la ligne d'arrivée
+const XP_RIGHT = 10, XP_COMBO = 5, XP_BLOCK = 25, XP_DAY = 50;
+
+/* ---------- dates (locales, jamais UTC) ---------- */
+function iso(d){
+  const p = n => String(n).padStart(2,"0");
+  return d.getFullYear()+"-"+p(d.getMonth()+1)+"-"+p(d.getDate());
+}
+function today(){ return iso(new Date()); }
+function parse(s){ const [y,m,d] = s.split("-").map(Number); return new Date(y, m-1, d); }
+function addDays(s, n){ const d = parse(s); d.setDate(d.getDate()+n); return iso(d); }
+function diffDays(a, b){ return Math.round((parse(b) - parse(a)) / 86400000); }
+function frDate(s){
+  const M = ["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"];
+  const d = parse(s); return d.getDate()+" "+M[d.getMonth()];
+}
+
+/* ---------- utilitaires ---------- */
+function shuffle(a){ const r = a.slice(); for (let i=r.length-1;i>0;i--){ const j = Math.floor(Math.random()*(i+1)); [r[i],r[j]] = [r[j],r[i]]; } return r; }
+function pick(a){ return a[Math.floor(Math.random()*a.length)]; }
+function norm(s){
+  return String(s == null ? "" : s).trim().toLowerCase()
+    .normalize("NFD").replace(/[\u0300-\u036f]/g,"")
+    .replace(/[’´`]/g,"'").replace(/[−–—]/g,"-")
+    .replace(/[.!?;:]+$/,"").replace(/\s+/g," ");
+}
+/* réponses de maths : espaces sans importance, virgule = point décimal */
+function normMath(s){
+  return norm(s).replace(/\s+/g,"").replace(/(\d),(\d)/g,"$1.$2").replace(/^\+/,"");
+}
+/* certains items portent sur l'accent lui-même (a/à, ou/où, la/là) : on le garde */
+function normAcc(s){
+  return String(s == null ? "" : s).trim().toLowerCase()
+    .replace(/[’´`]/g,"'").replace(/[−–—]/g,"-")
+    .replace(/[.!?;:]+$/,"").replace(/\s+/g," ");
+}
+function eq(a, b, it){
+  it = it || {};
+  if (it.m) return normMath(a) === normMath(b);
+  if (it.acc) return normAcc(a) === normAcc(b);
+  return norm(a) === norm(b);
+}
+function esc(s){ return String(s == null ? "" : s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+/* met en évidence *le mot* entre astérisques, et rend 2^5 en exposant */
+function fmt(s){
+  return esc(s).replace(/\*([^*]+)\*/g, "<em>$1</em>")
+    .replace(/\^\(([^)]+)\)/g, "<sup>$1</sup>")
+    .replace(/\^(-?\d+)/g, "<sup>$1</sup>");
+}
+
+/* ---------- catalogue des notions ---------- */
+const THEMES = [];        // toutes les notions, à plat
+const THEME_BY_ID = {};
+ORDER.forEach(sk => {
+  const sub = BANK[sk];
+  if (!sub) return;
+  sub.themes.forEach((t, i) => {
+    t.subject = sk; t.order = i;
+    THEMES.push(t); THEME_BY_ID[t.id] = t;
+  });
+});
+const SUB = {
+  francais:{label:"Français", short:"FR"},
+  allemand:{label:"Allemand", short:"DE"},
+  anglais: {label:"Anglais",  short:"EN"},
+  maths:   {label:"Maths",    short:"MA"}
+};
+
+/* ---------- état ---------- */
+function fresh(){
+  return {
+    v:1, start: today(), xp:0, streak:0, best:0, lastDay:null,
+    themes:{},              // id -> {box, due, seen, right, used:[idx]}
+    days:{},                // "YYYY-MM-DD" -> {blocks:[], xp, right, total}
+    badges:[]
+  };
+}
+let S = fresh();
+
+function load(){
+  try{
+    const raw = localStorage.getItem(KEY);
+    if (raw){ const o = JSON.parse(raw); if (o && o.v === 1) S = o; }
+  }catch(e){ /* premier lancement, ou stockage indisponible */ }
+  THEMES.forEach(t => {
+    if (!S.themes[t.id]) S.themes[t.id] = { box:0, due:today(), seen:0, right:0, used:[] };
+  });
+  save();
+}
+function save(){
+  try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){ /* mode privé : la session marche quand même */ }
+}
+
+/* ---------- répétition espacée ---------- */
+function dueThemes(){
+  const t0 = today();
+  return THEMES.filter(t => {
+    const st = S.themes[t.id];
+    return st.box >= 1 && st.box <= 5 && st.due <= t0;
+  }).sort((a,b) => {
+    const A = S.themes[a.id], B = S.themes[b.id];
+    return A.box - B.box || (A.due < B.due ? -1 : 1);
+  });
+}
+function seenThemes(){ return THEMES.filter(t => S.themes[t.id].box >= 1); }
+function newThemes(sk){ return THEMES.filter(t => S.themes[t.id].box === 0 && (!sk || t.subject === sk)); }
+function mastery(t){
+  const st = S.themes[t.id];
+  if (!st.seen) return null;
+  const acc = st.right / st.seen;
+  return Math.max(0, Math.min(100, Math.round(60*acc + 40*(Math.max(0,st.box-1)/4))));
+}
+function subjectMastery(sk){
+  const vals = BANK[sk].themes.map(mastery).filter(v => v !== null);
+  if (!vals.length) return null;
+  const total = BANK[sk].themes.length;
+  const sum = vals.reduce((a,b) => a+b, 0);
+  return Math.round(sum / total);          // les notions jamais vues comptent 0 : la barre = avancement réel
+}
+function moveBox(themeId, acc){
+  const st = S.themes[themeId];
+  const from = st.box;
+  let to = from;
+  if (from === 0) to = 1;
+  else if (acc >= 0.8) to = Math.min(5, from+1);
+  else if (acc < 0.5)  to = 1;
+  st.box = to;
+  st.due = addDays(today(), BOXES[to] || 1);
+  return { from, to };
+}
+
+/* ---------- tirage d'exercices ---------- */
+function itemsFor(theme, n){
+  const st = S.themes[theme.id];
+  const out = [];
+  const bank = theme.items || [];
+  let pool = bank.map((_, i) => i).filter(i => !(st.used || []).includes(i));
+  if (pool.length < n) { st.used = []; pool = bank.map((_, i) => i); }
+  shuffle(pool).slice(0, n).forEach(i => {
+    out.push(Object.assign({}, bank[i], { theme: theme.id, subject: theme.subject, bankIdx: i }));
+  });
+  // générateurs : réserve infinie quand la banque est épuisée
+  if (out.length < n && theme.gen && GENS[theme.gen]){
+    let guard = 0;
+    while (out.length < n && guard++ < 40){
+      const g = GENS[theme.gen]();
+      if (g && !out.some(o => o.q === g.q)){
+        out.push(Object.assign(g, { theme: theme.id, subject: theme.subject, gen:true }));
+      }
+    }
+  }
+  return out.slice(0, n);
+}
+function markUsed(item){
+  if (item.gen || item.bankIdx == null) return;
+  const st = S.themes[item.theme];
+  st.used = st.used || [];
+  if (!st.used.includes(item.bankIdx)) st.used.push(item.bankIdx);
+  if (st.used.length > Math.max(4, (THEME_BY_ID[item.theme].items || []).length - 3)) st.used = st.used.slice(-4);
+}
+
+/* ---------- le plan du jour ---------- */
+function todaysPlan(){
+  const t0 = today();
+  const dayIx = Math.max(0, diffDays(S.start, t0));
+  const done = (S.days[t0] && S.days[t0].blocks) || [];
+
+  // 1. Révision : ce que les boîtes réclament aujourd'hui
+  const due = dueThemes().slice(0, 4);
+  const rev = { kind:"revision", n:1, title:"Révision", themes: due.map(t => t.id),
+    sub: due.length
+      ? "Les notions que tes boîtes réclament aujourd'hui."
+      : "Rien à revoir aujourd'hui — je te fais réviser tes notions les plus fragiles." };
+  if (!due.length){
+    const weak = seenThemes().sort((a,b) => (mastery(a)||0) - (mastery(b)||0)).slice(0,2);
+    if (weak.length){
+      rev.themes = weak.map(t => t.id);
+    } else {
+      const basics = THEMES.filter(t => t.tier === "revision" && S.themes[t.id].box === 0).slice(0,2);
+      rev.themes = basics.map(t => t.id);
+      rev.title = "Échauffement";
+      rev.sub = "On part des acquis de 10e — c'est ce qui remplit tes boîtes de révision.";
+    }
+  }
+
+  // 2. Leçon du jour : nouvelle notion, matières en rotation
+  let lead = null;
+  for (let k = 0; k < ORDER.length && !lead; k++){
+    const sk = ORDER[(dayIx + k) % ORDER.length];
+    const cands = newThemes(sk);
+    if (cands.length) lead = cands.sort((a,b) => a.order - b.order)[0];
+  }
+  const lesson = lead
+    ? { kind:"lesson", n:2, title:"Leçon du jour", themes:[lead.id], sub: lead.t }
+    : { kind:"lesson", n:2, title:"Reprise", themes:[ (seenThemes().sort((a,b) => (mastery(a)||0)-(mastery(b)||0))[0] || THEMES[0]).id ],
+        sub:"Tout le programme est passé au moins une fois — on reprend le point le plus fragile, leçon comprise." };
+
+  // 3. Défi mixte : les 4 matières mélangées, au chrono
+  const pool = seenThemes().length >= 4 ? seenThemes() : THEMES;
+  const bySub = {};
+  shuffle(pool).forEach(t => { if (!bySub[t.subject]) bySub[t.subject] = t; });
+  const defi = { kind:"defi", n:3, title:"Défi mixte", themes: Object.values(bySub).map(t => t.id),
+    sub:"Six questions, les quatre matières mélangées. Les combos rapportent double." };
+
+  return [rev, lesson, defi].map(b => Object.assign(b, { done: done.includes(b.kind) }));
+}
+function blockItems(block){
+  const ids = block.themes.filter(id => THEME_BY_ID[id]);
+  if (!ids.length) return [];
+  const per = block.kind === "lesson" ? 8 : block.kind === "defi" ? 6 : 8;
+  if (block.kind === "lesson") return itemsFor(THEME_BY_ID[ids[0]], per);
+  const each = Math.max(1, Math.ceil(per / ids.length));
+  let out = [];
+  ids.forEach(id => { out = out.concat(itemsFor(THEME_BY_ID[id], each)); });
+  return shuffle(out).slice(0, per);
+}
+
+/* ---------- badges ---------- */
+const BADGES = [
+  { id:"d3",   em:"🔥", t:"3 jours",        ok:s => s.best >= 3 },
+  { id:"d7",   em:"🔥", t:"1 semaine",      ok:s => s.best >= 7 },
+  { id:"d14",  em:"🔥", t:"2 semaines",     ok:s => s.best >= 14 },
+  { id:"d30",  em:"🏔", t:"30 jours",       ok:s => s.best >= 30 },
+  { id:"xp1",  em:"⭐", t:"1000 XP",        ok:s => s.xp >= 1000 },
+  { id:"xp5",  em:"🌟", t:"5000 XP",        ok:s => s.xp >= 5000 },
+  { id:"acq",  em:"📦", t:"1re notion acquise", ok:s => THEMES.some(t => s.themes[t.id].box === 5) },
+  { id:"acq10",em:"🎓", t:"10 notions acquises", ok:s => THEMES.filter(t => s.themes[t.id].box === 5).length >= 10 },
+  { id:"full", em:"✅", t:"Journée complète", ok:s => Object.values(s.days).some(d => (d.blocks||[]).length >= 3) },
+  { id:"net",  em:"🎯", t:"Sans faute",      ok:s => Object.values(s.days).some(d => d.total >= 6 && d.right === d.total) }
+];
+function refreshBadges(){
+  const got = [];
+  BADGES.forEach(b => { if (b.ok(S)) got.push(b.id); });
+  const isNew = got.filter(id => !S.badges.includes(id));
+  S.badges = got;
+  return isNew;
+}
+
+/* ---------- fin de bloc : compta ---------- */
+function recordBlock(block, res){
+  const t0 = today();
+  const d = S.days[t0] || { blocks:[], xp:0, right:0, total:0 };
+  if (!d.blocks.includes(block.kind)) d.blocks.push(block.kind);
+  d.xp += res.xp; d.right += res.right; d.total += res.total;
+  S.days[t0] = d;
+
+  // série : un bloc suffit à tenir la journée
+  if (S.lastDay !== t0){
+    S.streak = (S.lastDay && diffDays(S.lastDay, t0) === 1) ? S.streak + 1 : 1;
+    S.lastDay = t0;
+  }
+  S.best = Math.max(S.best, S.streak);
+
+  let bonus = XP_BLOCK;
+  if (d.blocks.length === 3) bonus += XP_DAY;
+  S.xp += res.xp + bonus;
+
+  const moves = [];
+  Object.keys(res.byTheme).forEach(id => {
+    const r = res.byTheme[id];
+    const st = S.themes[id];
+    st.seen += r.total; st.right += r.right;
+    const mv = moveBox(id, r.total ? r.right / r.total : 0);
+    if (mv.from !== mv.to) moves.push({ id, from:mv.from, to:mv.to });
+  });
+  const newBadges = refreshBadges();
+  save();
+  return { bonus, moves, newBadges, dayComplete: d.blocks.length === 3 };
+}
+
+/* ============================================================
+   Rendu
+   ============================================================ */
+const root = document.getElementById("onze");
+let view = { screen:"home" };
+
+function setTheme(t){
+  document.documentElement.setAttribute("data-theme", t);
+  try{ localStorage.setItem("onze-theme", t); }catch(e){}
+}
+function currentTheme(){
+  const set = document.documentElement.getAttribute("data-theme");
+  if (set) return set;
+  return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+}
+
+function render(){
+  if (view.screen === "home")    root.innerHTML = homeHTML(), bindHome();
+  else if (view.screen === "session") renderSession();
+  else if (view.screen === "done")    root.innerHTML = doneHTML(), bindDone();
+  window.scrollTo(0, 0);
+}
+
+/* ---------- accueil ---------- */
+function homeHTML(){
+  const t0 = today();
+  const plan = todaysPlan();
+  const d = S.days[t0] || { blocks:[], xp:0 };
+  const toSchool = Math.max(0, diffDays(t0, SCHOOL_START));
+  const weekDone = weekCount();
+
+  const acq = THEMES.filter(t => S.themes[t.id].box === 5).length;
+
+  return `
+  <div class="board"><div class="board-in">
+    <div class="brand">
+      <div>
+        <h1>ON<span>ZE</span></h1>
+        <div class="tag">Cap sur la 11<sup>e</sup> · Ruben</div>
+      </div>
+      <button class="theme-btn" id="th" title="Clair / sombre" aria-label="Basculer clair ou sombre">${currentTheme() === "dark" ? "☀" : "☾"}</button>
+    </div>
+    <div class="scores">
+      <div class="score hot"><span class="k">Série</span><span class="v">${S.streak}<span style="font-size:12px;color:var(--ink-3)"> j</span></span></div>
+      <div class="score"><span class="k">XP</span><span class="v">${S.xp.toLocaleString("fr-CH")}</span></div>
+      <div class="score"><span class="k">Acquis</span><span class="v">${acq}<span style="font-size:12px;color:var(--ink-3)">/${THEMES.length}</span></span></div>
+    </div>
+    <div class="weekbar">
+      <div class="lab"><span>Semaine · ${weekDone}/5 jours</span><span>J−${toSchool} · rentrée</span></div>
+      <div class="meter"><i style="width:${Math.min(100, weekDone/5*100)}%"></i></div>
+    </div>
+  </div></div>
+
+  <div class="wrap">
+    <div class="sec">
+      <div class="sec-h">
+        <h2>Aujourd'hui · ${frDate(t0)}</h2>
+        <span class="note">${d.blocks.length}/3 · ${d.xp} XP</span>
+      </div>
+      <div class="blocks">
+        ${plan.map(blockHTML).join("")}
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-h"><h2>Maîtrise</h2><span class="note">${THEMES.length} notions</span></div>
+      <div class="card">
+        ${ORDER.map(sk => {
+          const m = subjectMastery(sk);
+          const seen = BANK[sk].themes.filter(t => S.themes[t.id].box >= 1).length;
+          return `<div class="mrow">
+            <span class="nm" style="color:var(--${shortVar(sk)})">${SUB[sk].label}</span>
+            <span class="bar"><i style="width:${m === null ? 0 : m}%; background:var(--${shortVar(sk)})"></i></span>
+            <span class="val">${m === null ? "—" : "<b>"+m+"%</b>"} · ${seen}/${BANK[sk].themes.length}</span>
+          </div>`;
+        }).join("")}
+        <div class="boxes">
+          ${[1,2,3,4,5].map(b => {
+            const n = THEMES.filter(t => S.themes[t.id].box === b).length;
+            return `<div class="boxcell${b===5?" b5":""}"><div class="n">${n}</div><div class="l">${BOX_LABEL[b]}</div></div>`;
+          }).join("")}
+        </div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-h"><h2>À retravailler</h2></div>
+      <div class="card">${weakHTML()}</div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-h"><h2>Calendrier</h2><span class="note">rentrée ${frDate(SCHOOL_START)}</span></div>
+      <div class="card">${calHTML()}</div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-h"><h2>Trophées</h2><span class="note">${S.badges.length}/${BADGES.length}</span></div>
+      <div class="card badges">
+        ${BADGES.map(b => `<span class="badge${S.badges.includes(b.id) ? " on":""}"><span class="em">${b.em}</span>${esc(b.t)}</span>`).join("")}
+      </div>
+    </div>
+
+    <div class="foot">
+      <button class="link" id="rst">Tout remettre à zéro</button>
+    </div>
+  </div>`;
+}
+function shortVar(sk){ return { francais:"fr", allemand:"de", anglais:"en", maths:"ma" }[sk]; }
+
+function blockHTML(b){
+  const chips = b.kind === "defi"
+    ? [`<span class="chip mix">4 matières</span>`]
+    : b.themes.map(id => {
+        const t = THEME_BY_ID[id]; if (!t) return "";
+        return `<span class="chip ${t.subject}">${SUB[t.subject].short} · ${esc(t.t)}</span>`;
+      });
+  const nQ = b.kind === "defi" ? 6 : 8;
+  return `<button class="block${b.done ? " done":""}" data-kind="${b.kind}" ${b.done ? "disabled":""}>
+    <span class="num">${b.n}</span>
+    <span class="mid">
+      <span class="ttl">${esc(b.title)}</span>
+      <span class="sub">${esc(b.sub)}</span>
+      <span class="chips">${chips.join("")}</span>
+    </span>
+    <span class="go">${b.done ? "Fait ✓" : nQ + " Q · 5 min"}</span>
+  </button>`;
+}
+
+function weakHTML(){
+  const seen = seenThemes().map(t => ({ t, m: mastery(t) })).filter(x => x.m !== null);
+  if (!seen.length) return `<div class="empty">Rien encore : fais tes premiers blocs et je repère tout seul ce qui accroche. Les notions ratées reviennent dès le lendemain.</div>`;
+  const weak = seen.sort((a,b) => a.m - b.m).slice(0,5);
+  return `<div class="weak">${weak.map(x => `
+    <div class="weak-row">
+      <span class="t">
+        <span class="chip ${x.t.subject}">${SUB[x.t.subject].short}</span>
+        <span class="nmm">${esc(x.t.t)}</span>
+      </span>
+      <span class="pc">boîte ${S.themes[x.t.id].box} · ${x.m}%</span>
+    </div>`).join("")}</div>`;
+}
+
+function calHTML(){
+  const t0 = today();
+  const first = addDays(S.start, -(( parse(S.start).getDay() + 6) % 7));   // lundi de la semaine de départ
+  const weeks = Math.max(6, Math.ceil((diffDays(first, SCHOOL_START) + 1) / 7));
+  const cells = [];
+  for (let i = 0; i < weeks*7; i++){
+    const day = addDays(first, i);
+    const rec = S.days[day];
+    const n = rec ? (rec.blocks || []).length : 0;
+    const cls = ["cd"];
+    if (day < S.start) cls.push("void");
+    else if (day > t0) cls.push("future");
+    if (day === t0) cls.push("today");
+    if (n >= 3) cls.push("full");
+    cells.push(`<div class="${cls.join(" ")}" title="${day}${n ? " · "+n+" bloc(s)":""}">
+      ${day < S.start ? "" : `<span>${parse(day).getDate()}</span>
+      <span class="pips">${[0,1,2].map(k => k < n ? "<i></i>" : "").join("")}</span>`}
+      ${day === SCHOOL_START ? '<span class="school" title="Rentrée"></span>' : ""}
+    </div>`);
+  }
+  return `<div class="cal-head">${["lu","ma","me","je","ve","sa","di"].map(d => `<div>${d}</div>`).join("")}</div>
+    <div class="cal">${cells.join("")}</div>`;
+}
+
+function weekCount(){
+  const t0 = today();
+  const mon = addDays(t0, -((parse(t0).getDay() + 6) % 7));
+  let n = 0;
+  for (let i = 0; i < 7; i++){
+    const d = addDays(mon, i);
+    if (S.days[d] && (S.days[d].blocks || []).length) n++;
+  }
+  return n;
+}
+
+function bindHome(){
+  root.querySelectorAll(".block:not(:disabled)").forEach(el => {
+    el.addEventListener("click", () => startBlock(el.dataset.kind));
+  });
+  const th = root.querySelector("#th");
+  if (th) th.addEventListener("click", () => { setTheme(currentTheme() === "dark" ? "light" : "dark"); render(); });
+  const rst = root.querySelector("#rst");
+  if (rst) rst.addEventListener("click", () => {
+    if (confirm("Effacer la série, les XP et toutes les boîtes de révision ? On repart de zéro.")){
+      S = fresh(); THEMES.forEach(t => S.themes[t.id] = { box:0, due:today(), seen:0, right:0, used:[] });
+      save(); render();
+    }
+  });
+}
+
+/* ---------- session ---------- */
+let sess = null;
+
+function startBlock(kind){
+  const block = todaysPlan().find(b => b.kind === kind);
+  if (!block) return;
+  const items = blockItems(block);
+  if (!items.length){ alert("Pas d'exercice disponible pour ce bloc."); return; }
+  sess = {
+    block, items, i:0, xp:0, right:0, total:0, combo:0, bestCombo:0,
+    byTheme:{}, answered:false, correct:null, chosen:null, built:[],
+    phase:"quiz"
+  };
+  const first = THEME_BY_ID[block.themes[0]];
+  if (block.kind === "lesson" || (block.kind === "revision" && first && S.themes[first.id].box <= 1)) sess.phase = "lesson";
+  if (sess.phase === "lesson" && !lessonTheme()) sess.phase = "quiz";
+  view = { screen:"session" };
+  render();
+}
+function lessonTheme(){
+  const id = sess.block.themes[0];
+  const t = THEME_BY_ID[id];
+  return (t && t.lesson) ? t : null;
+}
+
+function renderSession(){
+  if (sess.phase === "lesson"){ root.innerHTML = lessonHTML(); bindLesson(); return; }
+  const it = sess.items[sess.i];
+  // les mots à remettre dans l'ordre doivent être tirés AVANT le premier rendu
+  if (it && it.f === "ord" && !sess.pool) sess.pool = shuffle(it.w);
+  root.innerHTML = quizHTML(); bindQuiz();
+}
+
+function lessonHTML(){
+  const t = lessonTheme();
+  const st = S.themes[t.id];
+  const isNew = st.box === 0;
+  return `<div class="wrap">
+    ${topHTML(0)}
+    <div class="lesson">
+      <div class="kicker">${isNew ? "Nouvelle notion" : "On révise d'abord"} · ${SUB[t.subject].label} · ${esc(t.tier === "revision" ? "acquis de 10e" : t.tier === "consolidation" ? "10e confirmé" : "avance sur la 11e")}</div>
+      <h3 style="color:var(--${shortVar(t.subject)})">${esc(t.t)}</h3>
+      ${t.lesson.why ? `<div class="why">${esc(t.lesson.why)}</div>` : ""}
+      <ul class="pts">
+        ${t.lesson.pts.map(p => `<li><span class="d"></span><span>${fmt(p)}</span></li>`).join("")}
+      </ul>
+      ${t.lesson.ex ? `<div class="exbox"><span class="lab">Exemple</span>${fmt(t.lesson.ex)}</div>` : ""}
+    </div>
+    <button class="cta" id="go">C'est compris → ${sess.items.length} questions</button>
+  </div>`;
+}
+function bindLesson(){
+  root.querySelector("#go").addEventListener("click", () => { sess.phase = "quiz"; render(); });
+}
+
+function topHTML(frac){
+  const c = sess.combo;
+  return `<div class="s-top"><div class="s-top-in">
+      <button class="quit" id="quit" aria-label="Quitter">✕</button>
+      <span class="prog"><i style="width:${Math.round(frac*100)}%"></i></span>
+      <span class="combo${c >= 3 ? " hot":""}">${c >= 2 ? "×"+c+" 🔥" : sess.total ? sess.right+"/"+sess.total : "&nbsp;"}</span>
+    </div></div>`;
+}
+
+function quizHTML(){
+  const it = sess.items[sess.i];
+  const t  = THEME_BY_ID[it.theme];
+  const sk = it.subject;
+  const body =
+    it.f === "qcm" ? optsHTML(it) :
+    it.f === "ord" ? ordHTML(it)  : inputHTML(it);
+
+  return `<div class="wrap">
+    ${topHTML(sess.i / sess.items.length)}
+    <div class="q">
+      <div class="meta">
+        <span class="chip ${sk}">${SUB[sk].short}</span>
+        <span class="th">${esc(t ? t.t : "")} · ${sess.i+1}/${sess.items.length}</span>
+      </div>
+      <div class="txt">${fmt(it.q)}</div>
+      ${it.hint && !sess.answered ? `<div class="hint">${esc(it.hint)}</div>` : ""}
+      ${body}
+      ${sess.answered ? fbHTML(it) : ""}
+    </div>
+    ${sess.answered ? `<button class="cta" id="next">${sess.i+1 >= sess.items.length ? "Voir le bilan" : "Suivant →"}</button>` : ""}
+  </div>`;
+}
+function optsHTML(it){
+  const keys = ["A","B","C","D","E"];
+  return `<div class="opts">${it.o.map((o, i) => {
+    let cls = "opt";
+    if (sess.answered){
+      if (eq(o, it.a, it)) cls += " good";
+      else if (sess.chosen === i) cls += " bad";
+    }
+    return `<button class="${cls}" data-i="${i}" ${sess.answered ? "disabled":""}>
+      <span class="key">${keys[i]}</span><span>${fmt(o)}</span></button>`;
+  }).join("")}</div>`;
+}
+function inputHTML(it){
+  const cls = sess.answered ? (sess.correct ? "inp good" : "inp bad") : "inp";
+  return `<input class="${cls}" id="ans" value="${esc(sess.typed || "")}" ${sess.answered ? "disabled":""}
+      placeholder="${it.f === "gap" ? "le mot qui manque" : "ta réponse"}" autocomplete="off"
+      autocapitalize="off" spellcheck="false" inputmode="${it.num ? "text" : "text"}">
+    ${sess.answered ? "" : `<button class="cta" id="chk">Vérifier</button>`}`;
+}
+function ordHTML(it){
+  const rest = sess.pool || [];
+  const cls = sess.answered ? (sess.correct ? "slot good" : "slot bad") : "slot";
+  return `<div class="${cls}" id="slot">
+      ${sess.built.length ? sess.built.map((w, i) => `<button class="word" data-b="${i}" ${sess.answered ? "disabled":""}>${esc(w)}</button>`).join("")
+        : `<span class="ph">Clique les mots dans le bon ordre</span>`}
+    </div>
+    <div class="words">${rest.map((w, i) => `<button class="word" data-w="${i}" ${sess.answered || w === null ? "disabled":""}>${esc(w === null ? "·" : w)}</button>`).join("")}</div>
+    ${sess.answered ? "" : `<button class="cta" id="chk" ${sess.built.length ? "" : "disabled"}>Vérifier</button>`}`;
+}
+function fbHTML(it){
+  const good = sess.correct;
+  return `<div class="fb ${good ? "ok":"ko"}">
+    <div class="hd">${good ? "Juste" + (sess.combo >= 3 ? " · combo ×"+sess.combo : "") : "Pas encore"}</div>
+    ${good ? "" : `<div class="sol">${fmt(Array.isArray(it.a) ? it.a[0] : it.a)}</div>`}
+    ${it.e ? `<div class="exp">${fmt(it.e)}</div>` : ""}
+  </div>`;
+}
+
+function bindQuiz(){
+  const it = sess.items[sess.i];
+  root.querySelector("#quit").addEventListener("click", quitSession);
+
+  if (!sess.answered){
+    if (it.f === "qcm"){
+      root.querySelectorAll(".opt").forEach(el => el.addEventListener("click", () => {
+        const i = Number(el.dataset.i);
+        sess.chosen = i;
+        grade(eq(it.o[i], it.a, it));
+      }));
+    } else if (it.f === "ord"){
+      root.querySelectorAll("[data-w]").forEach(el => el.addEventListener("click", () => {
+        const i = Number(el.dataset.w);
+        if (sess.pool[i] == null) return;
+        sess.built.push(sess.pool[i]); sess.pool[i] = null; renderSession();
+      }));
+      root.querySelectorAll("[data-b]").forEach(el => el.addEventListener("click", () => {
+        const i = Number(el.dataset.b);
+        const w = sess.built.splice(i, 1)[0];
+        const slot = sess.pool.indexOf(null);
+        if (slot >= 0) sess.pool[slot] = w; else sess.pool.push(w);
+        renderSession();
+      }));
+      const chk = root.querySelector("#chk");
+      if (chk) chk.addEventListener("click", () => grade(norm(sess.built.join(" ")) === norm(it.a)));
+    } else {
+      const inp = root.querySelector("#ans");
+      const check = () => {
+        const v = inp.value;
+        sess.typed = v;
+        const answers = [it.a].concat(it.alt || []);
+        grade(answers.some(a => eq(a, v, it)));
+      };
+      inp.addEventListener("keydown", e => { if (e.key === "Enter") check(); });
+      inp.addEventListener("input", () => { sess.typed = inp.value; });
+      root.querySelector("#chk").addEventListener("click", check);
+      setTimeout(() => { try{ inp.focus({ preventScroll:true }); }catch(e){} }, 60);
+    }
+  } else {
+    root.querySelector("#next").addEventListener("click", nextItem);
+  }
+}
+
+function grade(ok){
+  const it = sess.items[sess.i];
+  sess.answered = true; sess.correct = ok;
+  sess.total++;
+  const bt = sess.byTheme[it.theme] || (sess.byTheme[it.theme] = { right:0, total:0 });
+  bt.total++;
+  if (ok){
+    sess.right++; bt.right++;
+    sess.combo++; sess.bestCombo = Math.max(sess.bestCombo, sess.combo);
+    let gain = XP_RIGHT + (sess.combo >= 3 ? XP_COMBO : 0);
+    if (sess.block.kind === "defi") gain = Math.round(gain * 1.5);
+    sess.xp += gain;
+    flyXP(gain);
+  } else {
+    sess.combo = 0;
+  }
+  markUsed(it);
+  renderSession();
+}
+function flyXP(n){
+  const el = document.createElement("div");
+  el.className = "xpfly"; el.textContent = "+" + n + " XP";
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 1000);
+}
+function nextItem(){
+  if (sess.i + 1 >= sess.items.length){ finish(); return; }
+  sess.i++; sess.answered = false; sess.correct = null; sess.chosen = null;
+  sess.typed = ""; sess.built = []; sess.pool = null;
+  renderSession();
+}
+function quitSession(){
+  if (sess.total && !confirm("Quitter maintenant ? Les questions déjà faites ne compteront pas.")) return;
+  sess = null; view = { screen:"home" }; render();
+}
+function finish(){
+  const out = recordBlock(sess.block, { xp:sess.xp, right:sess.right, total:sess.total, byTheme:sess.byTheme });
+  view = { screen:"done", res:{
+    kind: sess.block.kind, title: sess.block.title,
+    right: sess.right, total: sess.total, xp: sess.xp, bonus: out.bonus,
+    bestCombo: sess.bestCombo, moves: out.moves, newBadges: out.newBadges, dayComplete: out.dayComplete
+  }};
+  sess = null; render();
+}
+
+/* ---------- bilan ---------- */
+function doneHTML(){
+  const r = view.res;
+  const pct = r.total ? Math.round(100 * r.right / r.total) : 0;
+  const R = 58, C = 2 * Math.PI * R;
+  const col = pct >= 80 ? "var(--ok)" : pct >= 50 ? "var(--accent)" : "var(--ko)";
+  const word = pct >= 90 ? "Impeccable" : pct >= 75 ? "Solide" : pct >= 50 ? "Ça avance" : "On y retourne";
+  const left = 3 - ((S.days[today()] || {}).blocks || []).length;
+
+  return `<div class="wrap"><div class="done-wrap">
+    <div class="ring">
+      <svg width="132" height="132" viewBox="0 0 132 132" aria-hidden="true">
+        <circle cx="66" cy="66" r="${R}" fill="none" stroke="var(--panel-2)" stroke-width="9"></circle>
+        <circle cx="66" cy="66" r="${R}" fill="none" stroke="${col}" stroke-width="9" stroke-linecap="round"
+          stroke-dasharray="${C}" stroke-dashoffset="${C * (1 - pct/100)}"></circle>
+      </svg>
+      <div class="mid"><span class="pc" style="color:${col}">${pct}%</span><span class="of">${r.right}/${r.total}</span></div>
+    </div>
+    <h2>${esc(word)}</h2>
+    <div class="line">${esc(r.title)} terminé${r.dayComplete ? " — et la journée est complète 🏁" : left > 0 ? " · encore "+left+" bloc"+(left>1?"s":"")+" aujourd'hui" : ""}</div>
+    <div class="gain">
+      <div class="g"><div class="k">XP gagnés</div><div class="v" style="color:var(--accent)">+${r.xp + r.bonus}</div></div>
+      <div class="g"><div class="k">Meilleur combo</div><div class="v">×${r.bestCombo}</div></div>
+      <div class="g"><div class="k">Série</div><div class="v">${S.streak} j</div></div>
+    </div>
+    ${r.moves.length ? `<div class="moves">${r.moves.map(m => {
+      const t = THEME_BY_ID[m.id];
+      const up = m.to > m.from;
+      return `<div class="move">
+        <span class="chip ${t.subject}">${SUB[t.subject].short}</span>
+        <span style="flex:1">${esc(t.t)}</span>
+        <span class="ar">${m.from === 0 ? "neuf" : "boîte "+m.from} → <span class="${up ? "up":"dn"}">${m.to === 5 ? "acquis ✓" : "boîte "+m.to}</span></span>
+      </div>`;
+    }).join("")}</div>` : ""}
+    ${r.newBadges.length ? `<div class="gain" style="margin-top:14px">${r.newBadges.map(id => {
+      const b = BADGES.find(x => x.id === id);
+      return `<div class="g" style="background:var(--accent-soft)"><div class="k">Nouveau trophée</div><div class="v" style="font-size:14px;color:var(--accent)">${b.em} ${esc(b.t)}</div></div>`;
+    }).join("")}</div>` : ""}
+    <button class="cta" id="back" style="margin-top:24px">Retour au tableau</button>
+    ${left > 0 ? `<button class="cta ghost" id="more" style="margin-top:10px">Enchaîner le bloc suivant →</button>` : ""}
+  </div></div>`;
+}
+function bindDone(){
+  root.querySelector("#back").addEventListener("click", () => { view = { screen:"home" }; render(); });
+  const more = root.querySelector("#more");
+  if (more) more.addEventListener("click", () => {
+    const nxt = todaysPlan().find(b => !b.done);
+    if (nxt) startBlock(nxt.kind); else { view = { screen:"home" }; render(); }
+  });
+}
+
+/* ---------- démarrage ---------- */
+try{
+  try{ const saved = localStorage.getItem("onze-theme"); if (saved) setTheme(saved); }catch(e){}
+  load();
+  refreshBadges(); save();
+  render();
+} catch(err){
+  // plutôt qu'une page blanche : dire ce qui s'est passé, et laisser une porte de sortie
+  root.innerHTML = '<div class="wrap" style="padding-top:40px">'
+    + '<h1 style="font-family:var(--display); text-transform:uppercase; letter-spacing:.06em; font-size:22px; margin:0 0 10px">ONZE n\'a pas pu démarrer</h1>'
+    + '<p style="font-size:14px; color:var(--ink-2); line-height:1.5">Recharge la page. Si le message revient, envoie cette ligne à Pascal :</p>'
+    + '<pre class="exbox" style="white-space:pre-wrap; font-family:var(--mono); font-size:12px">'
+    + String((err && err.message) || err) + '</pre>'
+    + '<button class="cta" id="wipe">Repartir d\'un carnet vide</button></div>';
+  const w = root.querySelector("#wipe");
+  if (w) w.addEventListener("click", () => {
+    try{ localStorage.removeItem(KEY); }catch(e){}
+    location.reload();
+  });
+}
+})();
+</script>
+
+</html>
