@@ -10,9 +10,13 @@ repository is edited by hand.
 
 ## Where the source lives
 
-ONZE is built from `carnet/onze.html` in a separate private repository. Edit it
-there, rebuild, and copy the result here — never edit `index.html` directly, as
-the next build overwrites it.
+ONZE is built from `carnet/onze.html` in a separate private repository, by
+running `build.py` there. Never edit `index.html` directly — the next build
+overwrites it.
+
+That build script produces this public copy with the first names removed: the
+header, the `<meta description>`, the error message and the `localStorage` key
+are all anonymised. It refuses to write the file if a name survives.
 
 ## How it works
 

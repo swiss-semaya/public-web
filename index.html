@@ -7,12 +7,14 @@
 <meta name="apple-mobile-web-app-title" content="ONZE">
 <meta name="theme-color" content="#EFF2F6" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0F151B" media="(prefers-color-scheme: dark)">
-<meta name="description" content="ONZE — entraînement quotidien de Ruben : français, allemand, anglais, maths.">
+<meta name="description" content="ONZE — entraînement quotidien : français, allemand, anglais, maths.">
+</head>
+<body>
 <title>ONZE — cap sur la 11e</title>
 
 <style>
 /* ============================================================
-   ONZE — tableau d'entraînement scolaire (Ruben, 10VG → 11VG)
+   ONZE — tableau d'entraînement scolaire (10VG → 11VG)
    Tokens d'abord : thème clair par défaut, sombre redéfini
    ============================================================ */
 :root{
@@ -1573,7 +1575,7 @@ BANK.maths = { label:"Maths", short:"MA", themes:[
 (function(){
 "use strict";
 
-const KEY   = "onze-ruben-v1";
+const KEY   = "onze-v1";
 const BOXES = [0, 1, 3, 7, 14, 30];        // jours d'attente par boîte (1..5)
 const BOX_LABEL = ["neuf","chaque j.","3 jours","1 sem.","2 sem.","acquis"];
 const ORDER = ["francais","allemand","anglais","maths"];
@@ -1885,7 +1887,7 @@ function homeHTML(){
     <div class="brand">
       <div>
         <h1>ON<span>ZE</span></h1>
-        <div class="tag">Cap sur la 11<sup>e</sup> · Ruben</div>
+        <div class="tag">Cap sur la 11<sup>e</sup></div>
       </div>
       <button class="theme-btn" id="th" title="Clair / sombre" aria-label="Basculer clair ou sombre">${currentTheme() === "dark" ? "☀" : "☾"}</button>
     </div>
@@ -2314,7 +2316,7 @@ try{
   // plutôt qu'une page blanche : dire ce qui s'est passé, et laisser une porte de sortie
   root.innerHTML = '<div class="wrap" style="padding-top:40px">'
     + '<h1 style="font-family:var(--display); text-transform:uppercase; letter-spacing:.06em; font-size:22px; margin:0 0 10px">ONZE n\'a pas pu démarrer</h1>'
-    + '<p style="font-size:14px; color:var(--ink-2); line-height:1.5">Recharge la page. Si le message revient, envoie cette ligne à Pascal :</p>'
+    + '<p style="font-size:14px; color:var(--ink-2); line-height:1.5">Recharge la page. Si le message revient, transmets cette ligne :</p>'
     + '<pre class="exbox" style="white-space:pre-wrap; font-family:var(--mono); font-size:12px">'
     + String((err && err.message) || err) + '</pre>'
     + '<button class="cta" id="wipe">Repartir d\'un carnet vide</button></div>';
@@ -2327,4 +2329,5 @@ try{
 })();
 </script>
 
+</body>
 </html>
