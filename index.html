@@ -1660,10 +1660,11 @@ const SUB = {
 /* ---------- état ---------- */
 function fresh(){
   return {
-    v:1, start: today(), xp:0, streak:0, best:0, lastDay:null,
-    themes:{},              // id -> {box, due, seen, right, used:[idx]}
+    v:2, start: today(), xp:0, streak:0, best:0, lastDay:null,
+    themes:{},              // id -> {box, due, seen, right, used:[idx], miss:{idx:{f,s}}, hist:[{d,ok,tot}]}
     days:{},                // "YYYY-MM-DD" -> {blocks:[], xp, right, total}
-    badges:[]
+    badges:[],
+    errors:[]               // journal des fautes : {d, id, f, q, a, r, k, g} — borné à 400
   };
 }
 let S = fresh();
@@ -1671,10 +1672,15 @@ let S = fresh();
 function load(){
   try{
     const raw = localStorage.getItem(KEY);
-    if (raw){ const o = JSON.parse(raw); if (o && o.v === 1) S = o; }
+    if (raw){ const o = JSON.parse(raw); if (o && (o.v === 1 || o.v === 2)) S = o; }
   }catch(e){ /* premier lancement, ou stockage indisponible */ }
+  S.v = 2;
+  if (!S.errors) S.errors = [];
   THEMES.forEach(t => {
     if (!S.themes[t.id]) S.themes[t.id] = { box:0, due:today(), seen:0, right:0, used:[] };
+    const st = S.themes[t.id];
+    if (!st.miss) st.miss = {};
+    if (!st.hist) st.hist = [];
   });
   save();
 }
@@ -1720,16 +1726,50 @@ function moveBox(themeId, acc){
   return { from, to };
 }
 
+/* ---------- fautes & progrès ---------- */
+// exercices de la banque ratés, pas encore « rachetés » (2 réussites d'affilée)
+function missIdx(st){
+  return Object.keys(st.miss || {}).map(Number)
+    .filter(i => (st.miss[i].s || 0) < 2)
+    .sort((a,b) => (st.miss[b].f || 0) - (st.miss[a].f || 0));
+}
+// taux de réussite sur les n derniers blocs de la notion
+function histAcc(st, from, to){
+  const h = (st.hist || []).slice(from, to);
+  const tot = h.reduce((a,x) => a + x.tot, 0);
+  return tot ? h.reduce((a,x) => a + x.ok, 0) / tot : null;
+}
+// direction du progrès : compare les 3 derniers blocs aux 3 précédents
+function trend(t){
+  const st = S.themes[t.id];
+  if ((st.hist || []).length < 4) return null;
+  const rec = histAcc(st, -3), old = histAcc(st, -6, -3);
+  if (rec === null || old === null) return null;
+  if (rec - old > 0.12) return "up";
+  if (old - rec > 0.12) return "down";
+  return "flat";
+}
+
 /* ---------- tirage d'exercices ---------- */
 function itemsFor(theme, n){
   const st = S.themes[theme.id];
   const out = [];
   const bank = theme.items || [];
-  let pool = bank.map((_, i) => i).filter(i => !(st.used || []).includes(i));
-  if (pool.length < n) { st.used = []; pool = bank.map((_, i) => i); }
-  shuffle(pool).slice(0, n).forEach(i => {
+  // 1. la revanche : jusqu'à 2 exercices ratés récemment, à retenter en priorité
+  const retry = missIdx(st).slice(0, Math.min(2, Math.max(0, n - 1)));
+  retry.forEach(i => {
+    if (bank[i]) out.push(Object.assign({}, bank[i], { theme: theme.id, subject: theme.subject, bankIdx: i, retry:true }));
+  });
+  let pool = bank.map((_, i) => i).filter(i => !(st.used || []).includes(i) && !retry.includes(i));
+  if (out.length + pool.length < n) { st.used = []; pool = bank.map((_, i) => i).filter(i => !retry.includes(i)); }
+  shuffle(pool).slice(0, n - out.length).forEach(i => {
     out.push(Object.assign({}, bank[i], { theme: theme.id, subject: theme.subject, bankIdx: i }));
   });
+  // démarrer par une question gagnable : la revanche vient en 2e et 3e position
+  if (retry.length && out.length > retry.length){
+    const first = out.splice(retry.length, 1)[0];
+    out.unshift(first);
+  }
   // générateurs : réserve infinie quand la banque est épuisée
   if (out.length < n && theme.gen && GENS[theme.gen]){
     let guard = 0;
@@ -1756,8 +1796,14 @@ function todaysPlan(){
   const dayIx = Math.max(0, diffDays(S.start, t0));
   const done = (S.days[t0] && S.days[t0].blocks) || [];
 
-  // 1. Révision : ce que les boîtes réclament aujourd'hui
-  const due = dueThemes().slice(0, 4);
+  // 1. Révision : ce que les boîtes réclament aujourd'hui — les notions
+  // récemment ratées passent devant
+  const due = dueThemes()
+    .sort((a,b) => {
+      const ra = histAcc(S.themes[a.id], -3), rb = histAcc(S.themes[b.id], -3);
+      return (ra === null ? 1 : ra) - (rb === null ? 1 : rb);
+    })
+    .slice(0, 4);
   const rev = { kind:"revision", n:1, title:"Révision", themes: due.map(t => t.id),
     sub: due.length
       ? "Les notions que tes boîtes réclament aujourd'hui."
@@ -1846,11 +1892,26 @@ function recordBlock(block, res){
   if (d.blocks.length === 3) bonus += XP_DAY;
   S.xp += res.xp + bonus;
 
+  // journal des fautes (borné) + rachat des exercices retentés
+  S.errors = (S.errors || []).concat(res.errs || []).slice(-400);
+  (res.itemLog || []).forEach(e => {
+    if (e.k == null) return;
+    const st = S.themes[e.id];
+    st.miss = st.miss || {};
+    const m = st.miss[e.k];
+    if (!e.ok){ st.miss[e.k] = { f: (m ? m.f : 0) + 1, s: 0 }; }
+    else if (m){
+      m.s = (m.s || 0) + 1;
+      if (m.s >= 2) delete st.miss[e.k];   // racheté : 2 réussites d'affilée
+    }
+  });
+
   const moves = [];
   Object.keys(res.byTheme).forEach(id => {
     const r = res.byTheme[id];
     const st = S.themes[id];
     st.seen += r.total; st.right += r.right;
+    st.hist = (st.hist || []).concat({ d: t0, ok: r.right, tot: r.total }).slice(-20);
     const mv = moveBox(id, r.total ? r.right / r.total : 0);
     if (mv.from !== mv.to) moves.push({ id, from:mv.from, to:mv.to });
   });
@@ -1992,14 +2053,18 @@ function weakHTML(){
   const seen = seenThemes().map(t => ({ t, m: mastery(t) })).filter(x => x.m !== null);
   if (!seen.length) return `<div class="empty">Rien encore : fais tes premiers blocs et je repère tout seul ce qui accroche. Les notions ratées reviennent dès le lendemain.</div>`;
   const weak = seen.sort((a,b) => a.m - b.m).slice(0,5);
-  return `<div class="weak">${weak.map(x => `
+  return `<div class="weak">${weak.map(x => {
+    const tr = trend(x.t);
+    const fl = tr === "up" ? ` <span style="color:var(--ok)" title="en progrès">↗</span>`
+             : tr === "down" ? ` <span style="color:var(--ko)" title="en recul">↘</span>` : "";
+    return `
     <div class="weak-row">
       <span class="t">
         <span class="chip ${x.t.subject}">${SUB[x.t.subject].short}</span>
         <span class="nmm">${esc(x.t.t)}</span>
       </span>
-      <span class="pc">boîte ${S.themes[x.t.id].box} · ${x.m}%</span>
-    </div>`).join("")}</div>`;
+      <span class="pc">boîte ${S.themes[x.t.id].box} · ${x.m}%${fl}</span>
+    </div>`;}).join("")}</div>`;
 }
 
 function calHTML(){
@@ -2096,8 +2161,29 @@ function bilan(){
     justes: S.days[d].right, questions: S.days[d].total, xp: S.days[d].xp
   }));
 
+  // les fautes récentes, en clair : question, bonne réponse, réponse donnée
+  const fautes = (S.errors || []).slice(-60).map(e => {
+    const t = THEME_BY_ID[e.id];
+    return { jour: e.d, matiere: t ? SUB[t.subject].label : "?", notion: t ? t.t : e.id,
+             format: e.f, question: e.q, attendu: e.a, repondu: e.r };
+  });
+
+  // par notion : le progrès mesuré (3 derniers blocs vs 3 précédents)
+  const progres = seenThemes().map(t => {
+    const st = S.themes[t.id];
+    const tr = trend(t);
+    if (tr === null) return null;
+    return {
+      matiere: SUB[t.subject].label, notion: t.t, boite: st.box,
+      avant: Math.round(100 * (histAcc(st, -6, -3) ?? 0)),
+      recent: Math.round(100 * (histAcc(st, -3) ?? 0)),
+      direction: tr === "up" ? "en progrès" : tr === "down" ? "en recul" : "stable",
+      a_retravailler: missIdx(st).length
+    };
+  }).filter(Boolean);
+
   return {
-    app: "onze", format: 1, eleve: ELEVE, genere: t0,
+    app: "onze", format: 2, eleve: ELEVE, genere: t0,
     depuis: S.start,
     jours_avant_rentree: Math.max(0, diffDays(t0, SCHOOL_START)),
     serie: { actuelle: S.streak, record: S.best },
@@ -2107,6 +2193,8 @@ function bilan(){
     boites: boites,
     matieres: matieres,
     fragiles: fragiles,
+    fautes: fautes,
+    progres: progres,
     activite: activite,
     trophees: S.badges,
     // sauvegarde intégrale : sans elle, vider le navigateur efface tout sans retour
@@ -2165,6 +2253,7 @@ function startBlock(kind){
   sess = {
     block, items, i:0, xp:0, right:0, total:0, combo:0, bestCombo:0,
     byTheme:{}, answered:false, correct:null, chosen:null, built:[],
+    errs:[], itemLog:[],
     phase:"quiz"
   };
   const first = THEME_BY_ID[block.themes[0]];
@@ -2232,6 +2321,7 @@ function quizHTML(){
       <div class="meta">
         <span class="chip ${sk}">${SUB[sk].short}</span>
         <span class="th">${esc(t ? t.t : "")} · ${sess.i+1}/${sess.items.length}</span>
+        ${it.retry ? `<span class="chip" style="background:var(--accent-soft);color:var(--accent)">revanche ⚡</span>` : ""}
       </div>
       <div class="txt">${fmt(it.q)}</div>
       ${it.hint && !sess.answered ? `<div class="hint">${esc(it.hint)}</div>` : ""}
@@ -2329,6 +2419,20 @@ function grade(ok){
   sess.total++;
   const bt = sess.byTheme[it.theme] || (sess.byTheme[it.theme] = { right:0, total:0 });
   bt.total++;
+  // journal : ce qui a été répondu, pour la revanche et le bilan
+  sess.itemLog.push({ id: it.theme, k: it.gen ? null : it.bankIdx, ok });
+  if (!ok){
+    const donne = it.f === "qcm" ? (sess.chosen != null ? it.o[sess.chosen] : "")
+                : it.f === "ord" ? sess.built.join(" ")
+                : (sess.typed || "");
+    sess.errs.push({
+      d: today(), id: it.theme, f: it.f,
+      q: String(it.q || "").slice(0, 90),
+      a: String(Array.isArray(it.a) ? it.a[0] : it.a).slice(0, 60),
+      r: String(donne).slice(0, 60),
+      k: it.gen ? null : it.bankIdx, g: it.gen ? 1 : 0
+    });
+  }
   if (ok){
     sess.right++; bt.right++;
     sess.combo++; sess.bestCombo = Math.max(sess.bestCombo, sess.combo);
@@ -2359,7 +2463,8 @@ function quitSession(){
   sess = null; view = { screen:"home" }; render();
 }
 function finish(){
-  const out = recordBlock(sess.block, { xp:sess.xp, right:sess.right, total:sess.total, byTheme:sess.byTheme });
+  const out = recordBlock(sess.block, { xp:sess.xp, right:sess.right, total:sess.total, byTheme:sess.byTheme,
+    errs:sess.errs, itemLog:sess.itemLog });
   view = { screen:"done", res:{
     kind: sess.block.kind, title: sess.block.title,
     right: sess.right, total: sess.total, xp: sess.xp, bonus: out.bonus,
