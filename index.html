@@ -909,6 +909,177 @@ BANK.allemand = { label:"Allemand", short:"DE", themes:[
     {f:"txt", q:"Traduis avec l'article : le train", a:"der Zug", alt:["zug"], e:"der Zug, die Züge."},
     {f:"qcm", q:"« Es ist mir kalt » — was stimmt?", o:["« Mir ist kalt » ist die richtige Form","Es ist korrekt","Man sagt « Ich bin kalt »"], a:"« Mir ist kalt » ist die richtige Form", e:"En allemand, la sensation se dit au datif : mir ist kalt."},
     {f:"txt", q:"Traduis en allemand : la semaine (avec l'article)", a:"die Woche", alt:["woche"], e:"die Woche, die Wochen."}
+  ]},
+
+/* ============================================================
+   Unité 5 « Schmeckt's? » (manuel pp. 30-33) — le programme de l'école.
+   Sept listes de vocabulaire, chacune ouverte une semaine avant son test et
+   remise en avant à l'approche de celui-ci (champs `from` et `tests`).
+   Consigne de l'enseignante, reprise dans chaque leçon :
+     — les noms s'apprennent AU SINGULIER et AVEC LEUR ARTICLE
+       (exceptions au pluriel : die Nudeln, die Trauben, die Früchte, die Süssigkeiten) ;
+     — les verbes s'apprennent au présent ET au passé composé, à toutes les
+       personnes (ich, du, er/sie/es, wir, ihr, sie).
+   L'article est donc exigé dans les réponses : « Reis » seul est compté faux.
+   ============================================================ */
+
+{ id:"de-u5-1", t:"Unité 5 · Vocabulaire 1 : manger et boire", tier:"programme",
+  from:"2026-08-19", tests:["2026-08-27","2026-09-03"], gen:"de-u5-1",
+  lesson:{ why:"Le premier test de l'année (27 août) et la moitié du TA du 3 septembre. Vingt mots — c'est jouable si tu les prends *avec leur article*.",
+    pts:["L'article fait partie du mot : on apprend *der Reis*, pas « Reis ». Sans lui, tu ne pourras dire ni « ich mag *den* Reis » ni « mit *dem* Reis ».",
+      "Les trois mots vraiment neufs : *der Reis*, *die Wurst*, *der Schinken*. Le reste, tu le connais déjà — c'est l'encadré gris de la page 30.",
+      "Pièges de genre : *das* Fleisch (pas « der »), *der* Käse, *der* Joghurt, *die* Butter, *das* Wasser.",
+      "*die Nudeln* n'existe qu'au pluriel — il n'y a pas de « der Nudel ».",
+      "Deux mots courts se cachent dans des composés : das (Mineral-)Wasser, der (Apfel-/Orangen-)Saft."],
+    ex:"« der Schinken » — le jambon. Au test, écris l'article : c'est la moitié de la note." },
+  items:[
+    {f:"txt", q:"Traduis avec l'article : *le riz*", a:"der Reis", e:"der Reis — un des trois mots neufs de la liste."},
+    {f:"txt", q:"Traduis avec l'article : *le jambon*", a:"der Schinken", e:"der Schinken."},
+    {f:"txt", q:"Traduis avec l'article : *la saucisse*", a:"die Wurst", e:"die Wurst."},
+    {f:"qcm", q:"___ Fleisch", o:["das","der","die"], a:"das", e:"das Fleisch — neutre, c'est le piège le plus fréquent de la liste."},
+    {f:"qcm", q:"« der Käse » bedeutet…", o:["le fromage","le gâteau","la caisse"], a:"le fromage", e:"Le gâteau = der Kuchen ; la caisse = die Kasse. Trois faux amis proches."},
+    {f:"txt", q:"Traduis avec l'article : *le petit pain*", a:"das Brötchen", e:"das Brötchen — tous les mots en -chen sont neutres."},
+    {f:"qcm", q:"Comment dit-on « les pâtes » ?", o:["die Nudeln","der Nudel","das Nudel"], a:"die Nudeln", e:"Nudeln ne s'emploie qu'au pluriel."},
+    {f:"txt", q:"Traduis avec l'article : *le beurre*", a:"die Butter", e:"die Butter — féminin, malgré le -er final."}
+  ]},
+
+{ id:"de-u5-2", t:"Unité 5 · Vocabulaire 2 : fruits, légumes, sucreries", tier:"programme",
+  from:"2026-08-26", tests:["2026-09-03","2026-09-10"], gen:"de-u5-2",
+  lesson:{ why:"Cinq mots seulement, mais quatre sont des pluriels — et c'est exactement là que le test t'attend.",
+    pts:["*die Trauben*, *die Früchte*, *die Süssigkeiten* : toujours au pluriel en allemand.",
+      "*das Obst* et *das Gemüse* sont l'inverse : toujours au *singulier*, comme « la nourriture » en français. On dit « Obst ist gesund », jamais « Obste ».",
+      "*die Früchte* et *das Obst* se traduisent tous deux par « les fruits » — mais Obst est le mot collectif (les fruits en général), Früchte les fruits comptés.",
+      "C'est la liste du TA du 3 septembre avec le Vocabulaire 1 : les deux ensemble."],
+    ex:"« Ich esse gern Obst und Gemüse » — les deux au singulier, sans article." },
+  items:[
+    {f:"txt", q:"Traduis avec l'article : *les légumes*", a:"das Gemüse", e:"das Gemüse — singulier en allemand, toujours."},
+    {f:"txt", q:"Traduis avec l'article : *le raisin*", a:"die Trauben", e:"die Trauben — pluriel en allemand alors que le français dit « le raisin »."},
+    {f:"qcm", q:"Quelle forme est correcte ?", o:["Obst ist gesund.","Obste sind gesund.","Die Obst ist gesund."], a:"Obst ist gesund.", e:"das Obst ne se met jamais au pluriel."},
+    {f:"txt", q:"Traduis avec l'article : *les sucreries*", a:"die Süssigkeiten", e:"die Süssigkeiten — pluriel, avec deux s (orthographe suisse)."},
+    {f:"qcm", q:"« das Obst » bedeutet…", o:["les fruits","les légumes","les sucreries"], a:"les fruits", e:"Les légumes = das Gemüse ; les sucreries = die Süssigkeiten."},
+    {f:"txt", q:"Traduis avec l'article : *les fruits* (le pluriel, pas le mot collectif)", a:"die Früchte", alt:["fruchte","früchte"], e:"die Früchte (Pl.) — le collectif, c'est das Obst."},
+    {f:"qcm", q:"Lequel de ces mots est un *singulier* en allemand ?", o:["das Gemüse","die Trauben","die Süssigkeiten"], a:"das Gemüse", e:"Gemüse et Obst sont singuliers ; Trauben, Früchte et Süssigkeiten sont pluriels."}
+  ]},
+
+{ id:"de-u5-3", t:"Unité 5 · Vocabulaire 3 : dire ce qu'on aime", tier:"programme",
+  from:"2026-09-02", tests:["2026-09-10","2026-09-17"], gen:"de-u5-3",
+  lesson:{ why:"Deux mots… et la tournure qui revient dans tout le reste de l'unité : dire ce qu'on aime et ce qu'on n'aime pas.",
+    pts:["Les deux mots : *das Salz* (le sel), *der Pfeffer* (le poivre). La phrase à savoir : « *Gib mir bitte Salz und Pfeffer!* »",
+      "Aimer : « *Ich esse gern* … » / « *Ich mag* … ». Le *gern* se place après le verbe, jamais avant.",
+      "Ne pas aimer, deux façons : « Ich esse *nicht gern* … » (on nie le verbe) ou « Ich mag *keinen/kein/keine* … » (on nie le nom).",
+      "Et c'est là qu'il faut l'article : *keinen* devant un masculin, *kein* devant un neutre, *keine* devant un féminin ET devant un pluriel.",
+      "Donc : ich mag *keinen* Fisch (der), *kein* Fleisch (das), *keine* Wurst (die), *keine* Nudeln (Pl.)."],
+    ex:"« Ich esse gern Schokolade, aber ich mag keinen Fisch. » — der Fisch → keinen." },
+  items:[
+    {f:"txt", q:"Traduis avec l'article : *le poivre*", a:"der Pfeffer", e:"der Pfeffer."},
+    {f:"txt", q:"Traduis avec l'article : *le sel*", a:"das Salz", e:"das Salz — neutre."},
+    {f:"gap", q:"Ich mag ___ Fleisch. (je n'aime pas la viande)", a:"kein", e:"das Fleisch est neutre → kein."},
+    {f:"gap", q:"Ich mag ___ Wurst. (je n'aime pas la saucisse)", a:"keine", e:"die Wurst est féminin → keine."},
+    {f:"gap", q:"Ich mag ___ Käse. (je n'aime pas le fromage)", a:"keinen", e:"der Käse est masculin, et c'est un complément direct → keinen."},
+    {f:"ord", q:"Remets la phrase dans l'ordre :", w:["Ich","esse","gern","Schokolade"], a:"Ich esse gern Schokolade", e:"« gern » se place après le verbe conjugué."},
+    {f:"qcm", q:"Comment dit-on « donne-moi s'il te plaît le sel et le poivre » ?", o:["Gib mir bitte Salz und Pfeffer!","Gebe mir bitte Salz und Pfeffer!","Gib bitte mir Salz und Pfeffer!"], a:"Gib mir bitte Salz und Pfeffer!", e:"Impératif du tutoiement : *gib* (sans -e). Le pronom mir suit tout de suite le verbe."},
+    {f:"gap", q:"Ich mag ___ Nudeln. (je n'aime pas les pâtes)", a:"keine", e:"Au pluriel aussi : keine."}
+  ]},
+
+{ id:"de-u5-4", t:"Unité 5 · Vocabulaire 4 : ce qu'on préfère", tier:"programme",
+  from:"2026-09-09", tests:["2026-09-17","2026-09-24"], gen:"de-u5-4",
+  lesson:{ why:"Quatre mots de cuisine et le superlatif « ce que je préfère » — qui oblige à inverser le sujet et le verbe.",
+    pts:["Les mots : *das Mehl* (la farine), *der Zucker* (le sucre), *das Fett* (la graisse), *das Öl* (l'huile). Trois neutres, un masculin.",
+      "La tournure : « *Am liebsten esse ich* … » / « *Am liebsten mag ich* … » = ce que je préfère (manger).",
+      "Attention à l'ordre : « Am liebsten » occupe la 1re place, donc le verbe garde la 2e et le sujet passe *après* — esse *ich*, pas « ich esse ».",
+      "C'est la règle V2 que tu connais déjà : quoi qu'on mette en tête, le verbe conjugué reste le deuxième élément.",
+      "TA du 17 septembre : cette liste avec le Vocabulaire 3."],
+    ex:"« Am liebsten esse ich Schokolade » — et non « Am liebsten ich esse… »." },
+  items:[
+    {f:"txt", q:"Traduis avec l'article : *la farine*", a:"das Mehl", e:"das Mehl."},
+    {f:"txt", q:"Traduis avec l'article : *le sucre*", a:"der Zucker", e:"der Zucker — le seul masculin des quatre."},
+    {f:"txt", q:"Traduis avec l'article : *l'huile*", a:"das Öl", alt:["das Oel"], e:"das Öl."},
+    {f:"txt", q:"Traduis avec l'article : *la graisse*", a:"das Fett", e:"das Fett."},
+    {f:"ord", q:"Remets la phrase dans l'ordre :", w:["Am","liebsten","esse","ich","Kartoffeln"], a:"Am liebsten esse ich Kartoffeln", e:"« Am liebsten » en 1re place → verbe en 2e, sujet en 3e."},
+    {f:"qcm", q:"Quelle phrase est correcte ?", o:["Am liebsten mag ich Käse.","Am liebsten ich mag Käse.","Ich am liebsten mag Käse."], a:"Am liebsten mag ich Käse.", e:"Le verbe conjugué reste en 2e position — le sujet recule."},
+    {f:"gap", q:"___ liebsten trinke ich Orangensaft. (ce que je préfère boire)", a:"Am", e:"« Am liebsten » — la formule se retient en bloc."},
+    {f:"qcm", q:"« der Zucker » bedeutet…", o:["le sucre","la graisse","la farine"], a:"le sucre", e:"La graisse = das Fett ; la farine = das Mehl."}
+  ]},
+
+{ id:"de-u5-5", t:"Unité 5 · Vocabulaire 5 : c'est bon !", tier:"programme",
+  from:"2026-09-16", tests:["2026-09-24","2026-10-01"], gen:"de-u5-5",
+  lesson:{ why:"Le mot *das Ei* a un pluriel irrégulier, et « schmecken » est le verbe central de toute l'unité.",
+    pts:["*das Ei*, pluriel *die Eier* — un des rares pluriels en -er. La phrase du manuel : « *Die Eier sind frisch.* »",
+      "*frisch* = frais. Comme tous les adjectifs après « sein », il ne prend aucune terminaison : die Eier sind frisch.",
+      "Dire que c'est bon : « *Das schmeckt gut / lecker / fantastisch.* »",
+      "*schmecken* ne veut pas dire « goûter » mais « avoir bon goût » : c'est le plat qui schmeckt, pas la personne.",
+      "TA du 1er octobre : cette liste avec le Vocabulaire 6."],
+    ex:"« Die Suppe schmeckt fantastisch! » — c'est la soupe qui est sujet." },
+  items:[
+    {f:"txt", q:"Traduis avec l'article : *l'œuf*", a:"das Ei", e:"das Ei, pluriel die Eier."},
+    {f:"qcm", q:"Quel est le pluriel de « das Ei » ?", o:["die Eier","die Eien","die Eis"], a:"die Eier", e:"Pluriel en -er, comme das Kind → die Kinder."},
+    {f:"gap", q:"Die Eier ___ frisch. (être)", a:"sind", e:"Pluriel → sind. Et frisch reste nu après sein."},
+    {f:"txt", q:"Traduis en allemand : *frais*", a:"frisch", e:"frisch — invariable après sein, werden, bleiben."},
+    {f:"qcm", q:"Comment dit-on « c'est délicieux » ?", o:["Das schmeckt lecker.","Das schmeckt leckere.","Ich schmecke lecker."], a:"Das schmeckt lecker.", e:"C'est le plat qui schmeckt. « Ich schmecke lecker » voudrait dire que TU as bon goût."},
+    {f:"ord", q:"Remets la phrase dans l'ordre :", w:["Das","schmeckt","wirklich","fantastisch"], a:"Das schmeckt wirklich fantastisch", e:"Sujet, verbe en 2e position, puis le reste."},
+    {f:"gap", q:"Der Kuchen ___ sehr gut. (schmecken)", a:"schmeckt", e:"3e personne du singulier : schmeckt."},
+    {f:"qcm", q:"« Die Eier sind frisch » — pourquoi « frisch » sans terminaison ?", o:["parce qu'il suit le verbe sein","parce que Eier est un pluriel","parce que c'est un mot court"], a:"parce qu'il suit le verbe sein", e:"Adjectif attribut (après sein, werden, bleiben) → forme nue."}
+  ]},
+
+{ id:"de-u5-6", t:"Unité 5 · Vocabulaire 6 : les goûts et l'alimentation", tier:"programme",
+  from:"2026-09-23", tests:["2026-10-01","2026-10-08"], gen:"de-u5-6",
+  lesson:{ why:"Les quatre adjectifs de goût, plus le vocabulaire de l'alimentation que tu connais déjà (encadré gris p. 32).",
+    pts:["Les goûts : *süss* (sucré), *salzig* (salé), *sauer* (acide), *scharf* (piquant), *fett* (gras).",
+      "« *Mein Lieblingsessen ist* … » = mon plat préféré est… Le préfixe *Lieblings-* se colle à n'importe quel nom : Lieblingsfach, Lieblingsfilm.",
+      "« *Das ist (mir) zu süss.* » — *zu* + adjectif = trop. Et le *mir* au datif dit « pour moi ».",
+      "*probieren* (goûter, essayer) : ich probiere, du probierst, er probiert. Passé composé : *hat probiert* — sans *ge-*, parce que le verbe se termine en *-ieren*.",
+      "L'encadré gris : *gesund ≠ ungesund*, *das Stück* (le morceau), *die Portion*, *zu viel / zu oft*, *täglich = jeden Tag*."],
+    ex:"« Mein Lieblingsessen ist Pizza, aber die Suppe ist mir zu salzig. »" },
+  items:[
+    {f:"txt", q:"Traduis en allemand : *salé*", a:"salzig", e:"salzig."},
+    {f:"txt", q:"Traduis en allemand : *acide*", a:"sauer", e:"sauer."},
+    {f:"qcm", q:"« scharf » bedeutet…", o:["piquant, fort","sucré","gras"], a:"piquant, fort", e:"Sucré = süss ; gras = fett."},
+    {f:"gap", q:"Die Suppe ist mir ___ salzig. (trop)", a:"zu", e:"zu + adjectif = trop. « zu süss » = trop sucré."},
+    {f:"txt", q:"Traduis avec l'article : *le morceau*", a:"das Stück", e:"das Stück — ein Stück Pizza."},
+    {f:"qcm", q:"Le contraire de « gesund », c'est…", o:["ungesund","nicht gesund","schlecht gesund"], a:"ungesund", e:"Le préfixe un- inverse l'adjectif, comme en français « in- »."},
+    {f:"qcm", q:"Quel est le passé composé de « probieren » ?", o:["hat probiert","hat geprobiert","ist probiert"], a:"hat probiert", e:"Les verbes en -ieren ne prennent JAMAIS le ge- du participe."},
+    {f:"txt", q:"Traduis en allemand : *chaque jour* (en un mot)", a:"täglich", alt:["taeglich"], e:"täglich = jeden Tag."},
+    {f:"qcm", q:"Comment dit-on « mon plat préféré » ?", o:["mein Lieblingsessen","mein liebstes Essen","mein Liebling Essen"], a:"mein Lieblingsessen", e:"Lieblings- se soude au nom, en un seul mot."}
+  ]},
+
+{ id:"de-u5-7", t:"Unité 5 · Vocabulaire 7 : cuisiner", tier:"programme",
+  from:"2026-09-30", tests:["2026-10-08"], gen:"de-u5-7",
+  lesson:{ why:"Trois verbes de cuisine — et l'enseignante les veut au présent *et* au passé composé, à toutes les personnes.",
+    pts:["*probieren, er probiert, hat probiert* — goûter, essayer. « Oh, lecker! Die Suppe musst du probieren! »",
+      "*backen, er backt, hat gebacken* — faire de la pâtisserie. Participe irrégulier en *-en*.",
+      "*kochen, er kocht, hat gekocht* — cuisiner, faire cuire. « Wir kochen Nudeln. » Participe régulier en *-t*.",
+      "*fertig* = prêt. « Das Essen ist gleich fertig! » — gleich = tout de suite.",
+      "Rappel du Vocabulaire 6 : *zu* + adjectif = trop (zu süss = trop sucré)."],
+    ex:"« Gestern hat er einen Kuchen gebacken. » — hat + participe à la fin de la phrase." },
+  items:[
+    {f:"gap", q:"Wir ___ Nudeln. (kochen)", a:"kochen", e:"wir kochen — même forme que l'infinitif."},
+    {f:"gap", q:"Gestern hat er einen Kuchen ___ . (backen)", a:"gebacken", e:"backen → gebacken : participe irrégulier en -en."},
+    {f:"qcm", q:"Quel est le participe passé de « kochen » ?", o:["gekocht","gekochen","kocht"], a:"gekocht", e:"Verbe régulier : ge- + radical + -t."},
+    {f:"txt", q:"Traduis en allemand : *prêt*", a:"fertig", e:"fertig — « Das Essen ist gleich fertig! »"},
+    {f:"gap", q:"Du ___ die Suppe. (probieren, présent)", a:"probierst", e:"du probierst."},
+    {f:"ord", q:"Remets la phrase dans l'ordre :", w:["Das","Essen","ist","gleich","fertig"], a:"Das Essen ist gleich fertig", e:"gleich = tout de suite, juste avant l'adjectif."},
+    {f:"qcm", q:"Quelle phrase est correcte au passé composé ?", o:["Wir haben Nudeln gekocht.","Wir haben gekocht Nudeln.","Wir sind Nudeln gekocht."], a:"Wir haben Nudeln gekocht.", e:"Auxiliaire haben en 2e position, participe tout à la fin."},
+    {f:"gap", q:"Ihr ___ einen Kuchen. (backen, présent)", a:"backt", e:"ihr backt."}
+  ]},
+
+{ id:"de-u5-plus", t:"Unité 5 · le reste de l'unité (pp. 31-33)", tier:"programme",
+  from:"2026-10-09", gen:"de-u5-plus",
+  lesson:{ why:"Le vocabulaire de l'unité 5 qui n'est *pas* dans les sept listes testées : les encadrés bleus de la page 31 et toute la recette de la page 33. À voir une fois les tests passés.",
+    pts:["Encadrés bleus p. 31 : *die Melone*, *die Paprika*, *die Gurke*, *der Keks*, *die Olive*, *die Nuss*, *die Erdbeere*.",
+      "L'alimentation p. 33 : *das Gericht* (le plat), *die Kalorie*, *das Vitamin*, *vitaminreich* (riche en vitamines), *die Abwechslung* (la variété).",
+      "Les mesures : *das Kilogramm*, *das Gramm*, *der Liter*, *die Prise* (la pincée), *die Zutat* (l'ingrédient), *der Teig* (la pâte).",
+      "Les verbes de la recette : *braten* (er brät, hat gebraten), *mischen* (hat gemischt), *dazugeben* (er gibt … dazu, hat dazugegeben), *umdrehen* (er dreht … um, hat umgedreht).",
+      "*dazugeben* et *umdrehen* sont des verbes à particule séparable : au présent la particule part à la fin, au participe elle se recolle devant."],
+    ex:"« Er gibt Salz dazu und dreht den Pfannkuchen um. » — les deux particules ferment la phrase." },
+  items:[
+    {f:"txt", q:"Traduis avec l'article : *le concombre*", a:"die Gurke", e:"die Gurke."},
+    {f:"txt", q:"Traduis avec l'article : *l'ingrédient*", a:"die Zutat", e:"die Zutat, die Zutaten."},
+    {f:"qcm", q:"« die Abwechslung » bedeutet…", o:["la variété","la vitamine","la portion"], a:"la variété", e:"« Für eine gesunde Ernährung ist Abwechslung wichtig. »"},
+    {f:"gap", q:"Er ___ die Pfannkuchen. (braten, présent)", a:"brät", alt:["braet"], e:"braten est un verbe fort : a → ä à la 3e personne."},
+    {f:"gap", q:"Er gibt Salz ___ . (dazugeben — où va la particule ?)", a:"dazu", e:"Verbe à particule séparable : au présent, la particule ferme la phrase."},
+    {f:"qcm", q:"Quel est le participe passé de « umdrehen » ?", o:["umgedreht","geumdreht","umdreht"], a:"umgedreht", e:"Verbe séparable : le ge- se glisse ENTRE la particule et le radical."},
+    {f:"txt", q:"Traduis avec l'article : *la pincée*", a:"die Prise", e:"eine Prise Salz — une pincée de sel."},
+    {f:"txt", q:"Traduis avec l'article : *le plat*", a:"das Gericht", e:"das Gericht — « Burger und Döner sind typische Fastfood-Gerichte. »"}
   ]}
 
 ]};
@@ -974,6 +1145,116 @@ BANK.allemand = { label:"Allemand", short:"DE", themes:[
     const [fr, de] = VOK[rnd(VOK.length)];
     return { f:"txt", q:"Traduis avec l'article : *"+fr+"*", a:de, alt:[de.split(" ")[1]],
              e:de+"." };
+  };
+
+  /* ---------- Unité 5 « Schmeckt's? » : la réserve, liste par liste ----------
+     Le tableau porte le genre de chaque nom : il sert à la fois au tirage de
+     vocabulaire et au piège de la liste 3 (keinen / kein / keine).
+     Contrairement à « de-vok », l'article est EXIGÉ dans la réponse : c'est la
+     consigne de l'enseignante, et sans lui rien ne se décline.
+     [ liste, français, allemand avec l'article, genre m/f/n/pl ] */
+  const sh = a => { const r = a.slice(); for (let i=r.length-1;i>0;i--){ const j = rnd(i+1); [r[i],r[j]] = [r[j],r[i]]; } return r; };
+  const U5W = [
+    [1,"la viande","das Fleisch","n"],          [1,"le poisson","der Fisch","m"],
+    [1,"les pâtes","die Nudeln","pl"],          [1,"le pain","das Brot","n"],
+    [1,"le petit pain","das Brötchen","n"],     [1,"la pomme","der Apfel","m"],
+    [1,"la tomate","die Tomate","f"],           [1,"la carotte","die Karotte","f"],
+    [1,"la pomme de terre","die Kartoffel","f"],[1,"le fromage","der Käse","m"],
+    [1,"le yogourt","der Joghurt","m"],         [1,"le lait","die Milch","f"],
+    [1,"le beurre","die Butter","f"],           [1,"l'eau","das Wasser","n"],
+    [1,"le jus","der Saft","m"],                [1,"la limonade","die Limonade","f"],
+    [1,"le chocolat","die Schokolade","f"],     [1,"le riz","der Reis","m"],
+    [1,"la saucisse","die Wurst","f"],          [1,"le jambon","der Schinken","m"],
+
+    [2,"le raisin","die Trauben","pl"],         [2,"les fruits (pluriel)","die Früchte","pl"],
+    [2,"les fruits (mot collectif)","das Obst","n"], [2,"les légumes","das Gemüse","n"],
+    [2,"les sucreries","die Süssigkeiten","pl"],
+
+    [3,"le sel","das Salz","n"],                [3,"le poivre","der Pfeffer","m"],
+
+    [4,"la farine","das Mehl","n"],             [4,"le sucre","der Zucker","m"],
+    [4,"la graisse","das Fett","n"],            [4,"l'huile","das Öl","n"],
+
+    [5,"l'œuf","das Ei","n"],
+
+    [6,"le morceau","das Stück","n"],           [6,"la portion","die Portion","f"],
+
+    [8,"le melon","die Melone","f"],            [8,"le poivron","die Paprika","f"],
+    [8,"le concombre","die Gurke","f"],         [8,"le biscuit","der Keks","m"],
+    [8,"l'olive","die Olive","f"],              [8,"la noix","die Nuss","f"],
+    [8,"la fraise","die Erdbeere","f"],         [8,"le plat","das Gericht","n"],
+    [8,"la calorie","die Kalorie","f"],         [8,"la vitamine","das Vitamin","n"],
+    [8,"la variété","die Abwechslung","f"],     [8,"le kilogramme","das Kilogramm","n"],
+    [8,"le gramme","das Gramm","n"],            [8,"le litre","der Liter","m"],
+    [8,"l'ingrédient","die Zutat","f"],         [8,"la pâte","der Teig","m"],
+    [8,"la pincée","die Prise","f"],            [8,"le végétarien","der Vegetarier","m"]
+  ];
+
+  /* Tirage de vocabulaire pour la liste n. Les listes maigres (3, 5, 6) puisent
+     surtout dans les listes précédentes — ce qui tombe juste, puisque les TA
+     de l'école sont cumulatifs (1+2, 3+4, 5+6). */
+  function u5vok(n){
+    const own  = U5W.filter(w => w[0] === n);
+    const prev = U5W.filter(w => w[0] < n);
+    return function(){
+      const wantOwn = own.length >= 4 ? rnd(4) !== 0 : rnd(3) === 0;
+      const pool = (wantOwn && own.length) || !prev.length ? own : prev;
+      const w = pool[rnd(pool.length)];
+      if (rnd(3) === 0){                       // une fois sur trois : allemand → français
+        const others = sh(U5W.filter(x => x[1] !== w[1])).slice(0,2).map(x => x[1]);
+        return { f:"qcm", q:"« "+w[2]+" » bedeutet…", o:sh([w[1]].concat(others)), a:w[1],
+                 e:w[2]+" = "+w[1]+"." };
+      }
+      return { f:"txt", q:"Traduis avec l'article : *"+w[1]+"*", a:w[2], e:w[2]+"." };
+    };
+  }
+  [1,2,4,5,6].forEach(n => { GENS["de-u5-"+n] = u5vok(n); });
+
+  /* Liste 3 : la négation du nom, où le genre se paie comptant */
+  const KEIN = { m:"keinen", f:"keine", n:"kein", pl:"keine" };
+  const ESSBAR = U5W.filter(w => w[0] <= 2);
+  const vok3 = u5vok(3);
+  GENS["de-u5-3"] = function(){
+    if (rnd(3) === 0) return vok3();
+    const w = ESSBAR[rnd(ESSBAR.length)];
+    const noun = w[2].replace(/^(der|die|das) /, "");
+    return { f:"qcm", q:"Ich mag ___ "+noun+".  (je n'aime pas "+w[1]+")",
+             o:sh(["keinen","kein","keine"]), a:KEIN[w[3]],
+             e:w[2]+" → ich mag "+KEIN[w[3]]+" "+noun+"." };
+  };
+
+  /* Liste 7 : les verbes, au présent ET au passé composé, à toutes les personnes */
+  const PR5 = ["ich","du","er","wir","ihr","sie"];
+  const HAB = ["habe","hast","hat","haben","habt","haben"];
+  const V7 = [
+    {i:"kochen",    p:["koche","kochst","kocht","kochen","kocht","kochen"],                       pp:"gekocht"},
+    {i:"backen",    p:["backe","backst","backt","backen","backt","backen"],                       pp:"gebacken"},
+    {i:"probieren", p:["probiere","probierst","probiert","probieren","probiert","probieren"],     pp:"probiert"}
+  ];
+  const vok7 = u5vok(7);
+  function verbDrill(list, sepFrom){
+    const v = list[rnd(list.length)], p = rnd(6);
+    // au présent, on évite les verbes à particule : leur forme se coupe en deux
+    if (rnd(2) && (sepFrom === undefined || list.indexOf(v) < sepFrom)){
+      return { f:"gap", q:"Présent : *"+PR5[p]+"* ("+v.i+") ___", a:v.p[p], e:PR5[p]+" "+v.p[p]+"." };
+    }
+    return { f:"txt", q:"Mets au passé composé : *"+PR5[p]+"* ("+v.i+")",
+             a:PR5[p]+" "+HAB[p]+" "+v.pp, e:PR5[p]+" "+HAB[p]+" "+v.pp+"." };
+  }
+  GENS["de-u5-7"] = function(){
+    return rnd(4) === 0 ? vok7() : verbDrill(V7);
+  };
+
+  /* Le reste de l'unité : vocabulaire des encadrés bleus + verbes de la recette */
+  const V8 = [
+    {i:"braten",    p:["brate","brätst","brät","braten","bratet","braten"],                       pp:"gebraten"},
+    {i:"mischen",   p:["mische","mischst","mischt","mischen","mischt","mischen"],                 pp:"gemischt"},
+    {i:"dazugeben", p:[], pp:"dazugegeben"},
+    {i:"umdrehen",  p:[], pp:"umgedreht"}
+  ];
+  const vok8 = u5vok(8);
+  GENS["de-u5-plus"] = function(){
+    return rnd(3) === 0 ? verbDrill(V8, 2) : vok8();
   };
 })();
 </script>
@@ -1169,6 +1450,109 @@ BANK.anglais = { label:"Anglais", short:"EN", themes:[
     {f:"qcm", q:"« sensible » en anglais signifie…", o:["raisonnable","émotif","perceptible"], a:"raisonnable", e:"« sensible » (émotif) = sensitive."},
     {f:"txt", q:"Traduis : réussir un examen", a:"to pass an exam", alt:["pass an exam","pass"], e:"« passer un examen » = to take an exam."},
     {f:"qcm", q:"Quelle version est correcte ?", o:["She is fifteen years old.","She has fifteen years.","She is fifteen years."], a:"She is fifteen years old.", e:"L'âge se dit avec « be »."}
+  ]},
+
+/* ============================================================
+   Unit 1 « Travellers' tales » — l'active wordlist du programme.
+   Découpée comme dans le manuel : transport, prépositions de mouvement,
+   adjectifs d'opinion, mots et tournures, culture et géographie.
+   Pas de dates de test sur la feuille reçue : ces notions suivent la rotation
+   normale des matières. (Si le calendrier arrive, il suffit d'ajouter `from`
+   et `tests`, comme sur les listes d'allemand.)
+   ============================================================ */
+
+{ id:"en-u1-transport", t:"Unit 1 · Travel and transport", tier:"programme", gen:"en-u1-transport",
+  lesson:{ why:"Le vocabulaire de base de l'unité : tout ce qui sert à raconter un déplacement.",
+    pts:["*coach* n'est pas un entraîneur ici mais un *car* (le bus de voyage) — le faux ami de la liste.",
+      "*luggage* est indénombrable, comme *homework* : « my luggage *is* heavy », jamais « luggages ».",
+      "*trip* = le voyage (l'aller-retour, l'excursion) ; *journey* = le trajet ; *travel* est surtout un verbe.",
+      "*queue* se prononce comme la lettre « Q » et veut dire la file d'attente — rien à voir avec la queue d'un animal (*tail*).",
+      "*to pick somebody up* = venir chercher quelqu'un : verbe à particule, très fréquent à l'oral."],
+    ex:"« We took a *coach* to the *harbour* and left our *luggage* at the hotel. »" },
+  items:[
+    {f:"txt", q:"Traduis en anglais : *à l'étranger*", a:"abroad", e:"« to go abroad » — sans préposition : jamais « to abroad »."},
+    {f:"qcm", q:"Dans cette unité, « a coach » est…", o:["un car","un entraîneur","un cocher"], a:"un car", e:"Le mot a les deux sens ; ici c'est le véhicule."},
+    {f:"txt", q:"Traduis en anglais : *la file d'attente*", a:"queue", alt:["the queue","a queue"], e:"queue — se prononce « kyoo »."},
+    {f:"qcm", q:"Quelle phrase est correcte ?", o:["My luggage is heavy.","My luggages are heavy.","My luggage are heavy."], a:"My luggage is heavy.", e:"Indénombrable : pas de pluriel, verbe au singulier."},
+    {f:"txt", q:"Traduis en anglais : *le port*", a:"harbour", alt:["the harbour","harbor"], e:"harbour (GB) / harbor (US)."},
+    {f:"txt", q:"Traduis en anglais : *l'équipage*", a:"crew", alt:["the crew"], e:"the crew — l'équipage d'un bateau ou d'un avion."},
+    {f:"gap", q:"My parents will ___ at the station. (venir me chercher — 3 mots)", a:"pick me up", e:"to pick somebody up : le complément se glisse entre le verbe et la particule."},
+    {f:"qcm", q:"« a guided tour » c'est…", o:["une visite guidée","un guide touristique","un tour de garde"], a:"une visite guidée", e:"La personne, c'est *a tour guide*."}
+  ]},
+
+{ id:"en-u1-prep", t:"Unit 1 · Prepositions of movement", tier:"programme", gen:"en-u1-prep",
+  lesson:{ why:"En anglais, c'est la préposition qui porte le mouvement — le verbe ne dit que la manière.",
+    pts:["Le français met tout dans le verbe (« traverser en courant »), l'anglais le coupe en deux : *run* (manière) + *across* (trajet).",
+      "*across* = d'un bord à l'autre d'une surface ; *through* = à travers un volume ou une matière (a forest, a tunnel).",
+      "*into* = vers l'intérieur ; *out of* = vers l'extérieur. On ne dit pas « jump in the pool » si on saute depuis le bord : *into*.",
+      "*off* = en se détachant d'une surface (jump off the wall) ; *onto* = en s'y posant (climb onto the roof).",
+      "*past* = devant, en dépassant (walk past the school) ; *over* = par-dessus (climb over the fence)."],
+    ex:"« He ran *across* the bridge, walked *past* the hotel and climbed *up* the steps. »" },
+  items:[
+    {f:"gap", q:"She ran ___ the bridge. (traverser)", a:"across", e:"across = d'un bord à l'autre."},
+    {f:"gap", q:"We walked ___ the tunnel. (à travers)", a:"through", e:"through = à l'intérieur d'un volume — un tunnel, une forêt."},
+    {f:"qcm", q:"Il saute DANS la piscine. →", o:["He jumps into the pool.","He jumps in the pool.","He jumps onto the pool."], a:"He jumps into the pool.", e:"Mouvement vers l'intérieur : into."},
+    {f:"gap", q:"The cat jumped ___ the wall and ran away. (sauter de)", a:"off", e:"off = en se détachant d'une surface."},
+    {f:"qcm", q:"« to walk past the school » signifie…", o:["passer devant l'école","dépasser l'école en voiture","entrer dans l'école"], a:"passer devant l'école", e:"past = devant, en continuant son chemin."},
+    {f:"gap", q:"He climbed ___ the fence to get in. (par-dessus)", a:"over", e:"over = par-dessus un obstacle."},
+    {f:"txt", q:"Traduis : *s'éloigner de* (2 mots + from)", a:"walk away from", alt:["away from"], e:"(walk) away from — l'éloignement."},
+    {f:"gap", q:"They walked ___ the shop and went home. (sortir de — 2 mots)", a:"out of", e:"out of = vers l'extérieur."}
+  ]},
+
+{ id:"en-u1-opinion", t:"Unit 1 · Opinion adjectives", tier:"programme", gen:"en-u1-opinion",
+  lesson:{ why:"Dix adjectifs pour dire si c'était bien ou affreux — la moitié du travail dans une rédaction de voyage.",
+    pts:["Les positifs : *amazing*, *brilliant*, *fantastic*, *terrific*, *delicious* (pour la nourriture).",
+      "Les négatifs : *dreadful*, *disgusting*, *horrible*, *terrible*, *dull* (= ennuyeux, pas « bête »).",
+      "Le piège de la liste : *terrific* = formidable (positif !) alors que *terrible* = épouvantable. Un seul suffixe les sépare.",
+      "Ces adjectifs sont déjà « forts » : on ne dit pas « very amazing » mais *absolutely* amazing.",
+      "*brilliant* en anglais britannique veut simplement dire génial, pas seulement brillant."],
+    ex:"« The food was *delicious*, but the museum was *dull*. »" },
+  items:[
+    {f:"qcm", q:"« terrific » signifie…", o:["formidable","épouvantable","terrifiant"], a:"formidable", e:"Le piège : terrific est POSITIF. Épouvantable = terrible."},
+    {f:"txt", q:"Traduis en anglais : *dégoûtant*", a:"disgusting", e:"disgusting — surtout pour le goût et l'odeur."},
+    {f:"qcm", q:"« dull » signifie…", o:["ennuyeux","idiot","sombre"], a:"ennuyeux", e:"a dull film = un film ennuyeux."},
+    {f:"txt", q:"Traduis en anglais : *délicieux*", a:"delicious", e:"delicious — réservé à ce qui se mange."},
+    {f:"qcm", q:"Quelle phrase est correcte ?", o:["It was absolutely amazing.","It was very amazing.","It was more amazing."], a:"It was absolutely amazing.", e:"Les adjectifs extrêmes prennent *absolutely*, pas *very*."},
+    {f:"txt", q:"Traduis en anglais : *affreux* (commence par un d)", a:"dreadful", e:"dreadful — synonyme de terrible."},
+    {f:"qcm", q:"Lequel de ces adjectifs est *positif* ?", o:["brilliant","dreadful","disgusting"], a:"brilliant", e:"brilliant = génial, en anglais britannique surtout."}
+  ]},
+
+{ id:"en-u1-phrases", t:"Unit 1 · Words and phrases", tier:"programme", gen:"en-u1-phrases",
+  lesson:{ why:"Les formules pour aborder quelqu'un poliment — c'est ce qui est évalué à l'oral de l'unité.",
+    pts:["Demander son chemin : « *Excuse me, could you tell me the way to* …? » — *could* est plus poli que *can*.",
+      "Se renseigner : « *Excuse me, could you tell me about* …? » ; déranger : « *Sorry to bother you, but* … ».",
+      "Remercier : « *Thank you for* + verbe en *-ing* » — « Thank you for *picking* me up », jamais « for pick me up ».",
+      "Rencontrer quelqu'un : « *It's lovely to meet you.* » (la première fois seulement).",
+      "*advice* est indénombrable : « some advice », « a piece of advice » — jamais « an advice » ni « advices »."],
+    ex:"« Sorry to bother you, but could you tell me the way to the harbour? »" },
+  items:[
+    {f:"qcm", q:"Quelle formule est correcte ?", o:["Thank you for picking me up.","Thank you for pick me up.","Thank you to pick me up."], a:"Thank you for picking me up.", e:"« for » est une préposition : le verbe qui suit prend -ing."},
+    {f:"qcm", q:"Quelle phrase est correcte ?", o:["Can you give me some advice?","Can you give me an advice?","Can you give me some advices?"], a:"Can you give me some advice?", e:"advice est indénombrable — comme luggage et homework."},
+    {f:"txt", q:"Traduis en anglais : *être pressé* (3 mots, avec « be »)", a:"be in a hurry", alt:["to be in a hurry","in a hurry"], e:"I'm in a hurry."},
+    {f:"gap", q:"I'll call you ___ I arrive. (dès que — 3 mots)", a:"as soon as", e:"as soon as — suivi du présent, jamais du futur."},
+    {f:"qcm", q:"« to complain about something » signifie…", o:["se plaindre de quelque chose","compléter quelque chose","comprendre quelque chose"], a:"se plaindre de quelque chose", e:"Toujours suivi de *about*."},
+    {f:"txt", q:"Traduis en anglais : *disparaître*", a:"disappear", alt:["to disappear"], e:"disappear — un seul s, deux p."},
+    {f:"ord", q:"Remets la question dans l'ordre :", w:["Excuse","me","could","you","tell","me","the","way","to","the","station"], a:"Excuse me could you tell me the way to the station", e:"« could you » — l'inversion polie, avant le reste de la question."},
+    {f:"qcm", q:"« a tip » dans cette liste, c'est…", o:["un petit conseil","un pourboire","le sommet"], a:"un petit conseil", e:"Le mot a les trois sens ; l'unité retient « conseil »."}
+  ]},
+
+{ id:"en-u1-culture", t:"Unit 1 · Culture and geography", tier:"programme", gen:"en-u1-culture",
+  lesson:{ why:"Deux encadrés courts : les usages quand on est reçu chez l'habitant, et le vocabulaire pour décrire un lieu.",
+    pts:["Chez l'habitant : *host family* (famille d'accueil), *host* (l'hôte qui reçoit), *custom* (la coutume), *behave* (se comporter), *gift* (le cadeau).",
+      "*to shake hands* et *to kiss on the cheek* : les deux façons de saluer selon les pays — au pluriel, hands.",
+      "*embarrassing* décrit la situation, *embarrassed* décrit la personne : « I was *embarrassed* because it was *embarrassing* ».",
+      "Géographie : *northern*, *southern*, *eastern*, *western* sont les adjectifs — le nom, c'est north, south, east, west.",
+      "*accurate* = précis, exact (un chiffre, une carte) ; c'est un mot d'évaluation, pas de mesure."],
+    ex:"« My *host family* lives in the *southern* part of the *continent*. »" },
+  items:[
+    {f:"txt", q:"Traduis en anglais : *la famille d'accueil*", a:"host family", alt:["the host family"], e:"host family — celui qui reçoit est *the host*."},
+    {f:"qcm", q:"« It was an embarrassing situation. » — et pour la personne ?", o:["I was embarrassed.","I was embarrassing.","I was embarrass."], a:"I was embarrassed.", e:"-ing décrit ce qui provoque, -ed décrit ce qu'on ressent."},
+    {f:"txt", q:"Traduis en anglais : *la coutume*", a:"custom", alt:["the custom","a custom"], e:"custom — une coutume, un usage."},
+    {f:"qcm", q:"L'adjectif qui correspond à « south » est…", o:["southern","southly","southish"], a:"southern", e:"north → northern, east → eastern, west → western."},
+    {f:"txt", q:"Traduis en anglais : *précis, exact*", a:"accurate", e:"accurate — an accurate map."},
+    {f:"gap", q:"In Switzerland, people usually ___ when they meet. (se serrer la main — 2 mots)", a:"shake hands", e:"shake hands — toujours au pluriel."},
+    {f:"qcm", q:"« the Equator » c'est…", o:["l'équateur","l'équerre","l'équipement"], a:"l'équateur", e:"the Equator divides the Earth in two."},
+    {f:"txt", q:"Traduis en anglais : *se comporter*", a:"behave", alt:["to behave"], e:"behave — « behave yourself! »"}
   ]}
 
 ]};
@@ -1206,6 +1590,94 @@ BANK.anglais = { label:"Anglais", short:"EN", themes:[
     return { f:"txt", q:"Traduis en anglais : *"+fr+"*", a:en, alt:["the "+en, "to "+en],
              e:fr+" → "+en+"." };
   };
+
+  /* ---------- Unit 1 « Travellers' tales » : la réserve, section par section ---------- */
+  const sh = a => { const r = a.slice(); for (let i=r.length-1;i>0;i--){ const j = rnd(i+1); [r[i],r[j]] = [r[j],r[i]]; } return r; };
+  function enVok(list){
+    return function(){
+      const [fr, en] = list[rnd(list.length)];
+      if (rnd(3) === 0){                       // une fois sur trois : anglais → français
+        const others = sh(list.filter(x => x[0] !== fr)).slice(0,2).map(x => x[0]);
+        if (others.length === 2)
+          return { f:"qcm", q:"« "+en+" » signifie…", o:sh([fr].concat(others)), a:fr, e:en+" = "+fr+"." };
+      }
+      return { f:"txt", q:"Traduis en anglais : *"+fr+"*", a:en, alt:["the "+en, "to "+en],
+               e:fr+" → "+en+"." };
+    };
+  }
+
+  GENS["en-u1-transport"] = enVok([
+    ["à l'étranger","abroad"],            ["le car","coach"],
+    ["la visite guidée","guided tour"],   ["venir chercher","pick up"],
+    ["la file d'attente","queue"],        ["la valise","suitcase"],
+    ["la billetterie, le guichet","ticket office"], ["le guide touristique","tour guide"],
+    ["le voyage, l'excursion","trip"],    ["l'ambulance","ambulance"],
+    ["le canal","canal"],                 ["le télésiège","chairlift"],
+    ["l'équipage","crew"],                ["le bateau de croisière","cruise ship"],
+    ["le ferry","ferry"],                 ["le port","harbour"],
+    ["les bagages","luggage"],            ["l'autoroute","motorway"],
+    ["les passagers","passengers"],       ["le tunnel","tunnel"],
+    ["la camionnette","van"]
+  ]);
+
+  /* Les prépositions de mouvement : c'est la préposition qu'on interroge,
+     pas le verbe — le manuel les donne sous la forme « (run) across ». */
+  const MOVE = [
+    ["traverser en courant","run","across"],   ["s'éloigner de","walk","away from"],
+    ["descendre","go","down"],                 ["sauter dans","jump","into"],
+    ["sauter de","jump","off"],                ["grimper sur","climb","onto"],
+    ["sortir de","walk","out of"],             ["passer par-dessus","climb","over"],
+    ["passer devant","walk","past"],           ["traverser, passer à travers","walk","through"],
+    ["marcher jusqu'à","walk","to"],           ["monter en courant","run","up"]
+  ];
+  GENS["en-u1-prep"] = function(){
+    const m = MOVE[rnd(MOVE.length)];
+    if (rnd(3) === 0){
+      const others = sh(MOVE.filter(x => x[0] !== m[0])).slice(0,2).map(x => x[0]);
+      return { f:"qcm", q:"« to "+m[1]+" "+m[2]+" » signifie…", o:sh([m[0]].concat(others)), a:m[0],
+               e:"to "+m[1]+" "+m[2]+" = "+m[0]+"." };
+    }
+    return { f:"gap", q:"« "+m[0]+" » : "+m[1]+" ___", a:m[2],
+             e:m[1]+" "+m[2]+" = "+m[0]+"." };
+  };
+
+  GENS["en-u1-opinion"] = enVok([
+    ["incroyable","amazing"],     ["génial","brilliant"],
+    ["délicieux","delicious"],    ["dégoûtant","disgusting"],
+    ["affreux","dreadful"],       ["ennuyeux","dull"],
+    ["fantastique","fantastic"],  ["horrible","horrible"],
+    ["épouvantable","terrible"],  ["formidable","terrific"]
+  ]);
+
+  GENS["en-u1-phrases"] = enVok([
+    ["le conseil (indénombrable)","advice"], ["faire attention","be careful"],
+    ["l'ours","bear"],                  ["le pont","bridge"],
+    ["le client","customer"],           ["suivre","follow"],
+    ["gratuit","free"],                 ["embrasser sur la joue","kiss on the cheek"],
+    ["être perdu","be lost"],           ["la rencontre","meeting"],
+    ["le personnel (de l'hôtel)","staff"], ["la circulation","traffic"],
+    ["faire demi-tour","turn around"],  ["le serveur","waiter"],
+    ["dès que","as soon as"],           ["être pressé","be in a hurry"],
+    ["se plaindre de","complain about"],["disparaître","disappear"],
+    ["la peur","fear"],                 ["le hall","lobby"],
+    ["de luxe","luxury"],               ["la vie nocturne","nightlife"],
+    ["remarquer","notice"],             ["se serrer la main","shake hands"],
+    ["glisser","slide"],                ["les marches","steps"],
+    ["le petit conseil","tip"],         ["la terrasse","terrace"]
+  ]);
+
+  GENS["en-u1-culture"] = enVok([
+    ["se comporter","behave"],          ["la coutume","custom"],
+    ["embarrassant","embarrassing"],    ["le cadeau","gift"],
+    ["l'hôte (celui qui reçoit)","host"], ["la famille d'accueil","host family"],
+    ["inviter","invite"],               ["précis, exact","accurate"],
+    ["le continent","continent"],       ["le détail","detail"],
+    ["diviser","divide"],               ["de l'est","eastern"],
+    ["l'équateur","Equator"],           ["plat","flat"],
+    ["du nord","northern"],             ["rond","round"],
+    ["la forme","shape"],               ["la taille","size"],
+    ["du sud","southern"],              ["de l'ouest","western"]
+  ]);
 })();
 </script>
 <script>
@@ -1650,6 +2122,13 @@ ORDER.forEach(sk => {
     THEMES.push(t); THEME_BY_ID[t.id] = t;
   });
 });
+/* « programme » : ce que l'école interroge en ce moment, daté (voir `tests`) */
+const TIER = {
+  revision:      "acquis de 10e",
+  consolidation: "10e confirmé",
+  anticipation:  "avance sur la 11e",
+  programme:     "au programme"
+};
 const SUB = {
   francais:{label:"Français", short:"FR"},
   allemand:{label:"Allemand", short:"DE"},
@@ -1700,7 +2179,39 @@ function dueThemes(){
   });
 }
 function seenThemes(){ return THEMES.filter(t => S.themes[t.id].box >= 1); }
-function newThemes(sk){ return THEMES.filter(t => S.themes[t.id].box === 0 && (!sk || t.subject === sk)); }
+function newThemes(sk){ return THEMES.filter(t => S.themes[t.id].box === 0 && isOpen(t) && (!sk || t.subject === sk)); }
+
+/* ---------- calendrier scolaire ---------- */
+/* Une notion peut être calée sur le programme de l'école : `from` est le jour où
+   elle s'ouvre, `tests` les dates auxquelles elle est interrogée en classe. Tant
+   qu'une notion n'est pas ouverte, elle n'existe pas pour l'app ; à l'approche
+   d'un test elle passe devant la rotation des matières. Une notion sans ces deux
+   champs se comporte exactement comme avant. */
+const URGENT_DAYS = 8;                     // fenêtre de révision avant un test
+function isOpen(t){ return !t.from || t.from <= today(); }
+function nextTest(t){                      // prochaine date de test encore devant
+  if (!t.tests || !t.tests.length) return null;
+  const t0 = today();
+  return t.tests.filter(d => d >= t0).sort()[0] || null;
+}
+function daysToTest(t){                    // jours avant ce test, ou null
+  const d = nextTest(t);
+  return d === null ? null : diffDays(today(), d);
+}
+function urgentThemes(){                   // test dans la fenêtre, le plus proche d'abord
+  return THEMES.filter(t => {
+    if (!isOpen(t)) return false;
+    const d = daysToTest(t);
+    return d !== null && d <= URGENT_DAYS;
+  }).sort((a,b) => daysToTest(a) - daysToTest(b));
+}
+function testLabel(t){                     // « test dans 3 jours », pour l'affichage
+  const d = daysToTest(t);
+  if (d === null) return "";
+  if (d <= 0) return "test aujourd'hui";
+  if (d === 1) return "test demain";
+  return "test dans " + d + " jours (" + frDate(nextTest(t)) + ")";
+}
 function mastery(t){
   const st = S.themes[t.id];
   if (!st.seen) return null;
@@ -1797,17 +2308,24 @@ function todaysPlan(){
   const done = (S.days[t0] && S.days[t0].blocks) || [];
 
   // 1. Révision : ce que les boîtes réclament aujourd'hui — les notions
-  // récemment ratées passent devant
-  const due = dueThemes()
-    .sort((a,b) => {
-      const ra = histAcc(S.themes[a.id], -3), rb = histAcc(S.themes[b.id], -3);
-      return (ra === null ? 1 : ra) - (rb === null ? 1 : rb);
-    })
+  // récemment ratées passent devant, et une liste dont le test approche revient
+  // qu'elle soit due ou non : l'école ne consulte pas les boîtes.
+  const urgent = urgentThemes();
+  const forced = urgent.filter(t => S.themes[t.id].box >= 1);
+  const due = forced.concat(
+      dueThemes()
+        .filter(t => forced.indexOf(t) === -1)
+        .sort((a,b) => {
+          const ra = histAcc(S.themes[a.id], -3), rb = histAcc(S.themes[b.id], -3);
+          return (ra === null ? 1 : ra) - (rb === null ? 1 : rb);
+        }))
     .slice(0, 4);
   const rev = { kind:"revision", n:1, title:"Révision", themes: due.map(t => t.id),
-    sub: due.length
-      ? "Les notions que tes boîtes réclament aujourd'hui."
-      : "Rien à revoir aujourd'hui — je te fais réviser tes notions les plus fragiles." };
+    sub: forced.length
+      ? "Tu as un test qui arrive — " + forced[0].t + " : " + testLabel(forced[0]) + "."
+      : due.length
+        ? "Les notions que tes boîtes réclament aujourd'hui."
+        : "Rien à revoir aujourd'hui — je te fais réviser tes notions les plus fragiles." };
   if (!due.length){
     const weak = seenThemes().sort((a,b) => (mastery(a)||0) - (mastery(b)||0)).slice(0,2);
     if (weak.length){
@@ -1820,8 +2338,9 @@ function todaysPlan(){
     }
   }
 
-  // 2. Leçon du jour : nouvelle notion, matières en rotation
-  let lead = null;
+  // 2. Leçon du jour : une liste jamais vue dont le test approche passe devant
+  // la rotation ; sinon, nouvelle notion, matières en rotation
+  let lead = urgent.filter(t => S.themes[t.id].box === 0)[0] || null;
   for (let k = 0; k < ORDER.length && !lead; k++){
     const sk = ORDER[(dayIx + k) % ORDER.length];
     const cands = newThemes(sk);
@@ -1950,6 +2469,11 @@ function homeHTML(){
   const d = S.days[t0] || { blocks:[], xp:0 };
   const toSchool = Math.max(0, diffDays(t0, SCHOOL_START));
   const weekDone = weekCount();
+  // une fois la rentrée passée, le compte à rebours sert au prochain test de l'école
+  const nextEv = urgentThemes()[0];
+  const countdown = toSchool > 0 ? "J−" + toSchool + " · rentrée"
+    : nextEv ? nextEv.t + " · " + (daysToTest(nextEv) <= 0 ? "test aujourd'hui" : "J−" + daysToTest(nextEv))
+    : "";
 
   const acq = THEMES.filter(t => S.themes[t.id].box === 5).length;
 
@@ -1968,7 +2492,7 @@ function homeHTML(){
       <div class="score"><span class="k">Acquis</span><span class="v">${acq}<span style="font-size:12px;color:var(--ink-3)">/${THEMES.length}</span></span></div>
     </div>
     <div class="weekbar">
-      <div class="lab"><span>Semaine · ${weekDone}/5 jours</span><span>J−${toSchool} · rentrée</span></div>
+      <div class="lab"><span>Semaine · ${weekDone}/5 jours</span><span>${esc(countdown)}</span></div>
       <div class="meter"><i style="width:${Math.min(100, weekDone/5*100)}%"></i></div>
     </div>
   </div></div>
@@ -2182,8 +2706,21 @@ function bilan(){
     };
   }).filter(Boolean);
 
+  // le programme de l'école : où en est chaque liste par rapport à sa date de test
+  const programme = THEMES.filter(t => t.tests && t.tests.length).map(t => {
+    const st = S.themes[t.id];
+    return {
+      matiere: SUB[t.subject].label, notion: t.t,
+      ouverte: isOpen(t), ouvre_le: t.from || null,
+      prochain_test: nextTest(t), jours_restants: daysToTest(t),
+      boite: st.box, maitrise: mastery(t),
+      reussite: st.seen ? st.right + "/" + st.seen : null,
+      a_retravailler: missIdx(st).length
+    };
+  }).sort((a,b) => (a.prochain_test || "9999").localeCompare(b.prochain_test || "9999"));
+
   return {
-    app: "onze", format: 2, eleve: ELEVE, genere: t0,
+    app: "onze", format: 3, eleve: ELEVE, genere: t0,
     depuis: S.start,
     jours_avant_rentree: Math.max(0, diffDays(t0, SCHOOL_START)),
     serie: { actuelle: S.streak, record: S.best },
@@ -2195,6 +2732,7 @@ function bilan(){
     fragiles: fragiles,
     fautes: fautes,
     progres: progres,
+    programme: programme,
     activite: activite,
     trophees: S.badges,
     // sauvegarde intégrale : sans elle, vider le navigateur efface tout sans retour
@@ -2283,7 +2821,7 @@ function lessonHTML(){
   return `<div class="wrap">
     ${topHTML(0)}
     <div class="lesson">
-      <div class="kicker">${isNew ? "Nouvelle notion" : "On révise d'abord"} · ${SUB[t.subject].label} · ${esc(t.tier === "revision" ? "acquis de 10e" : t.tier === "consolidation" ? "10e confirmé" : "avance sur la 11e")}</div>
+      <div class="kicker">${isNew ? "Nouvelle notion" : "On révise d'abord"} · ${SUB[t.subject].label} · ${esc(TIER[t.tier] || t.tier)}${daysToTest(t) === null ? "" : ` · <b>⚡ ${esc(testLabel(t))}</b>`}</div>
       <h3 style="color:var(--${shortVar(t.subject)})">${esc(t.t)}</h3>
       ${t.lesson.why ? `<div class="why">${esc(t.lesson.why)}</div>` : ""}
       <ul class="pts">
