@@ -272,7 +272,7 @@ body{margin:0;}
 .badge.on .em{filter:none;}
 .badge .em{filter:grayscale(1) opacity(.5);}
 
-.foot{margin-top:30px; display:flex; justify-content:center; gap:18px;}
+.foot{margin-top:30px; display:flex; justify-content:center; align-items:center; gap:8px 18px; flex-wrap:wrap;}
 .link{
   background:none; border:none; color:var(--ink-3); font-size:11.5px; cursor:pointer;
   text-decoration:underline; text-underline-offset:3px; font-family:var(--body);
@@ -391,6 +391,31 @@ body{margin:0;}
 .slot.bad{border-color:var(--ko); border-style:solid; background:var(--ko-soft);}
 .slot .ph{font-size:12.5px; color:var(--ink-3); padding:0 4px;}
 
+/* relier deux colonnes : on tape à gauche, puis à droite. Le lien se lit au
+   numéro porté par les deux tuiles — pas de trait à tracer, ça tient sur un
+   téléphone et ça reste lisible quand les paires se croisent. */
+.pairs{display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:4px;}
+.pcol{display:flex; flex-direction:column; gap:7px;}
+.pw{
+  position:relative; text-align:left; background:var(--panel); border:1px solid var(--line);
+  color:var(--ink); cursor:pointer; border-radius:var(--r-s); padding:10px 12px;
+  font-size:14.5px; font-family:var(--body); line-height:1.3; min-height:42px;
+  display:flex; align-items:center; gap:7px;
+}
+.pw:hover:not(:disabled){border-color:var(--accent);}
+.pw.sel{border-color:var(--accent); background:var(--accent-soft); color:var(--accent);}
+.pw.lie{border-style:solid; border-color:var(--ink-3);}
+.pw.good{background:var(--ok-soft); border-color:var(--ok); color:var(--ok);}
+.pw.bad{background:var(--ko-soft); border-color:var(--ko); color:var(--ko);}
+.pw:disabled{cursor:default;}
+.pn{
+  flex:0 0 auto; width:19px; height:19px; border-radius:50%; font-size:11px;
+  display:inline-flex; align-items:center; justify-content:center;
+  background:var(--ink-3); color:var(--panel); font-family:var(--mono);
+}
+.pw.good .pn{background:var(--ok); color:var(--panel);}
+.pw.bad .pn{background:var(--ko); color:var(--panel);}
+
 .fb{
   margin-top:14px; border-radius:var(--r-m); padding:13px 15px; font-size:14px; line-height:1.5;
   animation:rise .28s cubic-bezier(.2,.8,.2,1);
@@ -461,6 +486,10 @@ body{margin:0;}
 /* Banque de contenu + générateurs. Rempli par les blocs qui suivent. */
 const BANK = {};
 const GENS = {};
+/* Fournisseurs de distracteurs, par clé de générateur : DIST[k](réponse) rend
+   des réponses plausibles et fausses, tirées du même vocabulaire. C'est ce qui
+   permet de proposer un mot neuf « à choisir » avant de le demander « à écrire ». */
+const DIST = {};
 </script>
 <script>
 /* ===================== FRANÇAIS ===================== */
@@ -1190,37 +1219,96 @@ BANK.allemand = { label:"Allemand", short:"DE", themes:[
     [8,"la pincée","die Prise","f"],            [8,"le végétarien","der Vegetarier","m"]
   ];
 
+  /* Les mots de l'unité qui ne sont pas des noms : ils servent de distracteurs
+     entre eux, un adjectif au milieu de trois noms ne trompe personne. */
+  const U5A = ["frisch","süss","salzig","sauer","scharf","fett","fertig",
+               "gesund","ungesund","täglich","probieren","backen","kochen","mischen","braten"];
+  const estNom = s => /^(der|die|das) /.test(s);
+  const nu = s => s.replace(/^(der|die|das) /, "");
+
+  /* --- les trois exercices de reconnaissance --- */
+
+  /* L'article seul, détaché de la traduction. C'est LE trou : un élève qui ignore
+     le mot ne travaille jamais son genre, alors que c'est ce que le test exige.
+     Les trois options gardent toujours le même ordre — der, die, das se lisent
+     comme un clavier, et la bonne réponse change à chaque fois de toute façon. */
+  const ART3 = ["der","die","das"];
+  function u5article(w){
+    const bon = w[3] === "pl" ? "die" : ART3[{ m:0, f:1, n:2 }[w[3]]];
+    return { f:"qcm", q:"___ "+nu(w[2]), a:bon, o:ART3.slice(),
+             e:w[2]+" — "+w[1]+(w[3] === "pl" ? " (pluriel : toujours die)" : "")+"." };
+  }
+  /* Relier deux colonnes : quatre paires, français à gauche, allemand à droite. */
+  function u5relier(pool){
+    const pris = sh(pool).slice(0, 4);
+    if (pris.length < 3) return null;
+    return { f:"pair", q:"Relie chaque mot à sa traduction :",
+             p: pris.map(w => [w[1], w[2]]),
+             e: pris.map(w => w[2]+" = "+w[1]).join(" · ")+"." };
+  }
+  /* Reconnaître la forme allemande — article compris — parmi quatre. */
+  function u5choix(w){
+    const faux = sh(U5W.filter(x => x[2] !== w[2])).slice(0,3).map(x => x[2]);
+    return { f:"qcm", q:"Comment dit-on « "+w[1]+" » ?", a:w[2], o:sh([w[2]].concat(faux)),
+             e:w[2]+"." };
+  }
+  function u5sens(w){
+    const faux = sh(U5W.filter(x => x[1] !== w[1])).slice(0,2).map(x => x[1]);
+    return { f:"qcm", q:"« "+w[2]+" » bedeutet…", a:w[1], o:sh([w[1]].concat(faux)),
+             e:w[2]+" = "+w[1]+"." };
+  }
+
   /* Tirage de vocabulaire pour la liste n. Les listes maigres (3, 5, 6) puisent
      surtout dans les listes précédentes — ce qui tombe juste, puisque les TA
-     de l'école sont cumulatifs (1+2, 3+4, 5+6). */
+     de l'école sont cumulatifs (1+2, 3+4, 5+6).
+
+     `et` est l'étape : 1 = reconnaître (choisir, relier, poser l'article),
+     2 = produire (écrire de mémoire). Le moteur la passe ; un appel sans argument
+     se comporte comme avant. */
   function u5vok(n){
     const own  = U5W.filter(w => w[0] === n);
     const prev = U5W.filter(w => w[0] < n);
-    return function(){
+    return function(et){
       const wantOwn = own.length >= 4 ? rnd(4) !== 0 : rnd(3) === 0;
       const pool = (wantOwn && own.length) || !prev.length ? own : prev;
       const w = pool[rnd(pool.length)];
-      if (rnd(3) === 0){                       // une fois sur trois : allemand → français
-        const others = sh(U5W.filter(x => x[1] !== w[1])).slice(0,2).map(x => x[1]);
-        return { f:"qcm", q:"« "+w[2]+" » bedeutet…", o:sh([w[1]].concat(others)), a:w[1],
-                 e:w[2]+" = "+w[1]+"." };
+      if (et === 1){
+        const d = rnd(4);
+        if (d === 0) return u5article(w);
+        if (d === 1) return u5relier(pool.length >= 4 ? pool : U5W.filter(x => x[0] <= n)) || u5choix(w);
+        if (d === 2) return u5sens(w);
+        return u5choix(w);
       }
+      if (rnd(3) === 0) return u5sens(w);
       return { f:"txt", q:"Traduis avec l'article : *"+w[1]+"*", a:w[2], e:w[2]+"." };
     };
   }
   [1,2,4,5,6].forEach(n => { GENS["de-u5-"+n] = u5vok(n); });
 
+  /* Distracteurs pour transformer un exercice à taper en QCM à l'étape 1.
+     On tire dans la même famille que la réponse — des noms articulés pour un nom,
+     des adjectifs et verbes pour le reste — sinon le bon choix saute aux yeux. */
+  function u5dist(rep){
+    const nom = estNom(rep);
+    const src = nom ? U5W.map(w => w[2]).filter(s => s !== rep)
+                    : U5A.filter(s => s !== rep);
+    return sh(src).slice(0, 3);
+  }
+  [1,2,3,4,5,6,7,"plus"].forEach(n => { DIST["de-u5-"+n] = u5dist; });
+
   /* Liste 3 : la négation du nom, où le genre se paie comptant */
   const KEIN = { m:"keinen", f:"keine", n:"kein", pl:"keine" };
   const ESSBAR = U5W.filter(w => w[0] <= 2);
   const vok3 = u5vok(3);
-  GENS["de-u5-3"] = function(){
-    if (rnd(3) === 0) return vok3();
+  GENS["de-u5-3"] = function(et){
+    if (rnd(3) === 0) return vok3(et);
     const w = ESSBAR[rnd(ESSBAR.length)];
-    const noun = w[2].replace(/^(der|die|das) /, "");
-    return { f:"qcm", q:"Ich mag ___ "+noun+".  (je n'aime pas "+w[1]+")",
+    // à l'étape 1 on rappelle le genre dans la question : la difficulté visée est
+    // l'accord de « kein », pas la mémorisation de l'article
+    const rappel = et === 1 ? "  ("+w[2]+")" : "  (je n'aime pas "+w[1]+")";
+    return { f:"qcm", q:"Ich mag ___ "+nu(w[2])+"."+rappel,
              o:sh(["keinen","kein","keine"]), a:KEIN[w[3]],
-             e:w[2]+" → ich mag "+KEIN[w[3]]+" "+noun+"." };
+             e:w[2]+" → ich mag "+KEIN[w[3]]+" "+nu(w[2])+"." };
   };
 
   /* Liste 7 : les verbes, au présent ET au passé composé, à toutes les personnes */
@@ -1232,17 +1320,36 @@ BANK.allemand = { label:"Allemand", short:"DE", themes:[
     {i:"probieren", p:["probiere","probierst","probiert","probieren","probiert","probieren"],     pp:"probiert"}
   ];
   const vok7 = u5vok(7);
-  function verbDrill(list, sepFrom){
+  function verbDrill(list, sepFrom, et){
     const v = list[rnd(list.length)], p = rnd(6);
+    const sep = sepFrom !== undefined && list.indexOf(v) >= sepFrom;   // verbe à particule
+    // Étape 1 : la bonne forme se reconnaît parmi trois. Les distracteurs sont les
+    // formes du même verbe à d'autres personnes — c'est là que la confusion vit.
+    if (et === 1){
+      // plusieurs personnes partagent souvent la même forme (er backt / ihr backt) :
+      // on dédoublonne, sinon deux options identiques se retrouvent dans le QCM
+      if (!sep && rnd(2)){
+        const faux = [];
+        sh(v.p).forEach(f => { if (f !== v.p[p] && faux.indexOf(f) === -1 && faux.length < 2) faux.push(f); });
+        if (faux.length === 2)
+          return { f:"qcm", q:"Présent : *"+PR5[p]+"* ("+v.i+") …", a:v.p[p],
+                   o:sh([v.p[p]].concat(faux)), e:PR5[p]+" "+v.p[p]+"." };
+      }
+      const fauxPP = [];
+      sh(list).forEach(x => { if (x.pp !== v.pp && fauxPP.indexOf(x.pp) === -1 && fauxPP.length < 2) fauxPP.push(x.pp); });
+      if (fauxPP.length === 2)
+        return { f:"qcm", q:"Participe passé de « "+v.i+" » ?", a:v.pp,
+                 o:sh([v.pp].concat(fauxPP)), e:PR5[p]+" "+HAB[p]+" "+v.pp+"." };
+    }
     // au présent, on évite les verbes à particule : leur forme se coupe en deux
-    if (rnd(2) && (sepFrom === undefined || list.indexOf(v) < sepFrom)){
+    if (rnd(2) && !sep){
       return { f:"gap", q:"Présent : *"+PR5[p]+"* ("+v.i+") ___", a:v.p[p], e:PR5[p]+" "+v.p[p]+"." };
     }
     return { f:"txt", q:"Mets au passé composé : *"+PR5[p]+"* ("+v.i+")",
              a:PR5[p]+" "+HAB[p]+" "+v.pp, e:PR5[p]+" "+HAB[p]+" "+v.pp+"." };
   }
-  GENS["de-u5-7"] = function(){
-    return rnd(4) === 0 ? vok7() : verbDrill(V7);
+  GENS["de-u5-7"] = function(et){
+    return rnd(4) === 0 ? vok7(et) : verbDrill(V7, undefined, et);
   };
 
   /* Le reste de l'unité : vocabulaire des encadrés bleus + verbes de la recette */
@@ -1253,8 +1360,8 @@ BANK.allemand = { label:"Allemand", short:"DE", themes:[
     {i:"umdrehen",  p:[], pp:"umgedreht"}
   ];
   const vok8 = u5vok(8);
-  GENS["de-u5-plus"] = function(){
-    return rnd(3) === 0 ? verbDrill(V8, 2) : vok8();
+  GENS["de-u5-plus"] = function(et){
+    return rnd(3) === 0 ? verbDrill(V8, 2, et) : vok8(et);
   };
 })();
 </script>
@@ -1593,20 +1700,49 @@ BANK.anglais = { label:"Anglais", short:"EN", themes:[
 
   /* ---------- Unit 1 « Travellers' tales » : la réserve, section par section ---------- */
   const sh = a => { const r = a.slice(); for (let i=r.length-1;i>0;i--){ const j = rnd(i+1); [r[i],r[j]] = [r[j],r[i]]; } return r; };
+  /* `et` = l'étape : 1 on reconnaît (choisir, relier), 2 on écrit. */
   function enVok(list){
-    return function(){
-      const [fr, en] = list[rnd(list.length)];
-      if (rnd(3) === 0){                       // une fois sur trois : anglais → français
-        const others = sh(list.filter(x => x[0] !== fr)).slice(0,2).map(x => x[0]);
-        if (others.length === 2)
-          return { f:"qcm", q:"« "+en+" » signifie…", o:sh([fr].concat(others)), a:fr, e:en+" = "+fr+"." };
+    const sens = ([fr, en]) => {
+      const faux = sh(list.filter(x => x[0] !== fr)).slice(0,2).map(x => x[0]);
+      return faux.length === 2
+        ? { f:"qcm", q:"« "+en+" » signifie…", o:sh([fr].concat(faux)), a:fr, e:en+" = "+fr+"." }
+        : null;
+    };
+    const choix = ([fr, en]) => {
+      const faux = sh(list.filter(x => x[1] !== en)).slice(0,3).map(x => x[1]);
+      return faux.length === 3
+        ? { f:"qcm", q:"Comment dit-on « "+fr+" » ?", o:sh([en].concat(faux)), a:en, e:fr+" → "+en+"." }
+        : null;
+    };
+    const relier = () => {
+      const pris = sh(list).slice(0, 4);
+      return pris.length >= 3
+        ? { f:"pair", q:"Relie chaque mot à sa traduction :", p: pris.map(x => [x[0], x[1]]),
+            e: pris.map(x => x[1]+" = "+x[0]).join(" · ")+"." }
+        : null;
+    };
+    return function(et){
+      const w = list[rnd(list.length)];
+      if (et === 1){
+        const d = rnd(4);
+        const g = d === 0 ? relier() : d === 1 ? sens(w) : choix(w);
+        if (g) return g;
       }
-      return { f:"txt", q:"Traduis en anglais : *"+fr+"*", a:en, alt:["the "+en, "to "+en],
-               e:fr+" → "+en+"." };
+      if (rnd(3) === 0){ const g = sens(w); if (g) return g; }
+      return { f:"txt", q:"Traduis en anglais : *"+w[0]+"*", a:w[1], alt:["the "+w[1], "to "+w[1]],
+               e:w[0]+" → "+w[1]+"." };
     };
   }
 
-  GENS["en-u1-transport"] = enVok([
+  /* Enregistre d'un coup le générateur et ses distracteurs : ces derniers
+     servent à transformer les exercices à taper de la banque en QCM tant que la
+     notion est neuve. */
+  function enSection(k, list){
+    GENS[k] = enVok(list);
+    DIST[k] = rep => sh(list.filter(x => x[1] !== rep)).slice(0, 3).map(x => x[1]);
+  }
+
+  enSection("en-u1-transport", [
     ["à l'étranger","abroad"],            ["le car","coach"],
     ["la visite guidée","guided tour"],   ["venir chercher","pick up"],
     ["la file d'attente","queue"],        ["la valise","suitcase"],
@@ -1630,18 +1766,31 @@ BANK.anglais = { label:"Anglais", short:"EN", themes:[
     ["passer devant","walk","past"],           ["traverser, passer à travers","walk","through"],
     ["marcher jusqu'à","walk","to"],           ["monter en courant","run","up"]
   ];
-  GENS["en-u1-prep"] = function(){
+  GENS["en-u1-prep"] = function(et){
     const m = MOVE[rnd(MOVE.length)];
     if (rnd(3) === 0){
       const others = sh(MOVE.filter(x => x[0] !== m[0])).slice(0,2).map(x => x[0]);
       return { f:"qcm", q:"« to "+m[1]+" "+m[2]+" » signifie…", o:sh([m[0]].concat(others)), a:m[0],
                e:"to "+m[1]+" "+m[2]+" = "+m[0]+"." };
     }
+    // étape 1 : la préposition se choisit parmi trois plutôt que de s'écrire
+    if (et === 1){
+      const faux = [];
+      sh(MOVE).forEach(x => { if (x[2] !== m[2] && faux.indexOf(x[2]) === -1 && faux.length < 2) faux.push(x[2]); });
+      if (faux.length === 2)
+        return { f:"qcm", q:"« "+m[0]+" » : "+m[1]+" …", o:sh([m[2]].concat(faux)), a:m[2],
+                 e:m[1]+" "+m[2]+" = "+m[0]+"." };
+    }
     return { f:"gap", q:"« "+m[0]+" » : "+m[1]+" ___", a:m[2],
              e:m[1]+" "+m[2]+" = "+m[0]+"." };
   };
+  DIST["en-u1-prep"] = function(rep){
+    const out = [];
+    sh(MOVE).forEach(x => { if (x[2] !== rep && out.indexOf(x[2]) === -1 && out.length < 3) out.push(x[2]); });
+    return out;
+  };
 
-  GENS["en-u1-opinion"] = enVok([
+  enSection("en-u1-opinion", [
     ["incroyable","amazing"],     ["génial","brilliant"],
     ["délicieux","delicious"],    ["dégoûtant","disgusting"],
     ["affreux","dreadful"],       ["ennuyeux","dull"],
@@ -1649,7 +1798,7 @@ BANK.anglais = { label:"Anglais", short:"EN", themes:[
     ["épouvantable","terrible"],  ["formidable","terrific"]
   ]);
 
-  GENS["en-u1-phrases"] = enVok([
+  enSection("en-u1-phrases", [
     ["le conseil (indénombrable)","advice"], ["faire attention","be careful"],
     ["l'ours","bear"],                  ["le pont","bridge"],
     ["le client","customer"],           ["suivre","follow"],
@@ -1666,7 +1815,7 @@ BANK.anglais = { label:"Anglais", short:"EN", themes:[
     ["le petit conseil","tip"],         ["la terrasse","terrace"]
   ]);
 
-  GENS["en-u1-culture"] = enVok([
+  enSection("en-u1-culture", [
     ["se comporter","behave"],          ["la coutume","custom"],
     ["embarrassant","embarrassing"],    ["le cadeau","gift"],
     ["l'hôte (celui qui reçoit)","host"], ["la famille d'accueil","host family"],
@@ -2261,19 +2410,64 @@ function trend(t){
   return "flat";
 }
 
+/* ---------- l'étape : reconnaître avant de produire ----------
+   Écrire « der Schinken » de mémoire et le reconnaître parmi quatre ne sont pas
+   le même exercice — le premier est beaucoup plus dur, et un mot rencontré la
+   veille n'est pas encore produisible. Tant qu'une notion est neuve ou fragile,
+   on reste donc en reconnaissance : choisir, relier, poser l'article. La frappe
+   arrive quand la notion tient (boîte ≥ 2 et réussite ≥ 60 %).
+
+   Le passage se fait sur l'état réel de la notion, jamais sur une date : un
+   élève qui bloque reste en reconnaissance aussi longtemps qu'il en a besoin. */
+function etape(theme){
+  const st = S.themes[theme.id];
+  if (!st) return 1;
+  const acc = st.seen ? st.right / st.seen : 0;
+  return (st.box <= 1 || acc < 0.6) ? 1 : 2;
+}
+
+/* Transforme un exercice à taper en QCM, quand la notion sait fournir des
+   distracteurs. Renvoie l'item inchangé si ce n'est pas possible. */
+function facile(it, theme){
+  if (it.f !== "txt" || it.etape1) return it;
+  const src = DIST[theme.gen];
+  if (!src) return it;
+  let faux;
+  try{ faux = src(it.a) || []; }catch(e){ return it; }
+  // options distinctes de la réponse ET entre elles, une fois normalisées
+  const vus = [norm(it.a)];
+  const gardees = [];
+  faux.forEach(f => {
+    const k = norm(f);
+    if (vus.indexOf(k) === -1){ vus.push(k); gardees.push(f); }
+  });
+  if (gardees.length < 2) return it;
+  return Object.assign({}, it, {
+    f:"qcm", o: shuffle([it.a].concat(gardees.slice(0, 3))), etape1:true
+  });
+}
+
 /* ---------- tirage d'exercices ---------- */
 function itemsFor(theme, n){
   const st = S.themes[theme.id];
+  const et = etape(theme);
   const out = [];
   const bank = theme.items || [];
+  const aGen = theme.gen && GENS[theme.gen];
+  // À l'étape 1, on réserve jusqu'à trois places aux exercices de reconnaissance
+  // des générateurs — relier, poser l'article, choisir une forme verbale. Sans
+  // ça la banque remplit tout le bloc et ils n'apparaissent jamais, alors que
+  // c'est au tout premier contact avec une notion qu'ils servent le plus.
+  const nBank = (et === 1 && aGen) ? Math.max(1, n - 3) : n;
+
   // 1. la revanche : jusqu'à 2 exercices ratés récemment, à retenter en priorité
-  const retry = missIdx(st).slice(0, Math.min(2, Math.max(0, n - 1)));
+  const retry = missIdx(st).slice(0, Math.min(2, Math.max(0, nBank - 1)));
   retry.forEach(i => {
     if (bank[i]) out.push(Object.assign({}, bank[i], { theme: theme.id, subject: theme.subject, bankIdx: i, retry:true }));
   });
   let pool = bank.map((_, i) => i).filter(i => !(st.used || []).includes(i) && !retry.includes(i));
-  if (out.length + pool.length < n) { st.used = []; pool = bank.map((_, i) => i).filter(i => !retry.includes(i)); }
-  shuffle(pool).slice(0, n - out.length).forEach(i => {
+  if (out.length + pool.length < nBank) { st.used = []; pool = bank.map((_, i) => i).filter(i => !retry.includes(i)); }
+  shuffle(pool).slice(0, nBank - out.length).forEach(i => {
     out.push(Object.assign({}, bank[i], { theme: theme.id, subject: theme.subject, bankIdx: i }));
   });
   // démarrer par une question gagnable : la revanche vient en 2e et 3e position
@@ -2281,17 +2475,19 @@ function itemsFor(theme, n){
     const first = out.splice(retry.length, 1)[0];
     out.unshift(first);
   }
-  // générateurs : réserve infinie quand la banque est épuisée
-  if (out.length < n && theme.gen && GENS[theme.gen]){
+  // générateurs : réserve infinie quand la banque est épuisée. L'étape leur est
+  // passée — à l'étape 1 ils proposent de la reconnaissance plutôt que de la frappe.
+  if (out.length < n && aGen){
     let guard = 0;
     while (out.length < n && guard++ < 40){
-      const g = GENS[theme.gen]();
+      const g = GENS[theme.gen](et);
       if (g && !out.some(o => o.q === g.q)){
         out.push(Object.assign(g, { theme: theme.id, subject: theme.subject, gen:true }));
       }
     }
   }
-  return out.slice(0, n);
+  // à l'étape 1, ce qui se tape se choisit
+  return out.slice(0, n).map(it => et === 1 ? facile(it, theme) : it);
 }
 function markUsed(item){
   if (item.gen || item.bankIdx == null) return;
@@ -2436,7 +2632,11 @@ function recordBlock(block, res){
   });
   const newBadges = refreshBadges();
   save();
-  return { bonus, moves, newBadges, dayComplete: d.blocks.length === 3 };
+  // le bilan part tout seul si un dossier a été désigné — annoncé quand la
+  // journée est complète, discret le reste du temps
+  const dayComplete = d.blocks.length === 3;
+  ecrireBilan(dayComplete);
+  return { bonus, moves, newBadges, dayComplete };
 }
 
 /* ============================================================
@@ -2547,6 +2747,7 @@ function homeHTML(){
     </div>
 
     <div class="foot">
+      ${depotHTML()}
       <button class="link" id="bil">Envoyer mon bilan</button>
       <button class="link" id="rst">Tout remettre à zéro</button>
     </div>
@@ -2634,6 +2835,10 @@ function bindHome(){
   if (th) th.addEventListener("click", () => { setTheme(currentTheme() === "dark" ? "light" : "dark"); render(); });
   const bil = root.querySelector("#bil");
   if (bil) bil.addEventListener("click", envoyerBilan);
+  const depon = root.querySelector("#depon");
+  if (depon) depon.addEventListener("click", activerDepot);
+  const depoff = root.querySelector("#depoff");
+  if (depoff) depoff.addEventListener("click", arreterDepot);
   const rst = root.querySelector("#rst");
   if (rst) rst.addEventListener("click", () => {
     if (confirm("Effacer la série, les XP et toutes les boîtes de révision ? On repart de zéro.")){
@@ -2645,9 +2850,14 @@ function bindHome(){
 
 /* ---------- le bilan : faire sortir la progression de l'appareil ----------
    La progression vit dans localStorage, donc dans CE navigateur et nulle part
-   ailleurs. Le bilan est le seul pont : un fichier que l'élève envoie quand il
-   le décide. Rien ne part tout seul, aucun appel réseau — c'est la feuille de
-   partage du téléphone qui fait le travail. */
+   ailleurs. Le bilan est le seul pont, et il ne passe jamais par le réseau :
+   c'est la feuille de partage du téléphone, ou le disque via le dépôt
+   automatique (plus bas), qui fait le travail.
+
+   Deux chemins, et le second n'existe que si l'élève a désigné un dossier :
+     — « Envoyer mon bilan » : le geste, disponible partout ;
+     — le dépôt automatique : l'app écrit seule, sur ordinateur uniquement.
+   Dans les deux cas l'élève voit ce qui part — rien ne se fait à son insu. */
 function toast(msg){
   const el = document.createElement("div");
   el.className = "toast"; el.textContent = msg;
@@ -2780,6 +2990,115 @@ function telecharger(blob, nom){
   }
 }
 
+/* ---------- le dépôt automatique (ordinateur seulement) ----------
+   Se souvenir de cliquer, c'est précisément ce qu'on ne peut pas demander à
+   quelqu'un qui révise. Sur un ordinateur, l'API File System Access laisse
+   l'élève désigner UNE fois un dossier — celui du kDrive — après quoi l'app y
+   écrit son bilan toute seule à la fin de chaque bloc.
+
+   Ça reste hors-ligne : c'est le navigateur qui écrit sur le disque, il n'y a
+   aucun appel réseau. Et ça reste visible : le dépôt est annoncé, l'état est
+   affiché en bas de l'écran d'accueil, et l'élève peut l'arrêter d'un clic.
+   Automatique, mais jamais à son insu.
+
+   Sur téléphone (Safari iOS n'a pas cette API), rien ne change : le bouton
+   « Envoyer mon bilan » reste le chemin. */
+const DEPOT_DB = "onze-depot", DEPOT_STORE = "h", DEPOT_KEY = "dossier";
+let depot = { handle:null, etat:"absent", dernier:null };   // absent | ok | prompt | erreur
+
+function depotDisponible(){
+  return typeof window.showDirectoryPicker === "function";
+}
+
+/* le handle de dossier ne tient pas dans localStorage : il vit dans IndexedDB */
+function idbOuvrir(){
+  return new Promise((res, rej) => {
+    const rq = indexedDB.open(DEPOT_DB, 1);
+    rq.onupgradeneeded = () => rq.result.createObjectStore(DEPOT_STORE);
+    rq.onsuccess = () => res(rq.result);
+    rq.onerror   = () => rej(rq.error);
+  });
+}
+function idbTx(mode, fn){
+  return idbOuvrir().then(db => new Promise((res, rej) => {
+    const tx = db.transaction(DEPOT_STORE, mode);
+    const rq = fn(tx.objectStore(DEPOT_STORE));
+    rq.onsuccess = () => res(rq.result);
+    rq.onerror   = () => rej(rq.error);
+  }));
+}
+const idbGet = ()  => idbTx("readonly",  st => st.get(DEPOT_KEY));
+const idbSet = (v) => idbTx("readwrite", st => st.put(v, DEPOT_KEY));
+const idbDel = ()  => idbTx("readwrite", st => st.delete(DEPOT_KEY));
+
+/* au démarrage : retrouver le dossier autorisé lors d'une session précédente.
+   Chrome ne rend la permission persistante que si l'élève a choisi
+   « Autoriser à chaque visite » ; sinon queryPermission répond « prompt » et il
+   faudra un clic — d'où l'état affiché plutôt qu'un échec silencieux. */
+function chargerDepot(){
+  if (!depotDisponible()) return;
+  idbGet().then(h => {
+    if (!h) return;
+    depot.handle = h;
+    return h.queryPermission({ mode:"readwrite" }).then(p => {
+      depot.etat = (p === "granted") ? "ok" : "prompt";
+      if (depot.etat === "ok") return ecrireBilan(false);
+    });
+  }).then(() => { if (view.screen === "home") render(); })
+    .catch(() => { /* IndexedDB indisponible (file://, navigation privée) : tant pis */ });
+}
+
+function activerDepot(){
+  if (!depotDisponible()) return;
+  window.showDirectoryPicker({ id:"onze-bilan", mode:"readwrite" })
+    .then(dir => dir.requestPermission({ mode:"readwrite" }).then(p => {
+      if (p !== "granted"){ toast("Dossier non autorisé — le dépôt reste manuel."); return; }
+      depot.handle = dir; depot.etat = "ok";
+      idbSet(dir).catch(() => toast("Le dossier est actif, mais il faudra le redésigner à la prochaine ouverture."));
+      return ecrireBilan(true);
+    }))
+    .then(() => render())
+    .catch(err => { if (!err || err.name !== "AbortError") toast("Le dossier n'a pas pu être ouvert."); });
+}
+
+function arreterDepot(){
+  depot = { handle:null, etat:"absent", dernier:null };
+  idbDel().catch(() => {});
+  toast("Dépôt automatique arrêté. Le bouton d'envoi reste disponible.");
+  render();
+}
+
+/* écrit le bilan du jour dans le dossier désigné ; un fichier par jour, réécrit
+   à chaque bloc pour rester à jour. Retourne une promesse — jamais rejetée. */
+function ecrireBilan(annonce){
+  if (!depot.handle) return Promise.resolve(false);
+  return depot.handle.queryPermission({ mode:"readwrite" }).then(p => {
+    if (p !== "granted"){ depot.etat = "prompt"; return false; }
+    const data = bilan();
+    const nom = "ONZE_bilan_" + (ELEVE || "eleve") + "_" + data.genere + ".json";
+    return depot.handle.getFileHandle(nom, { create:true })
+      .then(fh => fh.createWritable())
+      .then(w => w.write(JSON.stringify(data, null, 2)).then(() => w.close()))
+      .then(() => {
+        depot.etat = "ok"; depot.dernier = data.genere;
+        if (annonce) toast("Bilan déposé : « " + nom + " ».");
+        return true;
+      });
+  }).catch(() => { depot.etat = "erreur"; return false; });
+}
+
+function depotHTML(){
+  if (!depotDisponible()) return "";
+  if (depot.etat === "ok")
+    return `<span class="note">Bilan déposé tout seul${depot.dernier ? " · " + frDate(depot.dernier) : ""}</span>`
+         + `<button class="link" id="depoff">arrêter le dépôt</button>`;
+  if (depot.etat === "prompt")
+    return `<button class="link" id="depon">Réautoriser le dépôt automatique</button>`;
+  if (depot.etat === "erreur")
+    return `<button class="link" id="depon">Le dépôt a échoué — redésigner le dossier</button>`;
+  return `<button class="link" id="depon">Déposer mon bilan tout seul</button>`;
+}
+
 /* ---------- session ---------- */
 let sess = null;
 
@@ -2791,6 +3110,7 @@ function startBlock(kind){
   sess = {
     block, items, i:0, xp:0, right:0, total:0, combo:0, bestCombo:0,
     byTheme:{}, answered:false, correct:null, chosen:null, built:[],
+    pl:null, pr:null, link:{}, sel:null,
     errs:[], itemLog:[],
     phase:"quiz"
   };
@@ -2811,6 +3131,13 @@ function renderSession(){
   const it = sess.items[sess.i];
   // les mots à remettre dans l'ordre doivent être tirés AVANT le premier rendu
   if (it && it.f === "ord" && !sess.pool) sess.pool = shuffle(it.w);
+  // idem pour les deux colonnes à relier : les mélanger séparément, sinon les
+  // paires se retrouvent en face l'une de l'autre et l'exercice se résout à l'œil
+  if (it && it.f === "pair" && !sess.pl){
+    const idx = it.p.map((_, i) => i);
+    sess.pl = shuffle(idx); sess.pr = shuffle(idx);
+    sess.link = {}; sess.sel = null;
+  }
   root.innerHTML = quizHTML(); bindQuiz();
 }
 
@@ -2850,8 +3177,9 @@ function quizHTML(){
   const t  = THEME_BY_ID[it.theme];
   const sk = it.subject;
   const body =
-    it.f === "qcm" ? optsHTML(it) :
-    it.f === "ord" ? ordHTML(it)  : inputHTML(it);
+    it.f === "qcm"  ? optsHTML(it) :
+    it.f === "ord"  ? ordHTML(it)  :
+    it.f === "pair" ? pairHTML(it) : inputHTML(it);
 
   return `<div class="wrap">
     ${topHTML(sess.i / sess.items.length)}
@@ -2898,11 +3226,43 @@ function ordHTML(it){
     <div class="words">${rest.map((w, i) => `<button class="word" data-w="${i}" ${sess.answered || w === null ? "disabled":""}>${esc(w === null ? "·" : w)}</button>`).join("")}</div>
     ${sess.answered ? "" : `<button class="cta" id="chk" ${sess.built.length ? "" : "disabled"}>Vérifier</button>`}`;
 }
+/* Relier : les paires sont appariées par leur indice — la case i de gauche va
+   avec la case i de droite. On numérote les liens dans l'ordre où ils sont faits,
+   ce qui donne à l'élève un repère visuel sans qu'on ait à tracer quoi que ce soit. */
+function pairHTML(it){
+  const num = {};                                   // indice de gauche → n° du lien
+  let k = 0;
+  (sess.pl || []).forEach(i => { if (sess.link[i] != null) num[i] = ++k; });
+  const droite = {};                                // indice de droite → le même n°
+  Object.keys(num).forEach(i => { droite[sess.link[i]] = num[i]; });
+
+  const tuile = (cote, i, texte) => {
+    const badge = cote === "l" ? num[i] : droite[i];
+    let cls = "pw";
+    if (badge) cls += " lie";
+    if (cote === "l" && sess.sel === i) cls += " sel";
+    // après correction, une tuile est juste si le lien i ↔ i a bien été fait
+    if (sess.answered) cls += (sess.link[i] === i) ? " good" : " bad";
+    return `<button class="${cls}" data-p="${cote}${i}" ${sess.answered ? "disabled" : ""}>`
+      + (badge ? `<span class="pn">${badge}</span>` : "")
+      + `<span>${esc(texte)}</span></button>`;
+  };
+
+  const tous = Object.keys(sess.link).length === it.p.length;
+  return `<div class="pairs">
+      <div class="pcol">${(sess.pl || []).map(i => tuile("l", i, it.p[i][0])).join("")}</div>
+      <div class="pcol">${(sess.pr || []).map(i => tuile("r", i, it.p[i][1])).join("")}</div>
+    </div>
+    ${sess.answered ? "" : `<button class="cta" id="chk" ${tous ? "" : "disabled"}>Vérifier</button>`}`;
+}
+
 function fbHTML(it){
   const good = sess.correct;
   return `<div class="fb ${good ? "ok":"ko"}">
     <div class="hd">${good ? "Juste" + (sess.combo >= 3 ? " · combo ×"+sess.combo : "") : "Pas encore"}</div>
-    ${good ? "" : `<div class="sol">${fmt(Array.isArray(it.a) ? it.a[0] : it.a)}</div>`}
+    ${good ? "" : `<div class="sol">${it.f === "pair"
+        ? it.p.map(pr => esc(pr[0]) + " = " + esc(pr[1])).join("<br>")
+        : fmt(Array.isArray(it.a) ? it.a[0] : it.a)}</div>`}
     ${it.e ? `<div class="exp">${fmt(it.e)}</div>` : ""}
   </div>`;
 }
@@ -2933,6 +3293,24 @@ function bindQuiz(){
       }));
       const chk = root.querySelector("#chk");
       if (chk) chk.addEventListener("click", () => grade(norm(sess.built.join(" ")) === norm(it.a)));
+    } else if (it.f === "pair"){
+      root.querySelectorAll("[data-p]").forEach(el => el.addEventListener("click", () => {
+        const d = el.dataset.p, cote = d[0], i = Number(d.slice(1));
+        if (cote === "l"){
+          // une tuile déjà liée se délie ; sinon elle se sélectionne
+          if (sess.link[i] != null){ delete sess.link[i]; sess.sel = null; }
+          else sess.sel = (sess.sel === i ? null : i);
+        } else {
+          const pris = Object.keys(sess.link).filter(g => sess.link[g] === i)[0];
+          if (pris != null){ delete sess.link[pris]; sess.sel = null; }
+          else if (sess.sel != null){ sess.link[sess.sel] = i; sess.sel = null; }
+        }
+        renderSession();
+      }));
+      const chk = root.querySelector("#chk");
+      if (chk) chk.addEventListener("click", () => {
+        grade(it.p.every((_, i) => sess.link[i] === i));
+      });
     } else {
       const inp = root.querySelector("#ans");
       const check = () => {
@@ -2962,6 +3340,10 @@ function grade(ok){
   if (!ok){
     const donne = it.f === "qcm" ? (sess.chosen != null ? it.o[sess.chosen] : "")
                 : it.f === "ord" ? sess.built.join(" ")
+                : it.f === "pair" ? it.p
+                    .map((pr, i) => sess.link[i] === i ? null
+                          : pr[0] + " → " + (sess.link[i] != null ? it.p[sess.link[i]][1] : "?"))
+                    .filter(Boolean).join(" ; ")
                 : (sess.typed || "");
     sess.errs.push({
       d: today(), id: it.theme, f: it.f,
@@ -2994,6 +3376,7 @@ function nextItem(){
   if (sess.i + 1 >= sess.items.length){ finish(); return; }
   sess.i++; sess.answered = false; sess.correct = null; sess.chosen = null;
   sess.typed = ""; sess.built = []; sess.pool = null;
+  sess.pl = null; sess.pr = null; sess.link = {}; sess.sel = null;
   renderSession();
 }
 function quitSession(){
@@ -3068,6 +3451,7 @@ try{
   load();
   refreshBadges(); save();
   render();
+  chargerDepot();          // asynchrone : réaffiche l'accueil quand le dossier est retrouvé
 } catch(err){
   // plutôt qu'une page blanche : dire ce qui s'est passé, et laisser une porte de sortie
   root.innerHTML = '<div class="wrap" style="padding-top:40px">'
