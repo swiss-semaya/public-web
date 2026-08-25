@@ -272,6 +272,11 @@ body{margin:0;}
 .badge.on .em{filter:none;}
 .badge .em{filter:grayscale(1) opacity(.5);}
 
+.alerte{
+  margin-top:26px; background:var(--ko-soft); color:var(--ko);
+  border-radius:var(--r-m); padding:12px 15px; font-size:13px; line-height:1.5;
+}
+.alerte b{display:block; margin-bottom:2px;}
 .foot{margin-top:30px; display:flex; justify-content:center; align-items:center; gap:8px 18px; flex-wrap:wrap;}
 .link{
   background:none; border:none; color:var(--ink-3); font-size:11.5px; cursor:pointer;
@@ -335,6 +340,11 @@ body{margin:0;}
 .cta:disabled:hover{background:var(--accent);}
 .cta.ghost{background:transparent; color:var(--ink-2); border:1px solid var(--line);}
 .cta.ghost:hover{background:var(--panel-2); color:var(--ink);}
+/* « Vérifier » tant que le champ est vide : éteint, mais toujours cliquable —
+   un bouton mort ne dit pas POURQUOI il est mort (voir bindQuiz). */
+.cta.off{opacity:.38;}
+.cta.off:hover{background:var(--accent);}
+.vide{font-size:12.5px; color:var(--ko); margin-top:10px; line-height:1.45;}
 .cta-row{display:flex; gap:10px; margin-top:14px;}
 .cta-row .cta{margin-top:0;}
 
@@ -500,6 +510,7 @@ BANK.francais = { label:"Français", short:"FR", themes:[
     pts:["Le *nom* désigne (chat, courage) ; le *déterminant* l'accompagne (le, ma, trois, quelques).",
       "L'*adjectif* qualifie un nom et s'accorde avec lui ; l'*adverbe* modifie un verbe ou un adjectif et ne change jamais.",
       "Le *pronom* remplace (il, celui-ci, le mien, qui) ; la *préposition* introduit (à, de, pour, pendant).",
+      "Déterminant ou pronom ? Regarde ce qui SUIT : un déterminant est toujours collé à un nom (*mon* vélo, *ce* livre, *quelques* amis) ; un pronom tient debout tout seul, parce qu'il remplace le groupe (le mien, celui-ci, certains).",
       "La *conjonction* relie : mais, ou, et, donc, or, ni, car (coordination) ; que, quand, parce que (subordination)."],
     ex:"Dans « Il court *très* vite », « vite » est un adverbe et « très » un adverbe qui modifie « vite » — aucun des deux ne s'accorde." },
   items:[
@@ -510,7 +521,13 @@ BANK.francais = { label:"Français", short:"FR", themes:[
     {f:"txt", q:"Classe grammaticale de « courageusement » ?", a:"adverbe", alt:["un adverbe"], e:"Les mots en -ment formés sur un adjectif sont des adverbes."},
     {f:"qcm", q:"« quelques » dans « quelques amis » est…", o:["un déterminant indéfini","un pronom","un adjectif qualificatif"], a:"un déterminant indéfini", e:"Il précède le nom et en indique la quantité, sans la préciser."},
     {f:"qcm", q:"Combien de verbes conjugués dans « Il pense qu'il pleuvra demain » ?", o:["2","1","3"], a:"2", e:"pense (principale) et pleuvra (subordonnée) : deux verbes conjugués, donc deux propositions."},
-    {f:"qcm", q:"« celui-ci » est…", o:["un pronom démonstratif","un déterminant démonstratif","un adverbe"], a:"un pronom démonstratif", e:"« ce livre-ci » = déterminant + nom ; « celui-ci » remplace tout le groupe."}
+    {f:"qcm", q:"« celui-ci » est…", o:["un pronom démonstratif","un déterminant démonstratif","un adverbe"], a:"un pronom démonstratif", e:"« ce livre-ci » = déterminant + nom ; « celui-ci » remplace tout le groupe."},
+    /* Ajoutés le 25 août 2026. Quatre fois en cinq jours la même confusion —
+       « mon » → pronom, « quelques » → pronom, « celui-ci » → déterminant : ce
+       n'est pas la liste des classes qui manque, c'est le test qui les sépare. */
+    {f:"qcm", q:"Dans « *mon* vélo », « mon » est…", o:["un déterminant possessif","un pronom possessif","un adjectif qualificatif"], a:"un déterminant possessif", e:"Il est collé devant le nom → déterminant. Le pronom possessif, c'est « le mien », qui remplace « mon vélo »."},
+    {f:"qcm", q:"Lequel de ces trois mots est un *pronom* ?", o:["celui-ci","ce","quelques"], a:"celui-ci", e:"Le test : un déterminant est SUIVI d'un nom (ce livre, quelques amis) ; un pronom tient tout seul, parce qu'il remplace le groupe entier."},
+    {f:"txt", q:"Classe grammaticale de « *Ce* » dans « Ce livre est à moi » ?", a:"déterminant", alt:["un déterminant","déterminant démonstratif","un déterminant démonstratif"], e:"« Ce » précède le nom → déterminant démonstratif. S'il remplaçait le nom, ce serait « celui-ci »."}
   ]},
 
 { id:"fr-conj", t:"Présent, imparfait, passé composé", tier:"revision", gen:"fr-conj",
@@ -602,7 +619,11 @@ BANK.francais = { label:"Français", short:"FR", themes:[
     {f:"gap", q:"Futur : ils (faire) ___ un gâteau.", a:"feront", e:"Faire au futur garde le radical fer- : je ferai, ils feront."},
     {f:"gap", q:"Conditionnel : nous (aimer) ___ vous voir.", a:"aimerions", e:"Radical du futur + terminaison de l'imparfait : -rions."},
     {f:"txt", q:"Mets au futur simple : « tu es » →", a:"tu seras", alt:["seras"], e:"Être au futur : je serai, tu seras, il sera."},
-    {f:"qcm", q:"Où est la faute ? « Je te dirai si je peut. »", o:["« peut » → « peux »","« dirai » → « dirais »","aucune faute"], a:"« peut » → « peux »", e:"Avec « je », pouvoir donne « je peux »."}
+    {f:"qcm", q:"Où est la faute ? « Je te dirai si je peut. »", o:["« peut » → « peux »","« dirai » → « dirais »","aucune faute"], a:"« peut » → « peux »", e:"Avec « je », pouvoir donne « je peux »."},
+    /* Ajouté le 25 août 2026 : « tu serras » — il a généralisé le « deux r » de
+       « je verrai », que l'app lui avait justement appris. Le contraste vaut
+       mieux qu'une correction de plus. */
+    {f:"qcm", q:"Lequel est juste ?", o:["tu seras","tu serras","tu sera"], a:"tu seras", e:"Être au futur n'a qu'un seul r : je serai, tu seras. Les deux r, ce sont voir (je verrai) et courir (je courrai) — pas être."}
   ]},
 
 { id:"fr-orth", t:"Orthographe : pluriels et pièges", tier:"consolidation",
@@ -636,7 +657,7 @@ BANK.francais = { label:"Français", short:"FR", themes:[
     {f:"qcm", q:"« Cependant » exprime…", o:["l'opposition","la cause","la conséquence"], a:"l'opposition", e:"Comme « en revanche », « toutefois », « pourtant »."},
     {f:"qcm", q:"« Par conséquent » exprime…", o:["la conséquence","le but","la concession"], a:"la conséquence", e:"Synonyme de « donc », « c'est pourquoi »."},
     {f:"qcm", q:"Un narrateur qui dit « je » et vit l'histoire est…", o:["interne","externe","omniscient"], a:"interne", e:"Le point de vue est limité à ce que ce personnage perçoit."},
-    {f:"txt", q:"Comment appelle-t-on l'opinion défendue dans un texte argumentatif ?", a:"la thèse", alt:["thèse","these","la these"], e:"Les arguments la soutiennent, les exemples l'illustrent."},
+    {f:"txt", q:"Comment appelle-t-on l'opinion défendue dans un texte argumentatif ?", a:"la thèse", alt:["thèse"], e:"Les arguments la soutiennent, les exemples l'illustrent."},
     {f:"qcm", q:"Une recette de cuisine est un texte…", o:["injonctif","argumentatif","narratif"], a:"injonctif", e:"Il donne des instructions, souvent à l'impératif ou à l'infinitif."},
     {f:"ord", q:"Remets la phrase dans l'ordre :", w:["D'abord","je","présente","mon","idée","principale"], a:"D'abord je présente mon idée principale", e:"Le connecteur d'ouverture se place en tête de phrase."},
     {f:"qcm", q:"Quel connecteur pour ajouter un argument ?", o:["De plus","En revanche","Or"], a:"De plus", e:"« En revanche » oppose, « or » introduit une objection."}
@@ -752,7 +773,14 @@ BANK.allemand = { label:"Allemand", short:"DE", themes:[
     {f:"gap", q:"Ihr (lesen) ___ ein Buch.", a:"lest", e:"lesen : du liest, er liest, mais ihr lest."},
     {f:"gap", q:"Er (nehmen) ___ den Bus.", a:"nimmt", e:"nehmen est doublement irrégulier : er nimmt."},
     {f:"qcm", q:"Welche Form ist richtig?", o:["du siehst","du sehst","du sieht"], a:"du siehst", e:"sehen : ich sehe, du siehst, er sieht."},
-    {f:"gap", q:"Ich (arbeiten) ___ am Montag.", a:"arbeite", e:"Radical en -t → on garde le e : ich arbeite, du arbeitest."}
+    {f:"gap", q:"Ich (arbeiten) ___ am Montag.", a:"arbeite", e:"Radical en -t → on garde le e : ich arbeite, du arbeitest."},
+    /* Ajoutés le 25 août 2026. Trois fautes de présent le 24, toutes la même :
+       la forme *ihr* (« ihr lesen », « ihr liest », « lehst ») et le pluriel de
+       sein (« sie ist » pour « sie sind »). La règle est déjà dans la leçon —
+       ce qui manquait, c'est le CONTRASTE entre du/er et ihr. */
+    {f:"qcm", q:"Welche Form ist richtig? (*ihr*)", o:["ihr lest","ihr liest","ihr lesen"], a:"ihr lest", e:"La voyelle ne change que pour *du* et *er/sie/es* : du liest, er liest — mais ihr lest, tout simplement."},
+    {f:"qcm", q:"Welche Form ist richtig? (*ihr*)", o:["ihr fahrt","ihr fährt","ihr fahren"], a:"ihr fahrt", e:"du f*ä*hrst et er f*ä*hrt prennent l'Umlaut ; ihr fahrt et wir fahren ne le prennent pas."},
+    {f:"gap", q:"Sie (sein) ___ meine Freunde. (ils sont)", a:"sind", e:"« sie ist » = elle est ; « sie sind » = ils/elles sont. C'est le verbe qui dit lequel des deux « sie » on a."}
   ]},
 
 { id:"de-artikel", t:"Articles, genres et pluriels", tier:"revision",
@@ -969,7 +997,14 @@ BANK.allemand = { label:"Allemand", short:"DE", themes:[
     {f:"qcm", q:"« der Käse » bedeutet…", o:["le fromage","le gâteau","la caisse"], a:"le fromage", e:"Le gâteau = der Kuchen ; la caisse = die Kasse. Trois faux amis proches."},
     {f:"txt", q:"Traduis avec l'article : *le petit pain*", a:"das Brötchen", e:"das Brötchen — tous les mots en -chen sont neutres."},
     {f:"qcm", q:"Comment dit-on « les pâtes » ?", o:["die Nudeln","der Nudel","das Nudel"], a:"die Nudeln", e:"Nudeln ne s'emploie qu'au pluriel."},
-    {f:"txt", q:"Traduis avec l'article : *le beurre*", a:"die Butter", e:"die Butter — féminin, malgré le -er final."}
+    {f:"txt", q:"Traduis avec l'article : *le beurre*", a:"die Butter", e:"die Butter — féminin, malgré le -er final."},
+    /* Ajoutés le 25 août 2026, à deux jours du test, sur ses fautes des 20, 23
+       et 24 : le mot était su, l'article non — « das Schinken », « das Wurst »,
+       « das buter ». Le genre se travaille donc à part, et par contraste. */
+    {f:"qcm", q:"___ Schinken", o:["der","die","das"], a:"der", e:"der Schinken — masculin, comme der Käse, der Fisch, der Reis. C'est le mot que tu écris le plus souvent avec « das »."},
+    {f:"qcm", q:"___ Wurst", o:["der","die","das"], a:"die", e:"die Wurst — féminin, comme die Butter et die Milch."},
+    {f:"qcm", q:"Lequel de ces trois mots est *masculin* ?", o:["der Schinken","das Fleisch","die Butter"], a:"der Schinken", e:"der Schinken (m), das Fleisch (n), die Butter (f) : les trois genres dans une seule liste."},
+    {f:"pair", q:"Relie chaque mot à sa traduction :", p:[["le jambon","der Schinken"],["la saucisse","die Wurst"],["le beurre","die Butter"],["le petit pain","das Brötchen"]], e:"der Schinken · die Wurst · die Butter · das Brötchen — les quatre où l'article t'a coûté un point."}
   ]},
 
 { id:"de-u5-2", t:"Unité 5 · Vocabulaire 2 : fruits, légumes, sucreries", tier:"programme",
@@ -986,7 +1021,7 @@ BANK.allemand = { label:"Allemand", short:"DE", themes:[
     {f:"qcm", q:"Quelle forme est correcte ?", o:["Obst ist gesund.","Obste sind gesund.","Die Obst ist gesund."], a:"Obst ist gesund.", e:"das Obst ne se met jamais au pluriel."},
     {f:"txt", q:"Traduis avec l'article : *les sucreries*", a:"die Süssigkeiten", e:"die Süssigkeiten — pluriel, avec deux s (orthographe suisse)."},
     {f:"qcm", q:"« das Obst » bedeutet…", o:["les fruits","les légumes","les sucreries"], a:"les fruits", e:"Les légumes = das Gemüse ; les sucreries = die Süssigkeiten."},
-    {f:"txt", q:"Traduis avec l'article : *les fruits* (le pluriel, pas le mot collectif)", a:"die Früchte", alt:["fruchte","früchte"], e:"die Früchte (Pl.) — le collectif, c'est das Obst."},
+    {f:"txt", q:"Traduis avec l'article : *les fruits* (le pluriel, pas le mot collectif)", a:"die Früchte", e:"die Früchte (Pl.) — le collectif, c'est das Obst."},
     {f:"qcm", q:"Lequel de ces mots est un *singulier* en allemand ?", o:["das Gemüse","die Trauben","die Süssigkeiten"], a:"das Gemüse", e:"Gemüse et Obst sont singuliers ; Trauben, Früchte et Süssigkeiten sont pluriels."}
   ]},
 
@@ -1268,10 +1303,24 @@ BANK.allemand = { label:"Allemand", short:"DE", themes:[
   function u5vok(n){
     const own  = U5W.filter(w => w[0] === n);
     const prev = U5W.filter(w => w[0] < n);
+    /* Un paquet de cartes, pas un dé.
+
+       En tirant au hasard, un bloc de 24 questions laissait des mots jamais
+       posés pendant que d'autres tombaient quatre fois — sur une liste qu'un
+       test interroge en entier, c'est le pire tirage possible. On distribue
+       donc un paquet mélangé, et on ne le remélange qu'une fois épuisé : la
+       liste est balayée avant qu'un mot ne repasse. */
+    const paquets = new Map();
+    function tire(pool){
+      if (!pool.length) return null;
+      let d = paquets.get(pool);
+      if (!d || !d.length){ d = sh(pool.slice()); paquets.set(pool, d); }
+      return d.pop();
+    }
     return function(et){
       const wantOwn = own.length >= 4 ? rnd(4) !== 0 : rnd(3) === 0;
       const pool = (wantOwn && own.length) || !prev.length ? own : prev;
-      const w = pool[rnd(pool.length)];
+      const w = tire(pool) || pool[rnd(pool.length)];
       if (et === 1){
         const d = rnd(4);
         if (d === 0) return u5article(w);
@@ -1423,7 +1472,13 @@ BANK.anglais = { label:"Anglais", short:"EN", themes:[
     {f:"qcm", q:"Which question is correct?", o:["How long have you been here?","How long you are here?","How long you have here?"], a:"How long have you been here?", e:"Auxiliaire avant le sujet."},
     {f:"ord", q:"Remets la question dans l'ordre :", w:["Who","is","your","best","friend"], a:"Who is your best friend", e:"Avec « who » sujet, pas d'auxiliaire supplémentaire."},
     {f:"gap", q:"You are Swiss, ___ you?", a:"aren't", alt:["are not"], e:"Question tag : auxiliaire à la forme opposée."},
-    {f:"qcm", q:"Corrige : « Where does she works? »", o:["Where does she work?","Where does she working?","Where she works?"], a:"Where does she work?", e:"Le -s est déjà porté par « does »."}
+    {f:"qcm", q:"Corrige : « Where does she works? »", o:["Where does she work?","Where does she working?","Where she works?"], a:"Where does she work?", e:"Le -s est déjà porté par « does »."},
+    /* Ajoutés le 25 août 2026 : « You are Swiss, ___ you? » a été raté quatre
+       fois — « are », puis « are'nt ». La règle (tag de signe contraire) et
+       l'orthographe de la contraction se travaillent séparément. */
+    {f:"qcm", q:"She is your sister, ___ she?", o:["isn't","is","doesn't"], a:"isn't", e:"Phrase positive → tag négatif, et on reprend le MÊME auxiliaire : is → isn't."},
+    {f:"gap", q:"You aren't tired, ___ you?", a:"are", e:"L'inverse : phrase négative → tag positif. Le tag est toujours du signe contraire à la phrase."},
+    {f:"qcm", q:"Comment s'écrit la contraction de « are not » ?", o:["aren't","are'nt","arn't"], a:"aren't", e:"L'apostrophe remplace le *o* de « not » : are n(o)t → aren't. Pareil pour isn't, doesn't, didn't."}
   ]},
 
 { id:"en-comp", t:"Comparatifs et superlatifs", tier:"consolidation",
@@ -2213,6 +2268,26 @@ const ORDER = ["francais","allemand","anglais","maths"];
 const SCHOOL_START = "2026-08-24";          // rentrée : la ligne d'arrivée
 const XP_RIGHT = 10, XP_COMBO = 5, XP_BLOCK = 25, XP_DAY = 50;
 
+/* Longueur des blocs (21 août 2026). Huit questions ne suffisaient pas : le
+   premier TA d'allemand est arrivé avec deux réponses vides et six articles
+   faux sur six. Un bloc s'est donc allongé, découpé par des PALIERS visibles
+   toutes les 8 — la tâche reste lisible ("plus que 2 questions avant le
+   palier") alors que le volume monte.
+
+   RAMENÉ DE 24 À 16 LE 25 AOÛT 2026, sur les données du 23. Ce jour-là, 29 des
+   36 fautes sont des réponses VIDES : à partir d'un certain point du bloc, les
+   QCM étaient cliqués (et réussis) mais plus rien n'était tapé — 22 « Calcule : »
+   d'affilée validés à blanc. Le bloc étant tout-ou-rien, aller au bout à vide
+   coûtait moins cher que d'abandonner. Trois blocs font maintenant 44 questions
+   par jour au lieu de 60, et le champ vide n'est plus validable (voir bindQuiz).
+
+   La répétition est voulue, pas subie : un mot raté REVIENT dans le même bloc,
+   trois questions plus loin, puis huit plus loin (rappel expansé), et il faut
+   le réussir DEUX fois pour qu'il cesse de revenir. C'est le même critère que
+   le rachat entre sessions (`miss.s >= 2`), appliqué à l'intérieur du bloc. */
+const BLOC_LONG = 16, BLOC_DEFI = 12, PALIER = 8;
+const REPRISE_1 = 3, REPRISE_2 = 8, REPRISE_MAX = 4, REPRISE_FILE = 4;
+
 /* ---------- dates (locales, jamais UTC) ---------- */
 function iso(d){
   const p = n => String(n).padStart(2,"0");
@@ -2240,7 +2315,15 @@ function norm(s){
 function normMath(s){
   return norm(s).replace(/\s+/g,"").replace(/(\d),(\d)/g,"$1.$2").replace(/^\+/,"");
 }
-/* certains items portent sur l'accent lui-même (a/à, ou/où, la/là) : on le garde */
+/* La comparaison qui fait foi : l'accent compte (21 août 2026).
+
+   Avant, `norm()` supprimait les diacritiques et seuls les items marqués `acc:1`
+   étaient stricts — la tolérance était là pour le clavier du téléphone. Mais un
+   accent oublié EST une faute : « die Fruchte » est faux au TA, « la these »
+   est faux en français. Une app qui l'accepte apprend à l'oublier.
+
+   La casse, elle, reste tolérée : c'est un autre débat, et le clavier du
+   téléphone met des majuscules tout seul. */
 function normAcc(s){
   return String(s == null ? "" : s).trim().toLowerCase()
     .replace(/[’´`]/g,"'").replace(/[−–—]/g,"-")
@@ -2249,8 +2332,35 @@ function normAcc(s){
 function eq(a, b, it){
   it = it || {};
   if (it.m) return normMath(a) === normMath(b);
-  if (it.acc) return normAcc(a) === normAcc(b);
-  return norm(a) === norm(b);
+  return normAcc(a) === normAcc(b);
+}
+/* Faux uniquement à cause d'un accent ? On le dit, au lieu de laisser croire
+   que le mot lui-même était faux — c'est là que la correction apprend
+   quelque chose. La réponse reste comptée fausse. */
+function accentPres(rep, it){
+  if (!rep || (it && it.m)) return false;
+  const bonnes = [it.a].concat(it.alt || []);
+  return !bonnes.some(a => normAcc(a) === normAcc(rep))
+      &&  bonnes.some(a => norm(a)    === norm(rep));
+}
+/* Même idée pour l'article allemand (25 août 2026). Le 24, sur trois fautes de
+   vocabulaire, trois étaient des articles : « das Schinken », « der » tout seul,
+   « das Wurts » — le mot était su, le genre non. Or l'enseignante compte
+   l'article pour la moitié du point. Un « Pas encore » sec laisse croire que le
+   mot était faux ; on nomme donc la vraie cause. La réponse reste comptée
+   fausse, comme au test. */
+const ART_RE = /^(der|die|das)\s+/;
+function articlePres(rep, it){
+  if (!rep || (it && it.m)) return null;
+  const bonnes = [it.a].concat(it.alt || []).map(String);
+  if (bonnes.some(a => eq(a, rep, it))) return null;
+  const att = bonnes.filter(a => ART_RE.test(normAcc(a)))[0];
+  if (!att) return null;
+  const nu = s => normAcc(s).replace(ART_RE, "").trim();
+  if (!nu(rep) || nu(att) !== nu(rep)) return null;
+  return ART_RE.test(normAcc(rep))
+    ? "Le nom est juste, l'article non : on écrit « " + att + " »."
+    : "Le mot est juste, mais l'article manque : « " + att + " » — et au test il vaut la moitié du point.";
 }
 function esc(s){ return String(s == null ? "" : s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
 /* met en évidence *le mot* entre astérisques, et rend 2^5 en exposant */
@@ -2312,8 +2422,20 @@ function load(){
   });
   save();
 }
+/* Le stockage peut être refusé : navigation privée, quota plein, ou une page
+   ouverte en `file://` selon le navigateur. `save()` avale l'erreur pour que la
+   séance en cours continue — mais avaler SANS RIEN DIRE, c'est laisser faire
+   24 questions qui seront perdues à la fermeture. On teste donc une fois, et on
+   l'affiche. */
+let memoireOk = true;
+try {
+  localStorage.setItem("onze-test", "1");
+  localStorage.removeItem("onze-test");
+} catch(e){ memoireOk = false; }
+
 function save(){
-  try{ localStorage.setItem(KEY, JSON.stringify(S)); }catch(e){ /* mode privé : la session marche quand même */ }
+  try{ localStorage.setItem(KEY, JSON.stringify(S)); }
+  catch(e){ memoireOk = false; /* la session marche quand même, mais elle ne sera pas retenue */ }
 }
 
 /* ---------- répétition espacée ---------- */
@@ -2458,7 +2580,12 @@ function itemsFor(theme, n){
   // des générateurs — relier, poser l'article, choisir une forme verbale. Sans
   // ça la banque remplit tout le bloc et ils n'apparaissent jamais, alors que
   // c'est au tout premier contact avec une notion qu'ils servent le plus.
-  const nBank = (et === 1 && aGen) ? Math.max(1, n - 3) : n;
+  // À l'étape 1 la banque ne prend qu'une part du bloc : le reste va aux
+  // exercices de reconnaissance des générateurs. En proportion, et non « n - 3 » :
+  // sur un bloc de 24 cette soustraction ne réservait plus rien du tout.
+  const nBank = (et === 1 && aGen)
+    ? Math.max(1, Math.min(bank.length, Math.ceil(n * 0.4)))
+    : n;
 
   // 1. la revanche : jusqu'à 2 exercices ratés récemment, à retenter en priorité
   const retry = missIdx(st).slice(0, Math.min(2, Math.max(0, nBank - 1)));
@@ -2478,12 +2605,33 @@ function itemsFor(theme, n){
   // générateurs : réserve infinie quand la banque est épuisée. L'étape leur est
   // passée — à l'étape 1 ils proposent de la reconnaissance plutôt que de la frappe.
   if (out.length < n && aGen){
+    // 1er passage : on cherche des énoncés inédits dans ce bloc.
     let guard = 0;
-    while (out.length < n && guard++ < 40){
+    while (out.length < n && guard++ < n * 12){
       const g = GENS[theme.gen](et);
       if (g && !out.some(o => o.q === g.q)){
         out.push(Object.assign(g, { theme: theme.id, subject: theme.subject, gen:true }));
       }
+    }
+    // 2e passage : la liste est trop courte pour remplir 24 énoncés distincts
+    // (Vocabulaire 3 = deux mots). On accepte alors de repasser sur les mêmes —
+    // revoir « das Salz » trois fois dans un bloc est un entraînement, pas un
+    // bug. Sans ce filet le bloc rendait 11 questions au lieu de 24.
+    guard = 0;
+    while (out.length < n && guard++ < n * 4){
+      const g = GENS[theme.gen](et);
+      if (g) out.push(Object.assign(g, { theme: theme.id, subject: theme.subject, gen:true }));
+    }
+  }
+  // Dernier filet : pas de générateur et une banque trop courte — on recycle la
+  // banque elle-même plutôt que de rendre un bloc tronqué.
+  if (out.length < n && bank.length){
+    let garde = 0;
+    while (out.length < n && garde++ < n){
+      shuffle(bank.map((_, i) => i)).forEach(i => {
+        if (out.length < n) out.push(Object.assign({}, bank[i],
+          { theme: theme.id, subject: theme.subject, bankIdx: i }));
+      });
     }
   }
   // à l'étape 1, ce qui se tape se choisit
@@ -2552,14 +2700,14 @@ function todaysPlan(){
   const bySub = {};
   shuffle(pool).forEach(t => { if (!bySub[t.subject]) bySub[t.subject] = t; });
   const defi = { kind:"defi", n:3, title:"Défi mixte", themes: Object.values(bySub).map(t => t.id),
-    sub:"Six questions, les quatre matières mélangées. Les combos rapportent double." };
+    sub:BLOC_DEFI+" questions, les quatre matières mélangées. Les combos rapportent double." };
 
   return [rev, lesson, defi].map(b => Object.assign(b, { done: done.includes(b.kind) }));
 }
 function blockItems(block){
   const ids = block.themes.filter(id => THEME_BY_ID[id]);
   if (!ids.length) return [];
-  const per = block.kind === "lesson" ? 8 : block.kind === "defi" ? 6 : 8;
+  const per = block.kind === "defi" ? BLOC_DEFI : BLOC_LONG;
   if (block.kind === "lesson") return itemsFor(THEME_BY_ID[ids[0]], per);
   const each = Math.max(1, Math.ceil(per / ids.length));
   let out = [];
@@ -2611,6 +2759,10 @@ function recordBlock(block, res){
   S.errors = (S.errors || []).concat(res.errs || []).slice(-400);
   (res.itemLog || []).forEach(e => {
     if (e.k == null) return;
+    // Une reprise ne rachète pas : elle a lieu deux minutes après la faute, ce
+    // qui ne prouve rien sur demain. Le rachat reste ce qu'il était — réussir
+    // l'exercice à froid, dans une session suivante.
+    if (e.rep) return;
     const st = S.themes[e.id];
     st.miss = st.miss || {};
     const m = st.miss[e.k];
@@ -2625,9 +2777,12 @@ function recordBlock(block, res){
   Object.keys(res.byTheme).forEach(id => {
     const r = res.byTheme[id];
     const st = S.themes[id];
-    st.seen += r.total; st.right += r.right;
-    st.hist = (st.hist || []).concat({ d: t0, ok: r.right, tot: r.total }).slice(-20);
-    const mv = moveBox(id, r.total ? r.right / r.total : 0);
+    // premiers passages seulement — voir le commentaire dans grade()
+    const tot = r.pTotal != null ? r.pTotal : r.total;
+    const bon = r.pTotal != null ? r.pRight : r.right;
+    st.seen += tot; st.right += bon;
+    st.hist = (st.hist || []).concat({ d: t0, ok: bon, tot: tot }).slice(-20);
+    const mv = moveBox(id, tot ? bon / tot : 0);
     if (mv.from !== mv.to) moves.push({ id, from:mv.from, to:mv.to });
   });
   const newBadges = refreshBadges();
@@ -2636,6 +2791,7 @@ function recordBlock(block, res){
   // journée est complète, discret le reste du temps
   const dayComplete = d.blocks.length === 3;
   ecrireBilan(dayComplete);
+  ecrireProgression();
   return { bonus, moves, newBadges, dayComplete };
 }
 
@@ -2746,11 +2902,20 @@ function homeHTML(){
       </div>
     </div>
 
+    ${memoireOk ? "" : `<div class="alerte">
+      <b>Ce navigateur ne retient rien.</b> Tu peux travailler, mais tout sera
+      effacé en fermant la page. Envoie ton bilan avant de partir, ou ouvre
+      l'app depuis son lien habituel.
+    </div>`}
+
     <div class="foot">
       ${depotHTML()}
+      <button class="link" id="imp">Reprendre ma progression</button>
       <button class="link" id="bil">Envoyer mon bilan</button>
       <button class="link" id="rst">Tout remettre à zéro</button>
     </div>
+    <input type="file" id="impf" accept="application/json,.json"
+           style="position:absolute;width:1px;height:1px;opacity:0;pointer-events:none">
   </div>`;
 }
 function shortVar(sk){ return { francais:"fr", allemand:"de", anglais:"en", maths:"ma" }[sk]; }
@@ -2762,7 +2927,7 @@ function blockHTML(b){
         const t = THEME_BY_ID[id]; if (!t) return "";
         return `<span class="chip ${t.subject}">${SUB[t.subject].short} · ${esc(t.t)}</span>`;
       });
-  const nQ = b.kind === "defi" ? 6 : 8;
+  const nQ = b.kind === "defi" ? BLOC_DEFI : BLOC_LONG;
   return `<button class="block${b.done ? " done":""}" data-kind="${b.kind}" ${b.done ? "disabled":""}>
     <span class="num">${b.n}</span>
     <span class="mid">
@@ -2770,7 +2935,7 @@ function blockHTML(b){
       <span class="sub">${esc(b.sub)}</span>
       <span class="chips">${chips.join("")}</span>
     </span>
-    <span class="go">${b.done ? "Fait ✓" : nQ + " Q · 5 min"}</span>
+    <span class="go">${b.done ? "Fait ✓" : nQ + " Q · " + Math.round(nQ / 2) + " min"}</span>
   </button>`;
 }
 
@@ -2835,6 +3000,14 @@ function bindHome(){
   if (th) th.addEventListener("click", () => { setTheme(currentTheme() === "dark" ? "light" : "dark"); render(); });
   const bil = root.querySelector("#bil");
   if (bil) bil.addEventListener("click", envoyerBilan);
+  const imp = root.querySelector("#imp"), impf = root.querySelector("#impf");
+  if (imp && impf){
+    imp.addEventListener("click", () => impf.click());
+    impf.addEventListener("change", () => {
+      importerProgression(impf.files && impf.files[0]);
+      impf.value = "";                       // reprendre deux fois de suite reste possible
+    });
+  }
   const depon = root.querySelector("#depon");
   if (depon) depon.addEventListener("click", activerDepot);
   const depoff = root.querySelector("#depoff");
@@ -3003,6 +3176,185 @@ function telecharger(blob, nom){
 
    Sur téléphone (Safari iOS n'a pas cette API), rien ne change : le bouton
    « Envoyer mon bilan » reste le chemin. */
+/* ============================================================
+   LE CARNET DE PROGRESSION — un fichier, plusieurs supports
+   ============================================================
+
+   `localStorage` est cloisonné par origine ET par navigateur : le téléphone,
+   l'ordinateur, la page publiée et le fichier ouvert en `file://` ont chacun
+   leur carnet, et aucun ne sait ce que les autres ont fait. Trois blocs faits
+   sur le mauvais support étaient perdus pour de bon.
+
+   Le fichier `ONZE_progression_<élève>.json` devient la mémoire commune. À
+   l'ouverture on le LIT et on le FUSIONNE avec ce qu'il y a en local ; après
+   chaque bloc on le RÉÉCRIT. Deux supports peuvent donc diverger sans que rien
+   ne se perde.
+
+   Ce qu'on ne peut pas faire, et il faut le dire : Safari iOS n'a aucune API
+   pour lire ou écrire un fichier sans geste de l'élève. « Automatique partout »
+   n'existe pas hors ligne. D'où deux régimes :
+     · ordinateur (Chrome/Edge, dossier désigné) → lecture et écriture SEULES,
+       sans rien demander ;
+     · partout ailleurs (téléphone, file://) → un bouton « Reprendre ma
+       progression » qui ouvre le sélecteur de fichiers, et le partage habituel
+       pour ressortir.
+
+   LA FUSION NE PERD JAMAIS RIEN. Chaque règle est monotone : on garde la boîte
+   la plus haute, le jour le plus fourni, l'union des blocs et des trophées. Un
+   carnet fusionné est toujours au moins aussi avancé que chacun des deux. */
+
+function fusionJours(a, b){
+  const out = {};
+  Object.keys(a || {}).concat(Object.keys(b || {})).forEach(d => {
+    const x = (a || {})[d], y = (b || {})[d];
+    if (!x || !y){ out[d] = x || y; return; }
+    const blocs = [...new Set([].concat(x.blocks || [], y.blocks || []))];
+    const communs = (x.blocks || []).filter(k => (y.blocks || []).includes(k));
+    if (!communs.length){
+      // journées complémentaires (le bus le matin, le bureau le soir) : ça s'additionne
+      out[d] = { blocks:blocs, xp:(x.xp||0)+(y.xp||0),
+                 right:(x.right||0)+(y.right||0), total:(x.total||0)+(y.total||0) };
+    } else {
+      // un même bloc des deux côtés : on ne compte pas deux fois, le plus fourni gagne
+      const gros = (y.total||0) > (x.total||0) ? y : x;
+      out[d] = { blocks:blocs, xp:Math.max(x.xp||0, y.xp||0),
+                 right:gros.right||0, total:gros.total||0 };
+    }
+  });
+  return out;
+}
+
+function fusionHist(a, b){
+  const par = {};
+  [].concat(a || [], b || []).forEach(h => {
+    if (!h || !h.d) return;
+    const v = par[h.d];
+    if (!v || (h.tot || 0) > (v.tot || 0)) par[h.d] = h;
+  });
+  return Object.keys(par).sort().map(d => par[d]).slice(-20);
+}
+
+function fusionMiss(a, b){
+  const out = {};
+  Object.keys(a || {}).concat(Object.keys(b || {})).forEach(k => {
+    const x = (a || {})[k], y = (b || {})[k];
+    if (!x || !y){ out[k] = x || y; return; }
+    // le plus de fautes, le moins de rachats : on redemande plutôt que d'oublier
+    out[k] = { f: Math.max(x.f||0, y.f||0), s: Math.min(x.s||0, y.s||0) };
+  });
+  return out;
+}
+
+function fusionNotion(x, y){
+  if (!x || !y) return x || y;
+  // seen et right viennent du MÊME carnet, sinon on peut obtenir right > seen
+  const riche = (y.seen||0) > (x.seen||0) ? y : x;
+  const haut  = (y.box||0)  > (x.box||0)  ? y : x;
+  return {
+    box:  Math.max(x.box||0, y.box||0),
+    due:  haut.due,
+    seen: riche.seen||0,
+    right: riche.right||0,
+    used: [...new Set([].concat(x.used||[], y.used||[]))].slice(-8),
+    miss: fusionMiss(x.miss, y.miss),
+    hist: fusionHist(x.hist, y.hist)
+  };
+}
+
+function xpDepuisJours(days){
+  let x = 0;
+  Object.keys(days || {}).forEach(d => {
+    const j = days[d], n = (j.blocks || []).length;
+    x += (j.xp || 0) + n * XP_BLOCK + (n >= 3 ? XP_DAY : 0);
+  });
+  return x;
+}
+
+function serieDepuisJours(days){
+  const actifs = Object.keys(days || {}).filter(d => ((days[d].blocks) || []).length).sort();
+  if (!actifs.length) return { streak:0, last:null };
+  let n = 1;
+  for (let i = actifs.length - 1; i > 0; i--){
+    if (diffDays(actifs[i-1], actifs[i]) === 1) n++; else break;
+  }
+  return { streak:n, last: actifs[actifs.length - 1] };
+}
+
+/* Fusionne `autre` DANS l'état courant. Rend un résumé de ce qui a bougé —
+   une fusion muette serait invérifiable, et on ne saurait jamais si le
+   fichier a vraiment servi. */
+function fusionner(local, autre){
+  const jours = fusionJours(local.days, autre.days);
+  const themes = {};
+  let montees = 0;
+  Object.keys(local.themes || {}).concat(Object.keys(autre.themes || {})).forEach(id => {
+    if (themes[id]) return;
+    const av = (local.themes || {})[id];
+    const f = fusionNotion(av, (autre.themes || {})[id]);
+    if (f) themes[id] = f;
+    if (av && f && (f.box || 0) > (av.box || 0)) montees++;
+  });
+  const serie = serieDepuisJours(jours);
+  const nouveauxJours = Object.keys(jours).filter(d => !(local.days || {})[d]).length;
+
+  const fus = {
+    v: 2,
+    start: [local.start, autre.start].filter(Boolean).sort()[0] || local.start,
+    xp: xpDepuisJours(jours),
+    streak: serie.streak,
+    best: Math.max(local.best || 0, autre.best || 0, serie.streak),
+    lastDay: serie.last || local.lastDay || autre.lastDay,
+    themes: themes,
+    days: jours,
+    badges: [...new Set([].concat(local.badges || [], autre.badges || []))],
+    errors: fusionErreurs(local.errors, autre.errors)
+  };
+  return { etat: fus, jours: nouveauxJours, montees: montees,
+           xp: (fus.xp || 0) - (local.xp || 0) };
+}
+
+function fusionErreurs(a, b){
+  const vu = new Set(), out = [];
+  [].concat(a || [], b || []).forEach(e => {
+    if (!e) return;
+    const cle = [e.d, e.id, e.q].join("|");
+    if (vu.has(cle)) return;
+    vu.add(cle); out.push(e);
+  });
+  return out.sort((x, y) => String(x.d).localeCompare(String(y.d))).slice(-400);
+}
+
+/* Accepte un carnet de progression, mais AUSSI n'importe quel bilan déjà
+   partagé : tous deux portent l'état complet sous `etat`. Ça évite d'avoir à
+   expliquer quel fichier reprendre. */
+function etatDepuis(json){
+  if (!json || typeof json !== "object") return null;
+  const e = json.etat && typeof json.etat === "object" ? json.etat : json;
+  return (e && e.themes && typeof e.themes === "object") ? e : null;
+}
+
+function appliquerFusion(autre){
+  const r = fusionner(S, autre);
+  S = r.etat;
+  THEMES.forEach(t => {
+    if (!S.themes[t.id]) S.themes[t.id] = { box:0, due:today(), seen:0, right:0, used:[], miss:{}, hist:[] };
+  });
+  refreshBadges();
+  save();
+  return r;
+}
+
+function resumeFusion(r){
+  const bouts = [];
+  if (r.jours)   bouts.push(r.jours + " jour" + (r.jours > 1 ? "s" : ""));
+  if (r.montees) bouts.push(r.montees + " notion" + (r.montees > 1 ? "s" : "") + " plus avancée" + (r.montees > 1 ? "s" : ""));
+  if (r.xp > 0)  bouts.push("+" + r.xp + " XP");
+  return bouts.length ? "Progression reprise : " + bouts.join(", ") + "."
+                      : "Progression déjà à jour — rien de neuf dans le fichier.";
+}
+
+const PROG_NOM = "ONZE_progression_" + (ELEVE || "eleve") + ".json";
+
 const DEPOT_DB = "onze-depot", DEPOT_STORE = "h", DEPOT_KEY = "dossier";
 let depot = { handle:null, etat:"absent", dernier:null };   // absent | ok | prompt | erreur
 
@@ -3042,7 +3394,12 @@ function chargerDepot(){
     depot.handle = h;
     return h.queryPermission({ mode:"readwrite" }).then(p => {
       depot.etat = (p === "granted") ? "ok" : "prompt";
-      if (depot.etat === "ok") return ecrireBilan(false);
+      if (depot.etat !== "ok") return;
+      // lire d'abord : ce que cette machine ignore est peut-être dans le fichier
+      return lireProgression().then(r => {
+        if (r && (r.jours || r.montees)) toast(resumeFusion(r));
+        return ecrireProgression().then(() => ecrireBilan(false));
+      });
     });
   }).then(() => { if (view.screen === "home") render(); })
     .catch(() => { /* IndexedDB indisponible (file://, navigation privée) : tant pis */ });
@@ -3055,7 +3412,10 @@ function activerDepot(){
       if (p !== "granted"){ toast("Dossier non autorisé — le dépôt reste manuel."); return; }
       depot.handle = dir; depot.etat = "ok";
       idbSet(dir).catch(() => toast("Le dossier est actif, mais il faudra le redésigner à la prochaine ouverture."));
-      return ecrireBilan(true);
+      return lireProgression()
+        .then(r => { if (r && (r.jours || r.montees)) toast(resumeFusion(r)); })
+        .then(() => ecrireProgression())
+        .then(() => ecrireBilan(true));
     }))
     .then(() => render())
     .catch(err => { if (!err || err.name !== "AbortError") toast("Le dossier n'a pas pu être ouvert."); });
@@ -3066,6 +3426,53 @@ function arreterDepot(){
   idbDel().catch(() => {});
   toast("Dépôt automatique arrêté. Le bouton d'envoi reste disponible.");
   render();
+}
+
+/* Lit le carnet de progression du dossier et le fusionne. Absent = premier
+   passage sur cette machine, ce n'est pas une erreur. */
+function lireProgression(){
+  if (!depot.handle) return Promise.resolve(null);
+  return depot.handle.getFileHandle(PROG_NOM)
+    .then(fh => fh.getFile())
+    .then(f => f.text())
+    .then(txt => {
+      const autre = etatDepuis(JSON.parse(txt));
+      if (!autre) return null;
+      return appliquerFusion(autre);
+    })
+    .catch(() => null);           // fichier absent ou illisible : on continue
+}
+
+/* Réécrit le carnet — nom STABLE, toujours le même fichier, contrairement aux
+   bilans datés qui servent au rapport des parents. */
+function ecrireProgression(){
+  if (!depot.handle) return Promise.resolve(false);
+  const paquet = { app:"onze", type:"progression", format:1,
+                   eleve: ELEVE || "", maj: today(), etat: S };
+  return depot.handle.getFileHandle(PROG_NOM, { create:true })
+    .then(fh => fh.createWritable())
+    .then(w => w.write(JSON.stringify(paquet, null, 2)).then(() => w.close()))
+    .then(() => true)
+    .catch(() => false);
+}
+
+/* La reprise manuelle : le seul chemin qui marche PARTOUT — téléphone, Safari,
+   fichier ouvert en file://. Un sélecteur de fichiers, et on fusionne. */
+function importerProgression(file){
+  if (!file) return;
+  const fr = new FileReader();
+  fr.onload = () => {
+    let autre = null;
+    try { autre = etatDepuis(JSON.parse(String(fr.result))); }
+    catch (e) { autre = null; }
+    if (!autre){ toast("Ce fichier n'est pas un carnet ONZE."); return; }
+    const r = appliquerFusion(autre);
+    ecrireProgression();
+    toast(resumeFusion(r));
+    render();
+  };
+  fr.onerror = () => toast("Le fichier n'a pas pu être lu.");
+  fr.readAsText(file);
 }
 
 /* écrit le bilan du jour dans le dossier désigné ; un fichier par jour, réécrit
@@ -3112,6 +3519,7 @@ function startBlock(kind){
     byTheme:{}, answered:false, correct:null, chosen:null, built:[],
     pl:null, pr:null, link:{}, sel:null,
     errs:[], itemLog:[],
+    reprises:[], paliersVus:[], dernierRep:null,
     phase:"quiz"
   };
   const first = THEME_BY_ID[block.themes[0]];
@@ -3128,6 +3536,7 @@ function lessonTheme(){
 
 function renderSession(){
   if (sess.phase === "lesson"){ root.innerHTML = lessonHTML(); bindLesson(); return; }
+  if (sess.phase === "palier"){ root.innerHTML = palierHTML(); bindPalier(); return; }
   const it = sess.items[sess.i];
   // les mots à remettre dans l'ordre doivent être tirés AVANT le premier rendu
   if (it && it.f === "ord" && !sess.pool) sess.pool = shuffle(it.w);
@@ -3163,6 +3572,39 @@ function bindLesson(){
   root.querySelector("#go").addEventListener("click", () => { sess.phase = "quiz"; render(); });
 }
 
+/* Le palier : une respiration toutes les huit questions.
+
+   Un bloc de 24 questions d'affilée se regarde comme un mur. Découpé en trois
+   paliers annoncés, c'est trois fois « plus que deux questions » — la même
+   quantité de travail, mais une ligne d'arrivée toujours en vue. C'est le
+   découpage (chunking) que toute la littérature TDAH place en premier, et il
+   sert aussi à faire le point : ce qu'on vient de faire, ce qui reste. */
+function palierHTML(){
+  const n = sess.i;                                   // questions déjà posées
+  const tot = sess.items.length;
+  const num = Math.round(n / PALIER), sur = Math.ceil(tot / PALIER);
+  const justes = sess.right, pct = sess.total ? Math.round(100*justes/sess.total) : 0;
+  const mot = pct >= 80 ? "Ça tient." : pct >= 50 ? "On continue." : "On ralentit pas.";
+  const reste = tot - n;
+  return `<div class="wrap"><div class="done-wrap">
+    <div class="kicker">Palier ${num} sur ${sur}</div>
+    <h2 style="margin-top:6px">${esc(mot)}</h2>
+    <div class="line">${justes}/${sess.total} depuis le début du bloc${
+      sess.reprises.length ? ` · ${sess.reprises.length} mot${sess.reprises.length>1?"s":""} à revoir avant la fin` : ""}</div>
+    <div class="gain" style="margin-top:18px">
+      <div class="g"><div class="k">Fait</div><div class="v">${n}</div></div>
+      <div class="g"><div class="k">Reste</div><div class="v" style="color:var(--accent)">${reste}</div></div>
+      <div class="g"><div class="k">Combo</div><div class="v">×${sess.bestCombo}</div></div>
+    </div>
+    <button class="cta" id="go" style="margin-top:24px">Continuer → ${Math.min(PALIER, reste)} questions</button>
+  </div></div>`;
+}
+function bindPalier(){
+  root.querySelector("#go").addEventListener("click", () => {
+    sess.phase = "quiz"; renderSession();
+  });
+}
+
 function topHTML(frac){
   const c = sess.combo;
   return `<div class="s-top"><div class="s-top-in">
@@ -3188,6 +3630,7 @@ function quizHTML(){
         <span class="chip ${sk}">${SUB[sk].short}</span>
         <span class="th">${esc(t ? t.t : "")} · ${sess.i+1}/${sess.items.length}</span>
         ${it.retry ? `<span class="chip" style="background:var(--accent-soft);color:var(--accent)">revanche ⚡</span>` : ""}
+        ${it.reprise ? `<span class="chip" style="background:var(--accent-soft);color:var(--accent)">on la refait ↻</span>` : ""}
       </div>
       <div class="txt">${fmt(it.q)}</div>
       ${it.hint && !sess.answered ? `<div class="hint">${esc(it.hint)}</div>` : ""}
@@ -3211,10 +3654,12 @@ function optsHTML(it){
 }
 function inputHTML(it){
   const cls = sess.answered ? (sess.correct ? "inp good" : "inp bad") : "inp";
+  const vide = !String(sess.typed || "").trim();
   return `<input class="${cls}" id="ans" value="${esc(sess.typed || "")}" ${sess.answered ? "disabled":""}
       placeholder="${it.f === "gap" ? "le mot qui manque" : "ta réponse"}" autocomplete="off"
       autocapitalize="off" spellcheck="false" inputmode="${it.num ? "text" : "text"}">
-    ${sess.answered ? "" : `<button class="cta" id="chk">Vérifier</button>`}`;
+    ${sess.answered ? "" : `<button class="cta${vide ? " off" : ""}" id="chk">Vérifier</button>
+    <div class="vide" id="vidmsg" hidden></div>`}`;
 }
 function ordHTML(it){
   const rest = sess.pool || [];
@@ -3259,7 +3704,11 @@ function pairHTML(it){
 function fbHTML(it){
   const good = sess.correct;
   return `<div class="fb ${good ? "ok":"ko"}">
-    <div class="hd">${good ? "Juste" + (sess.combo >= 3 ? " · combo ×"+sess.combo : "") : "Pas encore"}</div>
+    <div class="hd">${good ? "Juste" + (sess.combo >= 3 ? " · combo ×"+sess.combo : "")
+                           : sess.accent ? "Presque — l'accent"
+                           : sess.artic ? "Presque — l'article" : "Pas encore"}</div>
+    ${sess.accent ? `<div class="exp">Le mot était bon, l'accent non : c'est compté faux, comme au test.</div>` : ""}
+    ${sess.artic ? `<div class="exp">${esc(sess.artic)}</div>` : ""}
     ${good ? "" : `<div class="sol">${it.f === "pair"
         ? it.p.map(pr => esc(pr[0]) + " = " + esc(pr[1])).join("<br>")
         : fmt(Array.isArray(it.a) ? it.a[0] : it.a)}</div>`}
@@ -3312,16 +3761,43 @@ function bindQuiz(){
         grade(it.p.every((_, i) => sess.link[i] === i));
       });
     } else {
+      /* UN CHAMP VIDE NE SE VALIDE PAS (25 août 2026).
+
+         Le 23 août, 29 réponses vides ont été validées d'affilée : les QCM du
+         même bloc étaient cliqués et justes, mais plus rien n'était tapé. Une
+         case vide n'est pas une faute de français ou de maths — c'est une
+         mesure qui n'a pas eu lieu, et elle a fait tomber « Nombres relatifs »
+         à 40 % de maîtrise alors que le lendemain il faisait 8/8.
+
+         Le bouton reste CLIQUABLE, seulement éteint : un bouton désactivé ne
+         dit pas pourquoi il ne marche pas. Au 3e essai à vide on nomme la cause
+         la plus probable — le clavier du téléphone qui ne s'ouvre pas. */
       const inp = root.querySelector("#ans");
+      const chk = root.querySelector("#chk");
+      const msg = root.querySelector("#vidmsg");
       const check = () => {
         const v = inp.value;
+        if (!v.trim()){
+          sess.vides = (sess.vides || 0) + 1;
+          msg.hidden = false;
+          msg.textContent = sess.vides < 3
+            ? "Écris ta réponse — même fausse. Une case vide ne compte pas comme un essai."
+            : "Le clavier ne s'ouvre pas ? Touche le cadre blanc au-dessus. "
+              + "Sinon, quitte le bloc — mieux vaut le refaire que le remplir à blanc.";
+          try{ inp.focus({ preventScroll:true }); }catch(e){}
+          return;
+        }
         sess.typed = v;
         const answers = [it.a].concat(it.alt || []);
         grade(answers.some(a => eq(a, v, it)));
       };
       inp.addEventListener("keydown", e => { if (e.key === "Enter") check(); });
-      inp.addEventListener("input", () => { sess.typed = inp.value; });
-      root.querySelector("#chk").addEventListener("click", check);
+      inp.addEventListener("input", () => {
+        sess.typed = inp.value;
+        chk.classList.toggle("off", !inp.value.trim());
+        if (inp.value.trim()) msg.hidden = true;
+      });
+      chk.addEventListener("click", check);
       setTimeout(() => { try{ inp.focus({ preventScroll:true }); }catch(e){} }, 60);
     }
   } else {
@@ -3332,11 +3808,24 @@ function bindQuiz(){
 function grade(ok){
   const it = sess.items[sess.i];
   sess.answered = true; sess.correct = ok;
+  // un accent oublié : faux, mais on nomme la raison
+  const repondu = it.f === "qcm" ? (sess.chosen != null ? it.o[sess.chosen] : "")
+                : (it.f === "ord" || it.f === "pair") ? ""
+                : (sess.typed || "");
+  sess.accent = !ok && accentPres(repondu, it);
+  sess.artic  = (!ok && !sess.accent) ? articlePres(repondu, it) : null;
   sess.total++;
-  const bt = sess.byTheme[it.theme] || (sess.byTheme[it.theme] = { right:0, total:0 });
+  const bt = sess.byTheme[it.theme]
+    || (sess.byTheme[it.theme] = { right:0, total:0, pRight:0, pTotal:0 });
   bt.total++;
+  // La MESURE ne compte que les premières tentatives (`p` = premier passage).
+  // Une reprise réussie est un entraînement, pas une preuve : si elle comptait,
+  // rater un mot puis le réussir deux fois de suite ferait MONTER le taux de
+  // réussite de la notion, et une notion mal sue passerait tranquillement en
+  // boîte supérieure. Les XP, eux, sont donnés dans les deux cas.
+  if (!it.reprise){ bt.pTotal++; if (ok) bt.pRight++; }
   // journal : ce qui a été répondu, pour la revanche et le bilan
-  sess.itemLog.push({ id: it.theme, k: it.gen ? null : it.bankIdx, ok });
+  sess.itemLog.push({ id: it.theme, k: it.gen ? null : it.bankIdx, ok, rep: it.reprise ? 1 : 0 });
   if (!ok){
     const donne = it.f === "qcm" ? (sess.chosen != null ? it.o[sess.chosen] : "")
                 : it.f === "ord" ? sess.built.join(" ")
@@ -3353,6 +3842,14 @@ function grade(ok){
       k: it.gen ? null : it.bankIdx, g: it.gen ? 1 : 0
     });
   }
+  // la file de reprise : rater programme un retour, réussir rapproche du rachat
+  if (!ok){
+    planifierReprise(Object.assign({}, it, { hits:0 }), REPRISE_1);
+  } else if (it.reprise){
+    const hits = (it.hits || 0) + 1;
+    if (hits < 2) planifierReprise(Object.assign({}, it, { hits }), REPRISE_2);
+  }
+
   if (ok){
     sess.right++; bt.right++;
     sess.combo++; sess.bestCombo = Math.max(sess.bestCombo, sess.combo);
@@ -3372,9 +3869,69 @@ function flyXP(n){
   document.body.appendChild(el);
   setTimeout(() => el.remove(), 1000);
 }
+/* Un mot raté doit revenir DANS le bloc, pas seulement demain.
+
+   Il revient trois questions plus loin, puis huit plus loin s'il est retombé —
+   c'est le rappel expansé : on rallonge l'intervalle à mesure que ça tient. Il
+   faut deux réussites pour qu'il sorte de la file.
+
+   La reprise PREND LA PLACE d'une question à venir, elle ne s'ajoute pas : le
+   bloc fait 24 questions, toujours, et le compteur ne ment pas. Rien n'est
+   perdu — les générateurs ont une réserve infinie, la question déplacée n'est
+   pas une question qu'on ne verra jamais. */
+function planifierReprise(it, delai){
+  if (sess.reprises.length >= REPRISE_FILE) return;
+  const vues = (it.reprise || 0);
+  if (vues >= REPRISE_MAX) return;          // un seul mot ne prend pas tout le bloc
+  const copie = Object.assign({}, it, {
+    reprise: vues + 1,
+    hits: it.hits || 0,
+    retry: false
+  });
+  delete copie.done;
+  sess.reprises.push({ item: copie, du: sess.i + delai });
+}
+function prendreReprise(pos){
+  if (!sess.reprises.length) return null;
+  // Une reprise au maximum toutes les trois questions. Sans ce plafond, une
+  // séance qui commence mal dégénère : la file reste pleine, chaque créneau est
+  // repris, et le bloc entier se réduit à quatre mots ressassés — mesuré sur un
+  // parcours à 0 % de réussite, les 24 questions étaient devenues 24 QCM, plus
+  // un seul « relier ». Le mot raté doit revenir ; il ne doit pas tout manger.
+  if (sess.dernierRep != null && pos - sess.dernierRep < REPRISE_1) return null;
+  // en fin de bloc, on place ce qui reste même si l'échéance n'est pas atteinte :
+  // une reprise jamais rejouée n'aurait servi à rien.
+  const fin = pos >= sess.items.length - sess.reprises.length;
+  let k = -1;
+  sess.reprises.forEach((r, i) => {
+    if ((fin || r.du <= pos) && (k < 0 || r.du < sess.reprises[k].du)) k = i;
+  });
+  if (k < 0) return null;
+  sess.dernierRep = pos;
+  return sess.reprises.splice(k, 1)[0].item;
+}
+
 function nextItem(){
   if (sess.i + 1 >= sess.items.length){ finish(); return; }
+  // une reprise due prend la place de la question suivante
+  const rep = prendreReprise(sess.i + 1);
+  if (rep) sess.items[sess.i + 1] = rep;
+  // palier : une respiration toutes les PALIER questions, pour que la ligne
+  // d'arrivée reste visible même dans un bloc long
+  const franchi = sess.i + 1;
+  if (franchi % PALIER === 0 && franchi < sess.items.length
+      && !sess.paliersVus.includes(franchi)){
+    sess.paliersVus.push(franchi);
+    sess.phase = "palier";
+    sess.i++;
+    sess.answered = false; sess.correct = null; sess.chosen = null; sess.accent = false; sess.artic = null;
+    sess.typed = ""; sess.built = []; sess.pool = null;
+    sess.pl = null; sess.pr = null; sess.link = {}; sess.sel = null;
+    render();
+    return;
+  }
   sess.i++; sess.answered = false; sess.correct = null; sess.chosen = null;
+  sess.accent = false; sess.artic = null;
   sess.typed = ""; sess.built = []; sess.pool = null;
   sess.pl = null; sess.pr = null; sess.link = {}; sess.sel = null;
   renderSession();
