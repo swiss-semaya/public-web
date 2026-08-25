@@ -140,7 +140,8 @@ body{margin:0;}
 }
 .theme-btn:hover{border-color:var(--ink-3);}
 
-.scores{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:16px;}
+.scores{display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-top:16px;}
+@media (max-width:460px){ .scores{grid-template-columns:repeat(2,1fr);} }
 .score{
   background:var(--panel-2); border-radius:var(--r-m); padding:10px 12px;
   display:flex; flex-direction:column; gap:2px;
@@ -342,6 +343,25 @@ body{margin:0;}
 .cta.ghost:hover{background:var(--panel-2); color:var(--ink);}
 /* « Vérifier » tant que le champ est vide : éteint, mais toujours cliquable —
    un bouton mort ne dit pas POURQUOI il est mort (voir bindQuiz). */
+/* le porte-monnaie */
+.pm-big{display:flex; align-items:baseline; justify-content:space-between; margin-bottom:10px;}
+.pm-big .k{font-family:var(--display); text-transform:uppercase; letter-spacing:.1em; font-size:11px; color:var(--ink-3);}
+.pm-big .v{font-family:var(--mono); font-variant-numeric:tabular-nums; font-size:30px; font-weight:700; color:var(--accent);}
+.pm-big .v small{font-size:14px; color:var(--ink-3); font-weight:500;}
+.pm-lig{display:flex; justify-content:space-between; align-items:baseline; padding:5px 0; font-size:13.5px; color:var(--ink-2);}
+.pm-lig b{font-family:var(--mono); font-variant-numeric:tabular-nums; color:var(--ink);}
+.pm-tarif{margin-top:10px; padding-top:10px; border-top:1px solid var(--line); font-size:12.5px; color:var(--ink-3); line-height:1.55;}
+.pm-jours{margin-top:8px; padding-top:6px; border-top:1px solid var(--line);}
+/* le bilan à copier, quand la page n'a pas le droit d'écrire un fichier */
+.sheet{position:fixed; inset:0; background:rgba(10,14,18,.55); z-index:60;
+  display:flex; align-items:flex-end; justify-content:center; padding:16px;}
+.sheet-in{background:var(--panel); border-radius:var(--r-l); padding:18px;
+  width:100%; max-width:560px; max-height:86vh; overflow:auto; box-shadow:var(--shadow-lift);}
+.sheet-in h3{margin:0 0 8px; font-family:var(--display); text-transform:uppercase; letter-spacing:.08em; font-size:15px;}
+.sheet-in p{margin:0 0 12px; font-size:13.5px; color:var(--ink-2); line-height:1.5;}
+.sheet-in textarea{width:100%; height:34vh; font-family:var(--mono); font-size:11px;
+  border:1px solid var(--line); border-radius:var(--r-m); padding:10px;
+  background:var(--panel-2); color:var(--ink-2); resize:vertical;}
 .cta.off{opacity:.38;}
 .cta.off:hover{background:var(--accent);}
 .vide{font-size:12.5px; color:var(--ko); margin-top:10px; line-height:1.45;}
@@ -500,6 +520,12 @@ const GENS = {};
    des réponses plausibles et fausses, tirées du même vocabulaire. C'est ce qui
    permet de proposer un mot neuf « à choisir » avant de le demander « à écrire ». */
 const DIST = {};
+/* Les listes de référence — le vocabulaire tel que l'enseignante le donne, avant
+   qu'on en fasse des exercices. Elles ne servent pas à l'app : elles servent à
+   `tests/validate.js`, qui vérifie que CHAQUE mot d'une liste est réellement
+   posé quelque part. Sans cette liste témoin, « tout le vocabulaire est
+   couvert » n'est qu'une intention. */
+const CORPUS = {};
 </script>
 <script>
 /* ===================== FRANÇAIS ===================== */
@@ -1103,7 +1129,11 @@ BANK.allemand = { label:"Allemand", short:"DE", themes:[
     {f:"qcm", q:"Le contraire de « gesund », c'est…", o:["ungesund","nicht gesund","schlecht gesund"], a:"ungesund", e:"Le préfixe un- inverse l'adjectif, comme en français « in- »."},
     {f:"qcm", q:"Quel est le passé composé de « probieren » ?", o:["hat probiert","hat geprobiert","ist probiert"], a:"hat probiert", e:"Les verbes en -ieren ne prennent JAMAIS le ge- du participe."},
     {f:"txt", q:"Traduis en allemand : *chaque jour* (en un mot)", a:"täglich", alt:["taeglich"], e:"täglich = jeden Tag."},
-    {f:"qcm", q:"Comment dit-on « mon plat préféré » ?", o:["mein Lieblingsessen","mein liebstes Essen","mein Liebling Essen"], a:"mein Lieblingsessen", e:"Lieblings- se soude au nom, en un seul mot."}
+    {f:"qcm", q:"Comment dit-on « mon plat préféré » ?", o:["mein Lieblingsessen","mein liebstes Essen","mein Liebling Essen"], a:"mein Lieblingsessen", e:"Lieblings- se soude au nom, en un seul mot."},
+    /* Ajouté le 25 août 2026 : le contrôle de couverture a trouvé que *süss*,
+       pourtant le premier des cinq adjectifs de goût, n'était jamais demandé —
+       il ne servait que de leurre dans les QCM des autres. */
+    {f:"txt", q:"Traduis en allemand : *sucré*", a:"süss", alt:["suess"], e:"süss — deux s, orthographe suisse (en Allemagne : süß). « Das ist mir zu süss. »"}
   ]},
 
 { id:"de-u5-7", t:"Unité 5 · Vocabulaire 7 : cuisiner", tier:"programme",
@@ -1412,6 +1442,12 @@ BANK.allemand = { label:"Allemand", short:"DE", themes:[
   GENS["de-u5-plus"] = function(et){
     return rnd(3) === 0 ? verbDrill(V8, 2, et) : vok8(et);
   };
+
+  /* La liste témoin, pour le contrôle de couverture (voir CORPUS plus haut).
+     `mots` = les noms, avec leur liste et leur genre ; `autres` = les
+     adjectifs et verbes de l'unité, qui ne sont pas des noms et vivaient donc
+     hors du tableau ; `verbes` = ceux que les drills conjuguent. */
+  CORPUS["de-u5"] = { mots: U5W, autres: U5A, verbes: V7.concat(V8).map(v => v.i) };
 })();
 </script>
 <script>
@@ -2075,6 +2111,91 @@ BANK.maths = { label:"Maths", short:"MA", themes:[
     {f:"txt", m:1, q:"Sac de 3 boules rouges et 5 bleues. Probabilité de tirer une rouge ? (fraction)", a:"3/8", e:"3 cas favorables sur 8 possibles."},
     {f:"qcm", q:"Quel indicateur est le moins sensible à une valeur extrême ?", o:["la médiane","la moyenne","l'étendue"], a:"la médiane", e:"Une valeur très grande tire la moyenne, pas la médiane."},
     {f:"txt", m:1, q:"Moyenne de 2, 8, 8, 6 ?", a:"6", e:"24 ÷ 4 = 6."}
+  ]},
+
+/* ============================================================
+   Quatre notions ajoutées le 25 août 2026 — les maths étaient la matière la
+   moins servie du programme (2 notions ouvertes sur 10 en cinq jours) alors
+   que c'est la plus cumulative. Elles complètent le programme de 11e là où il
+   manquait vraiment : les racines, Thalès, les fonctions affines — et les
+   problèmes à plusieurs étapes, qui sont le FORMAT réel des épreuves, pas un
+   chapitre de plus.
+   ============================================================ */
+
+{ id:"ma-rac", t:"Carrés et racines carrées", tier:"consolidation", gen:"ma-rac",
+  lesson:{ why:"La racine carrée est l'outil de Pythagore et de toute la géométrie de 11e. Elle s'apprivoise avec vingt carrés connus par cœur.",
+    pts:["Le carré fait l'aller : 7² = 7 × 7 = *49*. La racine carrée fait le retour : *√49 = 7*.",
+      "Les carrés parfaits jusqu'à 20², à savoir sans réfléchir : 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 121, 144, 169, 196, 225, 256, 289, 324, 361, 400.",
+      "Une racine qui ne tombe pas juste s'*encadre* : 30 est entre 25 et 36, donc √30 est entre *5 et 6*.",
+      "√(a × b) = √a × √b — c'est ce qui permet d'écrire √50 = √25 × √2 = *5√2*.",
+      "Une longueur ne peut pas être négative : en géométrie, on ne garde que la racine positive."],
+    ex:"L'aire d'un carré vaut 144 cm² → son côté vaut √144 = *12 cm*." },
+  items:[
+    {f:"txt", m:1, q:"Combien vaut 13² ?", a:"169", e:"13 × 13 = 169."},
+    {f:"txt", m:1, q:"Combien vaut √144 ?", a:"12", e:"12 × 12 = 144."},
+    {f:"qcm", q:"√30 est compris entre…", o:["5 et 6","4 et 5","6 et 7"], a:"5 et 6", e:"25 < 30 < 36, donc 5 < √30 < 6."},
+    {f:"txt", m:1, q:"Un carré a une aire de 81 cm². Son côté, en cm ?", a:"9", e:"√81 = 9."},
+    {f:"qcm", q:"√50 s'écrit aussi…", o:["5√2","2√5","25√2"], a:"5√2", e:"50 = 25 × 2, et √25 = 5."},
+    {f:"txt", m:1, q:"Triangle rectangle de côtés 2 et 3 : combien vaut le carré de l'hypoténuse ?", a:"13", e:"4 + 9 = 13. L'hypoténuse vaut donc √13, qui ne tombe pas juste."},
+    {f:"qcm", q:"Lequel n'est PAS un carré parfait ?", o:["50","49","64"], a:"50", e:"49 = 7², 64 = 8², mais 50 tombe entre les deux."},
+    {f:"txt", m:1, q:"Combien vaut 0,5² ?", a:"0.25", e:"0,5 × 0,5 = 0,25 — un carré peut être plus petit que le nombre de départ."}
+  ]},
+
+{ id:"ma-thales", t:"Thalès, échelles et agrandissements", tier:"consolidation", gen:"ma-thales",
+  lesson:{ why:"Une seule idée — la proportionnalité des longueurs — qui sert pour les cartes, les maquettes, les ombres et la moitié des exercices de géométrie.",
+    pts:["Dans un triangle, si (MN) est *parallèle* à (BC), les longueurs sont proportionnelles : AM/AB = AN/AC = MN/BC.",
+      "Le *rapport* k se calcule toujours entre deux longueurs qui se correspondent — jamais entre deux longueurs de la même figure.",
+      "Un agrandissement de rapport k multiplie les longueurs par k, les *aires par k²* et les *volumes par k³*.",
+      "Une échelle est un rapport : 1 : 25 000 signifie 1 cm sur la carte pour 25 000 cm en vrai, c'est-à-dire *250 m*.",
+      "Le piège classique : doubler les longueurs ne double pas l'aire, il la *quadruple*."],
+    ex:"AM = 3, AB = 9 → k = 1/3. Si AN = 4, alors AC = 4 × 3 = *12*." },
+  items:[
+    {f:"txt", m:1, q:"(MN) ∥ (BC), AM = 3, AB = 9, AN = 4. Combien vaut AC ?", a:"12", e:"AM/AB = 1/3, donc AN/AC = 1/3 : AC = 4 × 3 = 12."},
+    {f:"qcm", q:"Un agrandissement de rapport 3 multiplie l'aire par…", o:["9","3","6"], a:"9", e:"Les aires sont multipliées par k² = 3² = 9."},
+    {f:"txt", m:1, q:"Une photo de 15 cm de long est agrandie au rapport 2,5. Nouvelle longueur, en cm ?", a:"37.5", e:"15 × 2,5 = 37,5."},
+    {f:"qcm", q:"Échelle 1 : 50 000. Trois centimètres sur la carte représentent…", o:["1,5 km","150 m","15 km"], a:"1,5 km", e:"3 × 50 000 = 150 000 cm = 1 500 m = 1,5 km."},
+    {f:"txt", m:1, q:"Un bâton de 1 m projette 0,5 m d'ombre ; un arbre en projette 6 m. Hauteur de l'arbre, en m ?", a:"12", e:"Le rapport est 2 (1 ÷ 0,5), donc 6 × 2 = 12 m."},
+    {f:"qcm", q:"Toutes les longueurs d'un cube sont doublées. Son volume est multiplié par…", o:["8","2","4"], a:"8", e:"Les volumes suivent k³ = 2³ = 8."},
+    {f:"txt", m:1, q:"Deux triangles semblables : un côté de 4 correspond à un côté de 10. Un autre côté du petit vaut 6 ; combien vaut le sien dans le grand ?", a:"15", e:"Rapport 10/4 = 2,5, donc 6 × 2,5 = 15."},
+    {f:"qcm", q:"Si (MN) ∥ (BC), alors…", o:["AM/AB = AN/AC","AM/AB = AC/AN","AM × AB = AN × AC"], a:"AM/AB = AN/AC", e:"On garde le même sens de lecture des deux côtés de l'égalité."}
+  ]},
+
+{ id:"ma-fonc", t:"Fonctions affines et droites", tier:"anticipation", gen:"ma-fonc",
+  lesson:{ why:"Le chapitre qui structure toute la fin de la 11e — et la lecture d'un graphique de tarif, de vitesse ou d'abonnement.",
+    pts:["Une fonction affine s'écrit *f(x) = ax + b* : *a* est la *pente*, *b* l'*ordonnée à l'origine*.",
+      "Calculer une *image*, c'est remplacer x : f(x) = 3x − 2 donne f(4) = 12 − 2 = *10*.",
+      "Chercher un *antécédent*, c'est résoudre une équation : f(x) = 16 avec 5x + 1 → 5x = 15 → x = *3*.",
+      "La représentation est une *droite* : elle coupe l'axe des ordonnées en b, elle monte si a > 0, elle descend si a < 0.",
+      "Si b = 0, la fonction est *linéaire* : la droite passe par l'origine, et c'est exactement une situation de proportionnalité."],
+    ex:"Un taxi à 5 CHF de prise en charge plus 2 CHF/km, c'est f(x) = 2x + 5 : pour 8 km, 21 CHF." },
+  items:[
+    {f:"txt", m:1, q:"f(x) = 3x − 2. Combien vaut f(4) ?", a:"10", e:"3 × 4 = 12, puis 12 − 2 = 10."},
+    {f:"txt", m:1, q:"f(x) = −2x + 7. Combien vaut f(3) ?", a:"1", e:"−2 × 3 = −6, puis −6 + 7 = 1."},
+    {f:"txt", m:1, q:"f(x) = 5x + 1. Pour quel x a-t-on f(x) = 16 ?", a:"3", e:"5x = 15, donc x = 3."},
+    {f:"qcm", q:"Dans f(x) = ax + b, le nombre b est…", o:["l'ordonnée à l'origine","la pente","l'abscisse du point"], a:"l'ordonnée à l'origine", e:"C'est la valeur de f(0) : là où la droite coupe l'axe vertical."},
+    {f:"qcm", q:"La droite de f(x) = −3x + 2…", o:["descend","monte","est horizontale"], a:"descend", e:"La pente est négative."},
+    {f:"qcm", q:"Laquelle de ces fonctions est linéaire (donc proportionnelle) ?", o:["f(x) = 4x","f(x) = 4x + 1","f(x) = 4"], a:"f(x) = 4x", e:"Linéaire = affine avec b = 0 : la droite passe par l'origine."},
+    {f:"txt", m:1, q:"Un taxi prend 5 CHF au départ, puis 2 CHF par km. Prix pour 8 km, en CHF ?", a:"21", e:"f(x) = 2x + 5 → 16 + 5 = 21."},
+    {f:"txt", m:1, q:"f(x) = 2x + 3. En quelle ordonnée la droite coupe-t-elle l'axe vertical ?", a:"3", e:"f(0) = 3 : c'est b."}
+  ]},
+
+{ id:"ma-pbm", t:"Problèmes en plusieurs étapes", tier:"consolidation", gen:"ma-pbm",
+  lesson:{ why:"Ce n'est pas un chapitre de plus : c'est le format réel des épreuves. Presque tout s'y joue avant le calcul, dans la mise en route.",
+    pts:["Trois questions, toujours dans cet ordre : *qu'est-ce qu'on cherche ?*, *qu'est-ce qu'on sait ?*, *quelle opération relie les deux ?*",
+      "Deux étapes : le résultat de la première sert d'entrée à la seconde. *Écris-le* — le garder en tête est la première cause d'erreur.",
+      "Vitesse : *v = d ÷ t*, *d = v × t*, *t = d ÷ v*. Une durée de 2 h 30 vaut 2,5 h, jamais 2,30.",
+      "Un pourcentage s'applique toujours à un *total* : la vraie question est « lequel ? ».",
+      "Avant d'écrire le résultat, vérifie l'*ordre de grandeur* : un prix négatif ou un arbre de 400 m se voit sans calculer."],
+    ex:"Vélo à 480 CHF, soldé de 25 %, plus 10 CHF de frais : 480 × 0,75 = 360, puis 360 + 10 = *370 CHF*." },
+  items:[
+    {f:"txt", m:1, q:"Un vélo à 480 CHF est soldé de 25 %, puis on ajoute 10 CHF de frais. Prix payé, en CHF ?", a:"370", e:"480 × 0,75 = 360, puis + 10 = 370."},
+    {f:"txt", m:1, q:"Une voiture roule à 90 km/h pendant 2 h 30. Distance parcourue, en km ?", a:"225", e:"2 h 30 = 2,5 h, donc 90 × 2,5 = 225."},
+    {f:"txt", m:1, q:"Trois pizzas à 14 CHF sont partagées entre 6 personnes. Part de chacun, en CHF ?", a:"7", e:"3 × 14 = 42, puis 42 ÷ 6 = 7."},
+    {f:"txt", m:1, q:"Un réservoir de 60 L est rempli aux 3/4, puis on en retire 15 L. Combien reste-t-il de litres ?", a:"30", e:"60 × 3/4 = 45, puis 45 − 15 = 30."},
+    {f:"txt", m:1, q:"Un train part à 8 h 45 et arrive à 11 h 20. Durée du trajet, en minutes ?", a:"155", e:"De 8 h 45 à 11 h 45 il y a 180 min ; on retire 25 min → 155."},
+    {f:"txt", m:1, q:"Dans une classe de 24 élèves, 5/8 sont des filles. Combien y a-t-il de garçons ?", a:"9", e:"5/8 de 24 = 15 filles, donc 24 − 15 = 9."},
+    {f:"qcm", q:"Pour trouver une durée à partir d'une distance et d'une vitesse, on…", o:["divise la distance par la vitesse","les multiplie","divise la vitesse par la distance"], a:"divise la distance par la vitesse", e:"t = d ÷ v."},
+    {f:"txt", m:1, q:"Un livre coûte 32 CHF, plus 8 % de frais de port. Prix total, en CHF ?", a:"34.56", e:"32 × 1,08 = 34,56."}
   ]}
 
 ]};
@@ -2247,6 +2368,100 @@ BANK.maths = { label:"Maths", short:"MA", themes:[
     return { f:"txt", m:1, q:"Sac de "+r+" boules rouges et "+b+" bleues. Probabilité de tirer une rouge ? (fraction)",
       a:frac(r, r+b), alt:[r+"/"+(r+b)], e:r+" cas favorables sur "+(r+b)+" → "+frac(r,r+b)+"." };
   };
+
+  /* ---- les quatre notions ajoutées le 25 août 2026 ----
+     Même exigence que les autres : jamais de NaN, jamais de résultat qui ne
+     tombe pas juste, et une explication qui montre l'étape intermédiaire —
+     c'est elle qu'on cherche à installer, pas le résultat. */
+
+  const CARRES = [];
+  for (let i = 2; i <= 20; i++) CARRES.push(i);
+
+  GENS["ma-rac"] = function(){
+    const t = rnd(4);
+    if (t === 0){ const n = CARRES[rnd(CARRES.length)];
+      return { f:"txt", m:1, q:"Combien vaut "+n+"² ?", a:String(n*n),
+        e:n+" × "+n+" = "+(n*n)+"." }; }
+    if (t === 1){ const n = CARRES[rnd(CARRES.length)];
+      return { f:"txt", m:1, q:"Combien vaut √"+(n*n)+" ?", a:String(n),
+        e:n+" × "+n+" = "+(n*n)+", donc √"+(n*n)+" = "+n+"." }; }
+    if (t === 2){
+      // un nombre qui n'est PAS un carré parfait, à encadrer
+      let n = 0, k = 0;
+      do { n = ri(5, 399); k = Math.floor(Math.sqrt(n)); } while (k*k === n);
+      return { f:"txt", m:1, q:"√"+n+" est entre deux entiers consécutifs. Donne le plus petit.",
+        a:String(k), e:k+"² = "+(k*k)+" et "+(k+1)+"² = "+((k+1)*(k+1))+", donc "+k+" < √"+n+" < "+(k+1)+"." }; }
+    const c = CARRES[rnd(CARRES.length)];
+    return { f:"txt", m:1, q:"Un carré a une aire de "+(c*c)+" cm². Son côté, en cm ?", a:String(c),
+      e:"Le côté est la racine de l'aire : √"+(c*c)+" = "+c+" cm." };
+  };
+
+  GENS["ma-thales"] = function(){
+    const t = rnd(4);
+    if (t === 0){ const k = ri(2,5), am = ri(2,6), an = ri(2,7);
+      return { f:"txt", m:1, q:"(MN) ∥ (BC), AM = "+am+", AB = "+(am*k)+", AN = "+an+". Combien vaut AC ?",
+        a:String(an*k), e:"AM/AB = "+am+"/"+(am*k)+" = 1/"+k+", donc AC = "+an+" × "+k+" = "+(an*k)+"." }; }
+    if (t === 1){ const k = ri(2,5), quoi = rnd(2);
+      return { f:"qcm", q:"Un agrandissement de rapport "+k+" multiplie "+(quoi ? "les volumes" : "les aires")+" par…",
+        o:[String(quoi ? k*k*k : k*k), String(k), String(quoi ? k*k : k*k*k)],
+        a:String(quoi ? k*k*k : k*k),
+        e:"Les longueurs suivent k, les aires k², les volumes k³ — ici "+k+(quoi ? "³ = "+(k*k*k) : "² = "+(k*k))+"." }; }
+    if (t === 2){ const e = [25000, 50000, 100000][rnd(3)], d = ri(2,8);
+      const m = d * e / 100;                                  // cm → m
+      return { f:"txt", m:1, q:"Échelle 1 : "+e+". "+d+" cm sur la carte, combien de mètres en vrai ?",
+        a:String(m), e:d+" × "+e+" = "+(d*e)+" cm, soit "+m+" m." }; }
+    const k = ri(2,5), h = ri(1,3), om = ri(2,6);
+    return { f:"txt", m:1, q:"Un bâton de "+h+" m projette "+om+" m d'ombre. Au même moment un arbre en projette "+(om*k)+" m. Hauteur de l'arbre, en m ?",
+      a:String(h*k), e:"L'ombre est "+k+" fois plus longue, donc l'arbre est "+k+" fois plus haut : "+h+" × "+k+" = "+(h*k)+" m." };
+  };
+
+  GENS["ma-fonc"] = function(){
+    const t = rnd(4);
+    const a = [ri(2,6), -ri(2,6)][rnd(2)], b = ri(-8,8);
+    const ecr = "f(x) = "+(a === 1 ? "x" : a === -1 ? "−x" : a+"x")+(b >= 0 ? " + "+b : " − "+(-b));
+    if (t === 0){ const x = ri(-4,6);
+      return { f:"txt", m:1, q:ecr+". Combien vaut f("+x+") ?", a:String(a*x+b),
+        e:a+" × "+x+" = "+(a*x)+", puis "+(a*x)+(b >= 0 ? " + "+b : " − "+(-b))+" = "+(a*x+b)+"." }; }
+    if (t === 1){ const x = ri(1,7), y = a*x+b;
+      return { f:"txt", m:1, q:ecr+". Pour quel x a-t-on f(x) = "+y+" ?", a:String(x),
+        e:a+"x = "+y+(b >= 0 ? " − "+b : " + "+(-b))+" = "+(a*x)+", donc x = "+x+"." }; }
+    if (t === 2){
+      return { f:"qcm", q:"La droite de "+ecr+"…", o:["monte","descend","est horizontale"],
+        a: a > 0 ? "monte" : "descend",
+        e:"La pente vaut "+a+" : "+(a > 0 ? "positive, la droite monte" : "négative, la droite descend")+"." }; }
+    const fixe = ri(3,9), km = ri(2,5), n = ri(3,12);
+    return { f:"txt", m:1, q:"Un taxi prend "+fixe+" CHF au départ, puis "+km+" CHF par kilomètre. Prix pour "+n+" km, en CHF ?",
+      a:String(fixe + km*n), e:"f(x) = "+km+"x + "+fixe+" → "+km+" × "+n+" = "+(km*n)+", puis + "+fixe+" = "+(fixe+km*n)+"." };
+  };
+
+  GENS["ma-pbm"] = function(){
+    const t = rnd(5);
+    if (t === 0){ const p = ri(6,30) * 20, r = [10,20,25,50][rnd(4)], f = ri(1,3) * 5;
+      // prix multiple de 20 : les quatre remises tombent toujours juste
+      const solde = p * (100 - r) / 100;
+      const coef = String((100 - r) / 100).replace(".", ",");
+      return { f:"txt", m:1, q:"Un article à "+p+" CHF est soldé de "+r+" %, puis on ajoute "+f+" CHF de frais. Prix payé, en CHF ?",
+        a:String(solde + f), e:p+" × "+coef+" = "+solde+", puis + "+f+" = "+(solde+f)+"." }; }
+    if (t === 1){ const v = ri(6,12) * 10, h = [1, 1.5, 2, 2.5, 3][rnd(5)];
+      const txt = h === Math.floor(h) ? h+" h" : Math.floor(h)+" h 30";
+      const hfr = String(h).replace(".", ",");
+      return { f:"txt", m:1, q:"Une voiture roule à "+v+" km/h pendant "+txt+". Distance parcourue, en km ?",
+        a:String(v*h), e:txt+" = "+hfr+" h, donc "+v+" × "+hfr+" = "+(v*h)+" km." }; }
+    if (t === 2){ const n = ri(2,5), p = ri(8,18), g = [2,3,4,6][rnd(4)];
+      const tot = n*p;
+      if (tot % g !== 0) return GENS["ma-pbm"]();
+      return { f:"txt", m:1, q:n+" pizzas à "+p+" CHF sont partagées entre "+g+" personnes. Part de chacun, en CHF ?",
+        a:String(tot/g), e:n+" × "+p+" = "+tot+" CHF, puis "+tot+" ÷ "+g+" = "+(tot/g)+"." }; }
+    if (t === 3){ const h1 = ri(6,10), m1 = [0,15,30,45][rnd(4)], dur = ri(1,3) * 60 + [5,20,35,50][rnd(4)];
+      const fin = h1 * 60 + m1 + dur;
+      const hh = Math.floor(fin / 60), mm = fin % 60;
+      const deux = n => String(n).padStart(2, "0");
+      return { f:"txt", m:1, q:"Un train part à "+h1+" h "+deux(m1)+" et arrive à "+hh+" h "+deux(mm)+". Durée du trajet, en minutes ?",
+        a:String(dur), e:"De "+h1+" h "+deux(m1)+" à "+hh+" h "+deux(mm)+" : "+Math.floor(dur/60)+" h "+deux(dur%60)+", soit "+dur+" minutes." }; }
+    const den = [4,6,8][rnd(3)], num = ri(1, den-1), tot = den * ri(2,5);
+    return { f:"txt", m:1, q:"Dans une classe de "+tot+" élèves, "+num+"/"+den+" sont des filles. Combien y a-t-il de garçons ?",
+      a:String(tot - tot*num/den), e:num+"/"+den+" de "+tot+" = "+(tot*num/den)+" filles, donc "+tot+" − "+(tot*num/den)+" = "+(tot - tot*num/den)+" garçons." };
+  };
 })();
 </script>
 <!-- CONTENT_SLOT -->
@@ -2264,9 +2479,39 @@ const KEY   = "onze-v1";
 const ELEVE = "";                      // signe le bilan ; vidé dans le build public
 const BOXES = [0, 1, 3, 7, 14, 30];        // jours d'attente par boîte (1..5)
 const BOX_LABEL = ["neuf","chaque j.","3 jours","1 sem.","2 sem.","acquis"];
+/* La rotation de la « leçon du jour ». Les maths y figurent DEUX FOIS
+   (25 août 2026) : en cinq jours d'usage réel, l'élève avait ouvert 4 notions de
+   français, 3 d'allemand, 1 d'anglais et seulement 2 de maths sur 14 — une
+   matière par jour, c'est une notion de maths tous les quatre jours, et la
+   matière la plus cumulative du programme était la moins servie. Les maths
+   passent donc deux fois par cycle de cinq. La révision et le défi mixte ne
+   changent pas : eux suivent les boîtes. */
 const ORDER = ["francais","allemand","anglais","maths"];
+const ROTATION = ["francais","maths","allemand","maths","anglais"];
 const SCHOOL_START = "2026-08-24";          // rentrée : la ligne d'arrivée
 const XP_RIGHT = 10, XP_COMBO = 5, XP_BLOCK = 25, XP_DAY = 50;
+
+/* ---------- le porte-monnaie (25 août 2026) ----------
+
+   Le travail est payé, en argent réel, et le tarif est public — c'est tout
+   l'intérêt : il doit pouvoir compter ce qu'il gagne pendant qu'il le gagne.
+
+   · une bonne réponse : 10 centimes
+   · un essai faux :      6 centimes — il rapporte quand même, sinon la
+     stratégie payante serait de ne répondre qu'aux questions sûres, ou de ne
+     pas répondre du tout. C'est exactement ce qui s'est passé le 23 août.
+   · un bloc terminé :   40 centimes — le bloc est tout-ou-rien, et quitter en
+     cours de route ne rapporte rien.
+
+   Journée complète (44 questions, 3 blocs) : environ 4.90 CHF à 80 % de
+   réussite, 4.20 au pire, 5.60 au mieux. La cible fixée est ~5 CHF.
+
+   ⚠ SEULS LES PREMIERS PASSAGES SONT PAYÉS. Une reprise entraîne, elle ne
+   rapporte pas : sans cette règle, rater exprès pour faire revenir la question
+   serait une machine à centimes. C'est le même invariant que la mesure.
+   Le nombre de questions par jour étant fixe, aucun plafond n'est nécessaire. */
+const CTS_JUSTE = 10, CTS_ESSAI = 6, CTS_BLOC = 40;
+const chf = cts => (cts / 100).toLocaleString("fr-CH", { minimumFractionDigits:2, maximumFractionDigits:2 });
 
 /* Longueur des blocs (21 août 2026). Huit questions ne suffisaient pas : le
    premier TA d'allemand est arrivé avec deux réponses vides et six articles
@@ -2286,7 +2531,17 @@ const XP_RIGHT = 10, XP_COMBO = 5, XP_BLOCK = 25, XP_DAY = 50;
    le réussir DEUX fois pour qu'il cesse de revenir. C'est le même critère que
    le rachat entre sessions (`miss.s >= 2`), appliqué à l'intérieur du bloc. */
 const BLOC_LONG = 16, BLOC_DEFI = 12, PALIER = 8;
-const REPRISE_1 = 3, REPRISE_2 = 8, REPRISE_MAX = 4, REPRISE_FILE = 4;
+
+/* Les reprises, resserrées le 25 août 2026 : « moins de répétitions ».
+   Un mot raté revenait jusqu'à QUATRE fois dans le même bloc, et deux reprises
+   pouvaient se suivre à trois questions d'intervalle — sur un bloc de 16 ça
+   donnait un ressassement, plus une révision. Un mot revient maintenant au plus
+   DEUX fois (donc : la faute, la reprise, la confirmation), avec quatre
+   questions d'écart au minimum, trois en file au plus, et un plafond dur d'un
+   quart du bloc. Le rappel expansé reste : +3 questions, puis +8. */
+const REPRISE_1 = 3, REPRISE_2 = 8, REPRISE_MAX = 2, REPRISE_FILE = 3;
+const REPRISE_ECART = 4;                   // questions minimum entre deux reprises
+const REPRISE_PART = 4;                    // au plus un quart du bloc en reprises
 
 /* ---------- dates (locales, jamais UTC) ---------- */
 function iso(d){
@@ -2410,9 +2665,9 @@ let S = fresh();
 function load(){
   try{
     const raw = localStorage.getItem(KEY);
-    if (raw){ const o = JSON.parse(raw); if (o && (o.v === 1 || o.v === 2)) S = o; }
+    if (raw){ const o = JSON.parse(raw); if (o && o.v >= 1 && o.v <= 3) S = o; }
   }catch(e){ /* premier lancement, ou stockage indisponible */ }
-  S.v = 2;
+  S.v = 3;
   if (!S.errors) S.errors = [];
   THEMES.forEach(t => {
     if (!S.themes[t.id]) S.themes[t.id] = { box:0, due:today(), seen:0, right:0, used:[] };
@@ -2420,6 +2675,14 @@ function load(){
     if (!st.miss) st.miss = {};
     if (!st.hist) st.hist = [];
   });
+  // v3 : le porte-monnaie. Les journées d'avant le tarif sont chiffrées une
+  // fois pour toutes ici, pour que le montant ne bouge plus si le tarif change.
+  Object.keys(S.days || {}).forEach(d => {
+    if (S.days[d] && S.days[d].cts == null) S.days[d].cts = ctsJour(S.days[d]);
+  });
+  if (!S.wallet) S.wallet = { verse:0 };
+  if (S.wallet.verse == null) S.wallet.verse = 0;
+  S.wallet.cts = ctsDepuisJours(S.days);
   save();
 }
 /* Le stockage peut être refusé : navigation privée, quota plein, ou une page
@@ -2685,8 +2948,8 @@ function todaysPlan(){
   // 2. Leçon du jour : une liste jamais vue dont le test approche passe devant
   // la rotation ; sinon, nouvelle notion, matières en rotation
   let lead = urgent.filter(t => S.themes[t.id].box === 0)[0] || null;
-  for (let k = 0; k < ORDER.length && !lead; k++){
-    const sk = ORDER[(dayIx + k) % ORDER.length];
+  for (let k = 0; k < ROTATION.length && !lead; k++){
+    const sk = ROTATION[(dayIx + k) % ROTATION.length];
     const cands = newThemes(sk);
     if (cands.length) lead = cands.sort((a,b) => a.order - b.order)[0];
   }
@@ -2739,10 +3002,14 @@ function refreshBadges(){
 /* ---------- fin de bloc : compta ---------- */
 function recordBlock(block, res){
   const t0 = today();
-  const d = S.days[t0] || { blocks:[], xp:0, right:0, total:0 };
+  const d = S.days[t0] || { blocks:[], xp:0, right:0, total:0, cts:0 };
   if (!d.blocks.includes(block.kind)) d.blocks.push(block.kind);
   d.xp += res.xp; d.right += res.right; d.total += res.total;
+  // le bloc n'est payé QUE terminé — recordBlock n'est appelé que par finish()
+  d.cts = (d.cts || 0) + (res.cts || 0) + CTS_BLOC;
   S.days[t0] = d;
+  S.wallet = S.wallet || { verse:0 };
+  S.wallet.cts = ctsDepuisJours(S.days);
 
   // série : un bloc suffit à tenir la journée
   if (S.lastDay !== t0){
@@ -2846,6 +3113,7 @@ function homeHTML(){
       <div class="score hot"><span class="k">Série</span><span class="v">${S.streak}<span style="font-size:12px;color:var(--ink-3)"> j</span></span></div>
       <div class="score"><span class="k">XP</span><span class="v">${S.xp.toLocaleString("fr-CH")}</span></div>
       <div class="score"><span class="k">Acquis</span><span class="v">${acq}<span style="font-size:12px;color:var(--ink-3)">/${THEMES.length}</span></span></div>
+      <div class="score hot"><span class="k">À toucher</span><span class="v">${chf(aVerser())}<span style="font-size:12px;color:var(--ink-3)"> CHF</span></span></div>
     </div>
     <div class="weekbar">
       <div class="lab"><span>Semaine · ${weekDone}/5 jours</span><span>${esc(countdown)}</span></div>
@@ -2862,6 +3130,11 @@ function homeHTML(){
       <div class="blocks">
         ${plan.map(blockHTML).join("")}
       </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-h"><h2>Porte-monnaie</h2><span class="note">${chf((S.wallet||{}).cts||0)} CHF gagnés en tout</span></div>
+      <div class="card">${porteMonnaieHTML()}</div>
     </div>
 
     <div class="sec">
@@ -2939,6 +3212,52 @@ function blockHTML(b){
   </button>`;
 }
 
+/* ---------- le porte-monnaie ----------
+   Ce que le travail rapporte, en argent réel, visible pendant qu'il se gagne.
+   Le tarif est affiché : c'est ce qui permet de compter dans sa tête au lieu de
+   découvrir un chiffre à la fin. « Gagné » ne baisse jamais — on ne retire pas
+   ce qui a été mérité ; seul « à toucher » redescend, quand le parent paie. */
+function aVerser(){
+  const w = S.wallet || {};
+  return Math.max(0, (w.cts || 0) - (w.verse || 0));
+}
+/* Ce que vaut une journée, annoncé honnêtement : le maximum suppose zéro faute
+   (et donc zéro reprise) ; la valeur « typique » retire les créneaux mangés par
+   les reprises, qui ne sont pas payés. Promettre le maximum serait un mensonge
+   d'un franc par jour. */
+function jourMax(){ return (BLOC_LONG * 2 + BLOC_DEFI) * CTS_JUSTE + 3 * CTS_BLOC; }
+function jourTypique(){
+  const q = (BLOC_LONG * 2 + BLOC_DEFI) * 0.9;          // ~10 % des créneaux en reprises
+  return Math.round(q * (CTS_JUSTE * 0.8 + CTS_ESSAI * 0.2)) + 3 * CTS_BLOC;
+}
+function porteMonnaieHTML(){
+  const w = S.wallet || {};
+  const t0 = today();
+  const jours = Object.keys(S.days || {}).sort().slice(-7).reverse();
+  return `
+  <div class="pm">
+    <div class="pm-big">
+      <span class="k">À toucher</span>
+      <span class="v">${chf(aVerser())} <small>CHF</small></span>
+    </div>
+    <div class="pm-lig"><span>Gagné depuis le début</span><b>${chf(w.cts || 0)}</b></div>
+    <div class="pm-lig"><span>Déjà versé par Papa</span><b>${chf(w.verse || 0)}</b></div>
+  </div>
+  <div class="pm-tarif">
+    <b>${CTS_JUSTE} ct</b> par bonne réponse · <b>${CTS_ESSAI} ct</b> par essai, même faux ·
+    <b>${CTS_BLOC} ct</b> par bloc terminé. Une journée complète vaut environ
+    <b>${chf(jourTypique())} CHF</b>, et <b>${chf(jourMax())} CHF</b> si tout est juste.
+    Les questions qui reviennent dans le bloc ne sont pas payées une seconde fois.
+  </div>
+  ${jours.length ? `<div class="pm-jours">${jours.map(d => {
+    const j = S.days[d] || {};
+    return `<div class="pm-lig"><span>${d === t0 ? "Aujourd'hui" : frDate(d)}
+      <small style="color:var(--ink-3)">· ${j.right || 0}/${j.total || 0}</small></span>
+      <b>${chf(ctsJour(j))}</b></div>`;
+  }).join("")}</div>` : ""}
+  <button class="cta ghost" id="paye">Papa m'a payé</button>`;
+}
+
 function weakHTML(){
   const seen = seenThemes().map(t => ({ t, m: mastery(t) })).filter(x => x.m !== null);
   if (!seen.length) return `<div class="empty">Rien encore : fais tes premiers blocs et je repère tout seul ce qui accroche. Les notions ratées reviennent dès le lendemain.</div>`;
@@ -3008,6 +3327,18 @@ function bindHome(){
       impf.value = "";                       // reprendre deux fois de suite reste possible
     });
   }
+  const paye = root.querySelector("#paye");
+  if (paye) paye.addEventListener("click", () => {
+    const du = aVerser();
+    if (!du){ toast("Rien à toucher pour l'instant — au travail !"); return; }
+    // remettre le compteur à zéro est un fait du monde réel : ça se confirme,
+    // avec le montant sous les yeux, et ça n'efface jamais le total gagné.
+    if (!confirm("Papa t'a bien versé " + chf(du) + " CHF ?\n\nLe compteur « à toucher » repart de zéro. "
+                 + "Ton total gagné (" + chf((S.wallet||{}).cts||0) + " CHF) ne bouge pas.")) return;
+    S.wallet.verse = S.wallet.cts;
+    save(); render();
+    toast(chf(du) + " CHF encaissés 💰");
+  });
   const depon = root.querySelector("#depon");
   if (depon) depon.addEventListener("click", activerDepot);
   const depoff = root.querySelector("#depoff");
@@ -3065,7 +3396,8 @@ function bilan(){
 
   const activite = Object.keys(S.days).sort().slice(-21).map(d => ({
     jour: d, blocs: (S.days[d].blocks || []).length,
-    justes: S.days[d].right, questions: S.days[d].total, xp: S.days[d].xp
+    justes: S.days[d].right, questions: S.days[d].total, xp: S.days[d].xp,
+    cts: ctsJour(S.days[d])
   }));
 
   // les fautes récentes, en clair : question, bonne réponse, réponse donnée
@@ -3103,8 +3435,15 @@ function bilan(){
   }).sort((a,b) => (a.prochain_test || "9999").localeCompare(b.prochain_test || "9999"));
 
   return {
-    app: "onze", format: 3, eleve: ELEVE, genere: t0,
+    app: "onze", format: 4, eleve: ELEVE, genere: t0,
     depuis: S.start,
+    // le porte-monnaie : c'est le chiffre que le parent doit voir sans ouvrir l'app
+    porte_monnaie: {
+      gagne_cts: (S.wallet || {}).cts || 0,
+      verse_cts: (S.wallet || {}).verse || 0,
+      a_verser_cts: aVerser(),
+      tarif: { juste: CTS_JUSTE, essai: CTS_ESSAI, bloc: CTS_BLOC }
+    },
     jours_avant_rentree: Math.max(0, diffDays(t0, SCHOOL_START)),
     serie: { actuelle: S.streak, record: S.best },
     xp: S.xp,
@@ -3147,10 +3486,17 @@ function envoyerBilan(){
     }
   }catch(e){ /* File ou canShare indisponible : on télécharge */ }
 
-  telecharger(blob, nom);
+  telecharger(blob, nom, txt);
 }
 
-function telecharger(blob, nom){
+function telecharger(blob, nom, txt){
+  /* Dans un CADRE — c'est le cas de la page publiée en artefact — le
+     téléchargement est refusé par le bac à sable, et il échoue en SILENCE :
+     le clic ne fait rien, aucune erreur n'est levée, et le message
+     « Bilan enregistré » mentirait. Or c'est précisément le moment où l'élève
+     croit avoir envoyé son travail. On lui donne donc le texte à copier, ce
+     qui marche partout. */
+  if (window !== window.top){ panneauTexte(txt, nom); return; }
   try{
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -3159,8 +3505,42 @@ function telecharger(blob, nom){
     setTimeout(() => URL.revokeObjectURL(url), 4000);
     toast("Bilan enregistré : « " + nom + " ». Dépose-le dans kDrive.");
   }catch(e){
-    toast("Impossible d'enregistrer le bilan sur cet appareil.");
+    panneauTexte(txt, nom);
   }
+}
+
+/* Le bilan à copier, quand aucun fichier ne peut sortir. */
+function panneauTexte(txt, nom){
+  const fond = document.createElement("div");
+  fond.className = "sheet";
+  fond.innerHTML = `
+    <div class="sheet-in">
+      <h3>Copie ton bilan</h3>
+      <p>Ici, la page n'a pas le droit d'enregistrer un fichier. Copie tout le
+         texte et colle-le dans un message à Papa — c'est exactement le même
+         bilan.</p>
+      <textarea readonly id="bt"></textarea>
+      <div class="cta-row">
+        <button class="cta" id="btcopy">Tout copier</button>
+        <button class="cta ghost" id="btclose">Fermer</button>
+      </div>
+      <div class="pm-tarif">Fichier : ${esc(nom)}</div>
+    </div>`;
+  document.body.appendChild(fond);
+  const zone = fond.querySelector("#bt");
+  zone.value = txt;
+  fond.querySelector("#btcopy").addEventListener("click", () => {
+    zone.focus(); zone.select();
+    let fait = false;
+    try { fait = document.execCommand("copy"); } catch(e){ fait = false; }
+    if (fait) toast("Bilan copié. Colle-le dans un message à Papa.");
+    else if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(txt)
+        .then(() => toast("Bilan copié. Colle-le dans un message à Papa."))
+        .catch(() => toast("Sélectionne le texte et copie-le à la main."));
+    } else toast("Sélectionne le texte et copie-le à la main.");
+  });
+  fond.querySelector("#btclose").addEventListener("click", () => fond.remove());
 }
 
 /* ---------- le dépôt automatique (ordinateur seulement) ----------
@@ -3207,18 +3587,23 @@ function fusionJours(a, b){
   const out = {};
   Object.keys(a || {}).concat(Object.keys(b || {})).forEach(d => {
     const x = (a || {})[d], y = (b || {})[d];
-    if (!x || !y){ out[d] = x || y; return; }
+    // une journée présente d'un seul côté passe telle quelle — mais on lui pose
+    // son montant au passage : sans ça, la première fusion la laissait sans
+    // `cts`, la seconde le calculait, et la fusion cessait d'être idempotente.
+    if (!x || !y){ const j = x || y; out[d] = Object.assign({}, j, { cts: ctsJour(j) }); return; }
     const blocs = [...new Set([].concat(x.blocks || [], y.blocks || []))];
     const communs = (x.blocks || []).filter(k => (y.blocks || []).includes(k));
     if (!communs.length){
       // journées complémentaires (le bus le matin, le bureau le soir) : ça s'additionne
       out[d] = { blocks:blocs, xp:(x.xp||0)+(y.xp||0),
-                 right:(x.right||0)+(y.right||0), total:(x.total||0)+(y.total||0) };
+                 right:(x.right||0)+(y.right||0), total:(x.total||0)+(y.total||0),
+                 cts:ctsJour(x)+ctsJour(y) };
     } else {
       // un même bloc des deux côtés : on ne compte pas deux fois, le plus fourni gagne
       const gros = (y.total||0) > (x.total||0) ? y : x;
       out[d] = { blocks:blocs, xp:Math.max(x.xp||0, y.xp||0),
-                 right:gros.right||0, total:gros.total||0 };
+                 right:gros.right||0, total:gros.total||0,
+                 cts:Math.max(ctsJour(x), ctsJour(y)) };
     }
   });
   return out;
@@ -3261,6 +3646,26 @@ function fusionNotion(x, y){
   };
 }
 
+/* Le porte-monnaie se RECALCULE depuis les journées — il ne s'incrémente jamais
+   en aveugle. Même raison que pour les XP : deux supports qui divergent doivent
+   pouvoir fusionner sans qu'un centime soit compté deux fois ni perdu.
+   `verse`, lui, ne se recalcule pas : c'est un fait du monde réel. */
+function ctsJour(j){
+  if (!j) return 0;
+  if (j.cts != null) return j.cts;
+  // Journée antérieure au tarif (20 → 24 août) : payée rétroactivement sur ce
+  // qu'on en sait encore — les justes, les essais, les blocs terminés. Les
+  // reprises n'étaient pas distinguées à l'époque, ces journées sont donc
+  // légèrement généreuses. C'était du vrai travail : il est payé.
+  const bon = j.right || 0, tot = j.total || 0, n = (j.blocks || []).length;
+  return bon * CTS_JUSTE + Math.max(0, tot - bon) * CTS_ESSAI + n * CTS_BLOC;
+}
+function ctsDepuisJours(days){
+  let c = 0;
+  Object.keys(days || {}).forEach(d => { c += ctsJour(days[d]); });
+  return c;
+}
+
 function xpDepuisJours(days){
   let x = 0;
   Object.keys(days || {}).forEach(d => {
@@ -3298,9 +3703,14 @@ function fusionner(local, autre){
   const nouveauxJours = Object.keys(jours).filter(d => !(local.days || {})[d]).length;
 
   const fus = {
-    v: 2,
+    v: 3,
     start: [local.start, autre.start].filter(Boolean).sort()[0] || local.start,
     xp: xpDepuisJours(jours),
+    // le gagné se recalcule depuis les journées fusionnées ; le versé, lui, est
+    // un fait — on garde le plus élevé des deux carnets, jamais la somme, sinon
+    // un même paiement enregistré des deux côtés serait décompté deux fois.
+    wallet: { cts: ctsDepuisJours(jours),
+              verse: Math.max((local.wallet||{}).verse||0, (autre.wallet||{}).verse||0) },
     streak: serie.streak,
     best: Math.max(local.best || 0, autre.best || 0, serie.streak),
     lastDay: serie.last || local.lastDay || autre.lastDay,
@@ -3519,7 +3929,8 @@ function startBlock(kind){
     byTheme:{}, answered:false, correct:null, chosen:null, built:[],
     pl:null, pr:null, link:{}, sel:null,
     errs:[], itemLog:[],
-    reprises:[], paliersVus:[], dernierRep:null,
+    reprises:[], paliersVus:[], dernierRep:null, reprisesFaites:0,
+    cts:0, vides:0, artic:null,
     phase:"quiz"
   };
   const first = THEME_BY_ID[block.themes[0]];
@@ -3823,7 +4234,12 @@ function grade(ok){
   // rater un mot puis le réussir deux fois de suite ferait MONTER le taux de
   // réussite de la notion, et une notion mal sue passerait tranquillement en
   // boîte supérieure. Les XP, eux, sont donnés dans les deux cas.
-  if (!it.reprise){ bt.pTotal++; if (ok) bt.pRight++; }
+  if (!it.reprise){
+    bt.pTotal++; if (ok) bt.pRight++;
+    // le porte-monnaie suit la MESURE, pas l'effort : une reprise n'est pas
+    // payée, sinon rater exprès deviendrait rentable. Les XP, eux, le sont.
+    sess.cts += ok ? CTS_JUSTE : CTS_ESSAI;
+  }
   // journal : ce qui a été répondu, pour la revanche et le bilan
   sess.itemLog.push({ id: it.theme, k: it.gen ? null : it.bankIdx, ok, rep: it.reprise ? 1 : 0 });
   if (!ok){
@@ -3893,12 +4309,14 @@ function planifierReprise(it, delai){
 }
 function prendreReprise(pos){
   if (!sess.reprises.length) return null;
-  // Une reprise au maximum toutes les trois questions. Sans ce plafond, une
-  // séance qui commence mal dégénère : la file reste pleine, chaque créneau est
-  // repris, et le bloc entier se réduit à quatre mots ressassés — mesuré sur un
-  // parcours à 0 % de réussite, les 24 questions étaient devenues 24 QCM, plus
-  // un seul « relier ». Le mot raté doit revenir ; il ne doit pas tout manger.
-  if (sess.dernierRep != null && pos - sess.dernierRep < REPRISE_1) return null;
+  // Une reprise toutes les REPRISE_ECART questions au plus, et jamais plus d'un
+  // quart du bloc en tout. Sans ces plafonds, une séance qui commence mal
+  // dégénère : la file reste pleine, chaque créneau est repris, et le bloc se
+  // réduit à quatre mots ressassés — mesuré sur un parcours à 0 % de réussite.
+  // Le mot raté doit revenir ; il ne doit ni tout manger, ni donner
+  // l'impression qu'on tourne en rond (« moins de répétitions », 25 août 2026).
+  if ((sess.reprisesFaites || 0) >= Math.floor(sess.items.length / REPRISE_PART)) return null;
+  if (sess.dernierRep != null && pos - sess.dernierRep < REPRISE_ECART) return null;
   // en fin de bloc, on place ce qui reste même si l'échéance n'est pas atteinte :
   // une reprise jamais rejouée n'aurait servi à rien.
   const fin = pos >= sess.items.length - sess.reprises.length;
@@ -3908,6 +4326,7 @@ function prendreReprise(pos){
   });
   if (k < 0) return null;
   sess.dernierRep = pos;
+  sess.reprisesFaites = (sess.reprisesFaites || 0) + 1;
   return sess.reprises.splice(k, 1)[0].item;
 }
 
@@ -3942,10 +4361,11 @@ function quitSession(){
 }
 function finish(){
   const out = recordBlock(sess.block, { xp:sess.xp, right:sess.right, total:sess.total, byTheme:sess.byTheme,
-    errs:sess.errs, itemLog:sess.itemLog });
+    errs:sess.errs, itemLog:sess.itemLog, cts:sess.cts });
   view = { screen:"done", res:{
     kind: sess.block.kind, title: sess.block.title,
     right: sess.right, total: sess.total, xp: sess.xp, bonus: out.bonus,
+    cts: (sess.cts || 0) + CTS_BLOC, ctsBloc: CTS_BLOC,
     bestCombo: sess.bestCombo, moves: out.moves, newBadges: out.newBadges, dayComplete: out.dayComplete
   }};
   sess = null; render();
@@ -3973,8 +4393,13 @@ function doneHTML(){
     <div class="line">${esc(r.title)} terminé${r.dayComplete ? " — et la journée est complète 🏁" : left > 0 ? " · encore "+left+" bloc"+(left>1?"s":"")+" aujourd'hui" : ""}</div>
     <div class="gain">
       <div class="g"><div class="k">XP gagnés</div><div class="v" style="color:var(--accent)">+${r.xp + r.bonus}</div></div>
+      <div class="g"><div class="k">Gagné</div><div class="v" style="color:var(--ok)">${chf(r.cts || 0)}</div></div>
       <div class="g"><div class="k">Meilleur combo</div><div class="v">×${r.bestCombo}</div></div>
       <div class="g"><div class="k">Série</div><div class="v">${S.streak} j</div></div>
+    </div>
+    <div class="line" style="font-size:12.5px;color:var(--ink-3)">
+      dont ${r.ctsBloc} ct parce que tu es allé au bout du bloc ·
+      à toucher en tout : <b>${chf(aVerser())} CHF</b>
     </div>
     ${r.moves.length ? `<div class="moves">${r.moves.map(m => {
       const t = THEME_BY_ID[m.id];
