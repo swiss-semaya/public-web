@@ -2706,10 +2706,14 @@ function load(){
     if (!st.miss) st.miss = {};
     if (!st.hist) st.hist = [];
   });
-  // v3 : le porte-monnaie. Les journées d'avant le tarif sont chiffrées une
-  // fois pour toutes ici, pour que le montant ne bouge plus si le tarif change.
+  // v3 : le porte-monnaie. Chaque journée porte son montant une fois pour
+  // toutes, pour qu'il ne bouge plus si le tarif change — et les journées
+  // antérieures au 25 août sont remises à zéro, y compris celles qu'une
+  // version précédente avait chiffrées rétroactivement (voir ARGENT_DEPUIS).
   Object.keys(S.days || {}).forEach(d => {
-    if (S.days[d] && S.days[d].cts == null) S.days[d].cts = ctsJour(S.days[d]);
+    if (!S.days[d]) return;
+    if (d < ARGENT_DEPUIS) S.days[d].cts = 0;
+    else if (S.days[d].cts == null) S.days[d].cts = 0;
   });
   if (!S.wallet) S.wallet = { verse:0 };
   if (S.wallet.verse == null) S.wallet.verse = 0;
@@ -3340,7 +3344,7 @@ function porteMonnaieHTML(){
     const j = S.days[d] || {};
     return `<div class="pm-lig"><span>${d === t0 ? "Aujourd'hui" : frDate(d)}
       <small style="color:var(--ink-3)">· ${j.right || 0}/${j.total || 0}</small></span>
-      <b>${chf(ctsJour(j))}</b></div>`;
+      <b>${chf(ctsJour(j, d))}</b></div>`;
   }).join("")}</div>` : ""}
   ${(S.retraits || []).length ? `<div class="pm-jours">${(S.retraits || []).slice(-4).reverse().map(r =>
     `<div class="pm-lig"><span>Retrait demandé le ${frDate(r.d)}</span><b>−${chf(r.cts)}</b></div>`
@@ -3504,7 +3508,7 @@ function bilan(){
   const activite = Object.keys(S.days).sort().slice(-21).map(d => ({
     jour: d, blocs: (S.days[d].blocks || []).length,
     justes: S.days[d].right, questions: S.days[d].total, xp: S.days[d].xp,
-    cts: ctsJour(S.days[d])
+    cts: ctsJour(S.days[d], d)
   }));
 
   // les fautes récentes, en clair : question, bonne réponse, réponse donnée
@@ -3725,20 +3729,20 @@ function fusionJours(a, b){
     // une journée présente d'un seul côté passe telle quelle — mais on lui pose
     // son montant au passage : sans ça, la première fusion la laissait sans
     // `cts`, la seconde le calculait, et la fusion cessait d'être idempotente.
-    if (!x || !y){ const j = x || y; out[d] = Object.assign({}, j, { cts: ctsJour(j) }); return; }
+    if (!x || !y){ const j = x || y; out[d] = Object.assign({}, j, { cts: ctsJour(j, d) }); return; }
     const blocs = [...new Set([].concat(x.blocks || [], y.blocks || []))];
     const communs = (x.blocks || []).filter(k => (y.blocks || []).includes(k));
     if (!communs.length){
       // journées complémentaires (le bus le matin, le bureau le soir) : ça s'additionne
       out[d] = { blocks:blocs, xp:(x.xp||0)+(y.xp||0),
                  right:(x.right||0)+(y.right||0), total:(x.total||0)+(y.total||0),
-                 cts:ctsJour(x)+ctsJour(y) };
+                 cts:ctsJour(x, d)+ctsJour(y, d) };
     } else {
       // un même bloc des deux côtés : on ne compte pas deux fois, le plus fourni gagne
       const gros = (y.total||0) > (x.total||0) ? y : x;
       out[d] = { blocks:blocs, xp:Math.max(x.xp||0, y.xp||0),
                  right:gros.right||0, total:gros.total||0,
-                 cts:Math.max(ctsJour(x), ctsJour(y)) };
+                 cts:Math.max(ctsJour(x, d), ctsJour(y, d)) };
     }
   });
   return out;
@@ -3785,19 +3789,21 @@ function fusionNotion(x, y){
    en aveugle. Même raison que pour les XP : deux supports qui divergent doivent
    pouvoir fusionner sans qu'un centime soit compté deux fois ni perdu.
    `verse`, lui, ne se recalcule pas : c'est un fait du monde réel. */
-function ctsJour(j){
+/* Le porte-monnaie n'existe que depuis le 25 août 2026. Les journées d'avant
+   ne valent RIEN — décision du parent le 26 août : « on repart de zéro ».
+   Elles avaient d'abord été chiffrées rétroactivement (~22 CHF) ; payer un
+   travail fourni avant que le tarif existe brouillait le message même du
+   tarif. Le travail de ces journées reste dans les XP, les boîtes et la
+   maîtrise : c'est l'argent qui commence le 25, pas l'histoire. */
+const ARGENT_DEPUIS = "2026-08-25";
+function ctsJour(j, d){
   if (!j) return 0;
-  if (j.cts != null) return j.cts;
-  // Journée antérieure au tarif (20 → 24 août) : payée rétroactivement sur ce
-  // qu'on en sait encore — les justes, les essais, les blocs terminés. Les
-  // reprises n'étaient pas distinguées à l'époque, ces journées sont donc
-  // légèrement généreuses. C'était du vrai travail : il est payé.
-  const bon = j.right || 0, tot = j.total || 0, n = (j.blocks || []).length;
-  return bon * CTS_JUSTE + Math.max(0, tot - bon) * CTS_ESSAI + n * CTS_BLOC;
+  if (d && d < ARGENT_DEPUIS) return 0;
+  return j.cts || 0;
 }
 function ctsDepuisJours(days){
   let c = 0;
-  Object.keys(days || {}).forEach(d => { c += ctsJour(days[d]); });
+  Object.keys(days || {}).forEach(d => { c += ctsJour(days[d], d); });
   return c;
 }
 
