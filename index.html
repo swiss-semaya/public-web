@@ -190,6 +190,9 @@ body{margin:0;}
 .block:hover:not(:disabled){transform:translateY(-2px); box-shadow:var(--shadow-lift); border-color:var(--ink-3);}
 .block:focus-visible{outline:2px solid var(--accent); outline-offset:3px;}
 .block:disabled{cursor:default; opacity:.72;}
+/* le grand défi : il se voit, sinon il n'est pas une récompense */
+.block.or{border-color:var(--accent); background:linear-gradient(180deg,var(--accent-soft),var(--panel) 70%);}
+.block.or .num{color:var(--accent);}
 .block .num{
   font-family:var(--display); font-size:26px; line-height:1; color:var(--ink-3);
   font-variant-numeric:tabular-nums; width:26px; text-align:center;
@@ -2496,21 +2499,43 @@ const XP_RIGHT = 10, XP_COMBO = 5, XP_BLOCK = 25, XP_DAY = 50;
    Le travail est payé, en argent réel, et le tarif est public — c'est tout
    l'intérêt : il doit pouvoir compter ce qu'il gagne pendant qu'il le gagne.
 
-   · une bonne réponse : 10 centimes
-   · un essai faux :      6 centimes — il rapporte quand même, sinon la
+   · une bonne réponse :  8 centimes
+   · un essai faux :      5 centimes — il rapporte quand même, sinon la
      stratégie payante serait de ne répondre qu'aux questions sûres, ou de ne
      pas répondre du tout. C'est exactement ce qui s'est passé le 23 août.
-   · un bloc terminé :   40 centimes — le bloc est tout-ou-rien, et quitter en
+   · un bloc terminé :   50 centimes — le bloc est tout-ou-rien, et quitter en
      cours de route ne rapporte rien.
 
-   Journée complète (44 questions, 3 blocs) : environ 4.90 CHF à 80 % de
-   réussite, 4.20 au pire, 5.60 au mieux. La cible fixée est ~5 CHF.
+   Journée complète (52 questions, 3 blocs) : environ 5.00 CHF à 80 % de
+   réussite, 4.40 au pire, 5.66 au mieux. La cible fixée est ~5 CHF.
+
+   TARIF REVU LE 26 AOÛT 2026 — « des leçons plus longues pour la même somme ».
+   Le bloc passe de 16 à 20 questions (52 par jour au lieu de 44) et le tarif
+   baisse de 10/6/40 à 8/5/50 : le montant d'une journée ne bouge pas, le
+   travail qu'il demande augmente d'un quart. La prime de fin de bloc monte,
+   elle : c'est elle qui paie l'endurance sur un bloc plus long.
 
    ⚠ SEULS LES PREMIERS PASSAGES SONT PAYÉS. Une reprise entraîne, elle ne
    rapporte pas : sans cette règle, rater exprès pour faire revenir la question
    serait une machine à centimes. C'est le même invariant que la mesure.
    Le nombre de questions par jour étant fixe, aucun plafond n'est nécessaire. */
-const CTS_JUSTE = 10, CTS_ESSAI = 6, CTS_BLOC = 40;
+const CTS_JUSTE = 8, CTS_ESSAI = 5, CTS_BLOC = 50;
+
+/* ---------- le grand défi (26 août 2026) ----------
+   « Toutes les trois sessions, une chance de gagner plus en résolvant des
+   questions plus difficiles et des questionnaires plus longs. »
+
+   Un quatrième bloc, OPTIONNEL, qui se débloque toutes les trois journées
+   complètes : 28 questions, uniquement des notions déjà travaillées, toutes
+   posées à l'étape 2 — on écrit la réponse, on ne la choisit pas — et en
+   priorité les niveaux « consolidation » et « anticipation ». Une bonne réponse
+   y vaut presque le double, et aller au bout rapporte 1 franc.
+
+   Il se mérite (trois journées de trois blocs), il ne se répète pas (chaque
+   palier de trois journées n'ouvre qu'un seul défi) et il ne se brade pas : un
+   défi abandonné ne rapporte rien, comme les autres blocs. */
+const BLOC_BONUS = 28, BONUS_TOUS_LES = 3;
+const CTS_BONUS_JUSTE = 15, CTS_BONUS_ESSAI = 4, CTS_BONUS_BLOC = 100;
 const chf = cts => (cts / 100).toLocaleString("fr-CH", { minimumFractionDigits:2, maximumFractionDigits:2 });
 
 /* Longueur des blocs (21 août 2026). Huit questions ne suffisaient pas : le
@@ -2519,18 +2544,24 @@ const chf = cts => (cts / 100).toLocaleString("fr-CH", { minimumFractionDigits:2
    toutes les 8 — la tâche reste lisible ("plus que 2 questions avant le
    palier") alors que le volume monte.
 
-   RAMENÉ DE 24 À 16 LE 25 AOÛT 2026, sur les données du 23. Ce jour-là, 29 des
-   36 fautes sont des réponses VIDES : à partir d'un certain point du bloc, les
-   QCM étaient cliqués (et réussis) mais plus rien n'était tapé — 22 « Calcule : »
-   d'affilée validés à blanc. Le bloc étant tout-ou-rien, aller au bout à vide
-   coûtait moins cher que d'abandonner. Trois blocs font maintenant 44 questions
-   par jour au lieu de 60, et le champ vide n'est plus validable (voir bindQuiz).
+   24 → 16 le 25 août 2026 (sur les données du 23), puis **16 → 20 le 26**, à la
+   demande du parent : des leçons plus longues pour la même somme gagnée. Le
+   tarif a baissé d'autant (voir CTS_JUSTE) — c'est le rapport travail/argent
+   qui change, pas le montant de la journée.
+
+   Le retour en arrière du 25, pour mémoire : le 23, 29 des 36 fautes étaient
+   des réponses VIDES — à partir d'un certain point du bloc, les QCM étaient
+   cliqués (et réussis) mais plus rien n'était tapé, 22 « Calcule : » d'affilée
+   validés à blanc. Le bloc étant tout-ou-rien, aller au bout à vide coûtait
+   moins cher que d'abandonner. D'où deux garde-fous qui, eux, ne bougent pas :
+   le champ vide n'est plus validable (voir bindQuiz), et la journée reste
+   nettement en dessous des 60 questions d'alors.
 
    La répétition est voulue, pas subie : un mot raté REVIENT dans le même bloc,
    trois questions plus loin, puis huit plus loin (rappel expansé), et il faut
    le réussir DEUX fois pour qu'il cesse de revenir. C'est le même critère que
    le rachat entre sessions (`miss.s >= 2`), appliqué à l'intérieur du bloc. */
-const BLOC_LONG = 16, BLOC_DEFI = 12, PALIER = 8;
+const BLOC_LONG = 20, BLOC_DEFI = 12, PALIER = 8;
 
 /* Les reprises, resserrées le 25 août 2026 : « moins de répétitions ».
    Un mot raté revenait jusqu'à QUATRE fois dans le même bloc, et deux reprises
@@ -2833,9 +2864,9 @@ function facile(it, theme){
 }
 
 /* ---------- tirage d'exercices ---------- */
-function itemsFor(theme, n){
+function itemsFor(theme, n, forceEt){
   const st = S.themes[theme.id];
-  const et = etape(theme);
+  const et = forceEt || etape(theme);
   const out = [];
   const bank = theme.items || [];
   const aGen = theme.gen && GENS[theme.gen];
@@ -2846,8 +2877,13 @@ function itemsFor(theme, n){
   // À l'étape 1 la banque ne prend qu'une part du bloc : le reste va aux
   // exercices de reconnaissance des générateurs. En proportion, et non « n - 3 » :
   // sur un bloc de 24 cette soustraction ne réservait plus rien du tout.
-  const nBank = (et === 1 && aGen)
-    ? Math.max(1, Math.min(bank.length, Math.ceil(n * 0.4)))
+  // Et dans le grand défi (`forceEt`), c'est l'inverse : la banque ne prend
+  // qu'un tiers des places. Les banques contiennent beaucoup de QCM écrits à la
+  // main — parfaits pour comprendre, trop faciles pour un défi payé le double.
+  // Les générateurs, à l'étape 2, demandent d'ÉCRIRE la réponse : c'est là
+  // qu'est la difficulté annoncée.
+  const nBank = (aGen && (et === 1 || forceEt === 2))
+    ? Math.max(1, Math.min(bank.length, Math.ceil(n * (et === 1 ? 0.4 : 0.3))))
     : n;
 
   // 1. la revanche : jusqu'à 2 exercices ratés récemment, à retenter en priorité
@@ -2965,16 +3001,60 @@ function todaysPlan(){
   const defi = { kind:"defi", n:3, title:"Défi mixte", themes: Object.values(bySub).map(t => t.id),
     sub:BLOC_DEFI+" questions, les quatre matières mélangées. Les combos rapportent double." };
 
-  return [rev, lesson, defi].map(b => Object.assign(b, { done: done.includes(b.kind) }));
+  const plan = [rev, lesson, defi];
+
+  // 4. Le grand défi : une fois toutes les trois journées complètes, plus long,
+  //    plus dur, et beaucoup mieux payé. Il n'apparaît que s'il est mérité.
+  if (bonusOuvert()){
+    plan.push({ kind:"bonus", n:4, title:"Le grand défi", themes: themesDurs(),
+      sub: BLOC_BONUS + " questions, tout à écrire, les notions les plus exigeantes. "
+         + CTS_BONUS_JUSTE + " ct la bonne réponse et " + chf(CTS_BONUS_BLOC) + " CHF si tu vas au bout." });
+  }
+
+  return plan.map(b => Object.assign(b, { done: done.includes(b.kind) }));
+}
+
+/* ---------- le grand défi : quand, et sur quoi ----------
+
+   « Toutes les trois sessions » = toutes les trois JOURNÉES COMPLÈTES (trois
+   blocs). Un palier de trois journées n'ouvre qu'un seul défi : on compte les
+   paliers gagnés et les paliers déjà pris, ce qui rend la règle insensible à
+   l'ordre des choses et impossible à farmer — une journée ne compte qu'une fois.  */
+/* Une journée est complète quand les TROIS blocs ordinaires sont faits. Le grand
+   défi ne compte pas : sinon un défi joué à la place du défi mixte « finirait »
+   la journée, et ouvrirait le palier suivant en travaillant moins. */
+const KINDS_JOUR = ["revision", "lesson", "defi"];
+function blocsOrdinaires(j){
+  return (((j || {}).blocks) || []).filter(k => KINDS_JOUR.indexOf(k) >= 0).length;
+}
+function joursComplets(){
+  return Object.keys(S.days || {}).filter(d => blocsOrdinaires(S.days[d]) >= 3).length;
+}
+function paliersBonus(){ return Math.floor(joursComplets() / BONUS_TOUS_LES); }
+function bonusOuvert(){
+  if (!seenThemes().length) return false;
+  return paliersBonus() > ((S.bonus || {}).pris || 0);
+}
+/* Les notions « les plus exigeantes » : d'abord le niveau (anticipation, puis
+   consolidation), ensuite celles qui tiennent le mieux — un défi doit être
+   difficile, pas décourageant. On ne prend que du déjà vu. */
+function themesDurs(){
+  const poids = { anticipation:0, consolidation:1, programme:2, revision:3 };
+  return seenThemes()
+    .sort((a, b) => (poids[a.tier] ?? 9) - (poids[b.tier] ?? 9) || (mastery(b) || 0) - (mastery(a) || 0))
+    .slice(0, 5).map(t => t.id);
 }
 function blockItems(block){
   const ids = block.themes.filter(id => THEME_BY_ID[id]);
   if (!ids.length) return [];
-  const per = block.kind === "defi" ? BLOC_DEFI : BLOC_LONG;
+  const per = block.kind === "defi" ? BLOC_DEFI : block.kind === "bonus" ? BLOC_BONUS : BLOC_LONG;
+  // le grand défi force l'étape 2 : on écrit la réponse, on ne la choisit pas —
+  // c'est là qu'est la difficulté, et c'est ce qu'il est payé plus cher.
+  const et = block.kind === "bonus" ? 2 : null;
   if (block.kind === "lesson") return itemsFor(THEME_BY_ID[ids[0]], per);
   const each = Math.max(1, Math.ceil(per / ids.length));
   let out = [];
-  ids.forEach(id => { out = out.concat(itemsFor(THEME_BY_ID[id], each)); });
+  ids.forEach(id => { out = out.concat(itemsFor(THEME_BY_ID[id], each, et)); });
   return shuffle(out).slice(0, per);
 }
 
@@ -3006,8 +3086,15 @@ function recordBlock(block, res){
   if (!d.blocks.includes(block.kind)) d.blocks.push(block.kind);
   d.xp += res.xp; d.right += res.right; d.total += res.total;
   // le bloc n'est payé QUE terminé — recordBlock n'est appelé que par finish()
-  d.cts = (d.cts || 0) + (res.cts || 0) + CTS_BLOC;
+  d.cts = (d.cts || 0) + (res.cts || 0) + (block.kind === "bonus" ? CTS_BONUS_BLOC : CTS_BLOC);
   S.days[t0] = d;
+  // un palier de grand défi ne s'ouvre qu'une fois : on le consomme ICI, à la
+  // fin du bloc, jamais à son ouverture — un défi commencé puis abandonné reste
+  // disponible.
+  if (block.kind === "bonus"){
+    S.bonus = S.bonus || {};
+    S.bonus.pris = paliersBonus();
+  }
   S.wallet = S.wallet || { verse:0 };
   S.wallet.cts = ctsDepuisJours(S.days);
 
@@ -3019,7 +3106,7 @@ function recordBlock(block, res){
   S.best = Math.max(S.best, S.streak);
 
   let bonus = XP_BLOCK;
-  if (d.blocks.length === 3) bonus += XP_DAY;
+  if (blocsOrdinaires(d) === 3) bonus += XP_DAY;
   S.xp += res.xp + bonus;
 
   // journal des fautes (borné) + rachat des exercices retentés
@@ -3056,7 +3143,7 @@ function recordBlock(block, res){
   save();
   // le bilan part tout seul si un dossier a été désigné — annoncé quand la
   // journée est complète, discret le reste du temps
-  const dayComplete = d.blocks.length === 3;
+  const dayComplete = blocsOrdinaires(d) === 3;
   ecrireBilan(dayComplete);
   ecrireProgression();
   return { bonus, moves, newBadges, dayComplete };
@@ -3125,7 +3212,7 @@ function homeHTML(){
     <div class="sec">
       <div class="sec-h">
         <h2>Aujourd'hui · ${frDate(t0)}</h2>
-        <span class="note">${d.blocks.length}/3 · ${d.xp} XP</span>
+        <span class="note">${blocsOrdinaires(d)}/3 · ${d.xp} XP</span>
       </div>
       <div class="blocks">
         ${plan.map(blockHTML).join("")}
@@ -3200,9 +3287,9 @@ function blockHTML(b){
         const t = THEME_BY_ID[id]; if (!t) return "";
         return `<span class="chip ${t.subject}">${SUB[t.subject].short} · ${esc(t.t)}</span>`;
       });
-  const nQ = b.kind === "defi" ? BLOC_DEFI : BLOC_LONG;
-  return `<button class="block${b.done ? " done":""}" data-kind="${b.kind}" ${b.done ? "disabled":""}>
-    <span class="num">${b.n}</span>
+  const nQ = b.kind === "defi" ? BLOC_DEFI : b.kind === "bonus" ? BLOC_BONUS : BLOC_LONG;
+  return `<button class="block${b.done ? " done":""}${b.kind === "bonus" ? " or":""}" data-kind="${b.kind}" ${b.done ? "disabled":""}>
+    <span class="num">${b.kind === "bonus" ? "★" : b.n}</span>
     <span class="mid">
       <span class="ttl">${esc(b.title)}</span>
       <span class="sub">${esc(b.sub)}</span>
@@ -3333,11 +3420,15 @@ function bindHome(){
     if (!du){ toast("Rien à toucher pour l'instant — au travail !"); return; }
     // remettre le compteur à zéro est un fait du monde réel : ça se confirme,
     // avec le montant sous les yeux, et ça n'efface jamais le total gagné.
-    if (!confirm("Papa t'a bien versé " + chf(du) + " CHF ?\n\nLe compteur « à toucher » repart de zéro. "
-                 + "Ton total gagné (" + chf((S.wallet||{}).cts||0) + " CHF) ne bouge pas.")) return;
-    S.wallet.verse = S.wallet.cts;
-    save(); render();
-    toast(chf(du) + " CHF encaissés 💰");
+    demander("Papa t'a payé ?",
+      "Il t'a bien versé <b>" + chf(du) + " CHF</b> ? Le compteur « à toucher » "
+      + "repart de zéro. Ton total gagné (" + chf((S.wallet||{}).cts||0) + " CHF) ne bouge pas.",
+      "Oui, j'ai été payé",
+      () => {
+        S.wallet.verse = S.wallet.cts;
+        save(); render();
+        toast(chf(du) + " CHF encaissés 💰");
+      });
   });
   const depon = root.querySelector("#depon");
   if (depon) depon.addEventListener("click", activerDepot);
@@ -3345,10 +3436,13 @@ function bindHome(){
   if (depoff) depoff.addEventListener("click", arreterDepot);
   const rst = root.querySelector("#rst");
   if (rst) rst.addEventListener("click", () => {
-    if (confirm("Effacer la série, les XP et toutes les boîtes de révision ? On repart de zéro.")){
-      S = fresh(); THEMES.forEach(t => S.themes[t.id] = { box:0, due:today(), seen:0, right:0, used:[] });
-      save(); render();
-    }
+    demander("Tout effacer ?",
+      "La série, les XP, les boîtes de révision et le porte-monnaie repartent de zéro. "
+      + "C'est sans retour.", "Tout effacer",
+      () => {
+        S = fresh(); THEMES.forEach(t => S.themes[t.id] = { box:0, due:today(), seen:0, right:0, used:[] });
+        save(); render();
+      });
   });
 }
 
@@ -3507,6 +3601,32 @@ function telecharger(blob, nom, txt){
   }catch(e){
     panneauTexte(txt, nom);
   }
+}
+
+/* Demander confirmation SANS `confirm()` (26 août 2026).
+
+   « Papa m'a payé » ne marchait pas, et la cause n'était pas le bouton : dans un
+   cadre bac à sable — c'est le cas de la page publiée en artefact — les boîtes
+   de dialogue du navigateur sont interdites. `confirm()` rend `false` sans rien
+   afficher, donc le clic ne faisait RIEN, en silence. Le même piège rendait le
+   bouton « quitter » inopérant : impossible de sortir d'un bloc.
+
+   On pose donc la question DANS la page, ce qui marche partout. */
+function demander(titre, texte, libelleOui, onOui){
+  const fond = document.createElement("div");
+  fond.className = "sheet";
+  fond.innerHTML = `
+    <div class="sheet-in">
+      <h3>${esc(titre)}</h3>
+      <p>${texte}</p>
+      <div class="cta-row">
+        <button class="cta" id="dok">${esc(libelleOui)}</button>
+        <button class="cta ghost" id="dno">Annuler</button>
+      </div>
+    </div>`;
+  document.body.appendChild(fond);
+  fond.querySelector("#dno").addEventListener("click", () => fond.remove());
+  fond.querySelector("#dok").addEventListener("click", () => { fond.remove(); onOui(); });
 }
 
 /* Le bilan à copier, quand aucun fichier ne peut sortir. */
@@ -4238,7 +4358,9 @@ function grade(ok){
     bt.pTotal++; if (ok) bt.pRight++;
     // le porte-monnaie suit la MESURE, pas l'effort : une reprise n'est pas
     // payée, sinon rater exprès deviendrait rentable. Les XP, eux, le sont.
-    sess.cts += ok ? CTS_JUSTE : CTS_ESSAI;
+    const grand = sess.block.kind === "bonus";
+    sess.cts += ok ? (grand ? CTS_BONUS_JUSTE : CTS_JUSTE)
+                   : (grand ? CTS_BONUS_ESSAI : CTS_ESSAI);
   }
   // journal : ce qui a été répondu, pour la revanche et le bilan
   sess.itemLog.push({ id: it.theme, k: it.gen ? null : it.bankIdx, ok, rep: it.reprise ? 1 : 0 });
@@ -4356,8 +4478,12 @@ function nextItem(){
   renderSession();
 }
 function quitSession(){
-  if (sess.total && !confirm("Quitter maintenant ? Les questions déjà faites ne compteront pas.")) return;
-  sess = null; view = { screen:"home" }; render();
+  if (!sess.total){ sess = null; view = { screen:"home" }; render(); return; }
+  demander("Quitter le bloc ?",
+    "Les " + sess.total + " questions déjà faites ne compteront pas, et le bloc ne "
+    + "rapportera rien. Tu pourras le reprendre depuis le début.",
+    "Quitter quand même",
+    () => { sess = null; view = { screen:"home" }; render(); });
 }
 function finish(){
   const out = recordBlock(sess.block, { xp:sess.xp, right:sess.right, total:sess.total, byTheme:sess.byTheme,
@@ -4365,7 +4491,8 @@ function finish(){
   view = { screen:"done", res:{
     kind: sess.block.kind, title: sess.block.title,
     right: sess.right, total: sess.total, xp: sess.xp, bonus: out.bonus,
-    cts: (sess.cts || 0) + CTS_BLOC, ctsBloc: CTS_BLOC,
+    cts: (sess.cts || 0) + (sess.block.kind === "bonus" ? CTS_BONUS_BLOC : CTS_BLOC),
+    ctsBloc: sess.block.kind === "bonus" ? CTS_BONUS_BLOC : CTS_BLOC,
     bestCombo: sess.bestCombo, moves: out.moves, newBadges: out.newBadges, dayComplete: out.dayComplete
   }};
   sess = null; render();
@@ -4378,7 +4505,7 @@ function doneHTML(){
   const R = 58, C = 2 * Math.PI * R;
   const col = pct >= 80 ? "var(--ok)" : pct >= 50 ? "var(--accent)" : "var(--ko)";
   const word = pct >= 90 ? "Impeccable" : pct >= 75 ? "Solide" : pct >= 50 ? "Ça avance" : "On y retourne";
-  const left = 3 - ((S.days[today()] || {}).blocks || []).length;
+  const left = 3 - blocsOrdinaires(S.days[today()]);
 
   return `<div class="wrap"><div class="done-wrap">
     <div class="ring">
