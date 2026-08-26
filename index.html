@@ -3342,7 +3342,10 @@ function porteMonnaieHTML(){
       <small style="color:var(--ink-3)">· ${j.right || 0}/${j.total || 0}</small></span>
       <b>${chf(ctsJour(j))}</b></div>`;
   }).join("")}</div>` : ""}
-  <button class="cta ghost" id="paye">Papa m'a payé</button>`;
+  ${(S.retraits || []).length ? `<div class="pm-jours">${(S.retraits || []).slice(-4).reverse().map(r =>
+    `<div class="pm-lig"><span>Retrait demandé le ${frDate(r.d)}</span><b>−${chf(r.cts)}</b></div>`
+  ).join("")}</div>` : ""}
+  <button class="cta ghost" id="paye">Je retire mon argent</button>`;
 }
 
 function weakHTML(){
@@ -3417,17 +3420,27 @@ function bindHome(){
   const paye = root.querySelector("#paye");
   if (paye) paye.addEventListener("click", () => {
     const du = aVerser();
-    if (!du){ toast("Rien à toucher pour l'instant — au travail !"); return; }
-    // remettre le compteur à zéro est un fait du monde réel : ça se confirme,
-    // avec le montant sous les yeux, et ça n'efface jamais le total gagné.
-    demander("Papa t'a payé ?",
-      "Il t'a bien versé <b>" + chf(du) + " CHF</b> ? Le compteur « à toucher » "
-      + "repart de zéro. Ton total gagné (" + chf((S.wallet||{}).cts||0) + " CHF) ne bouge pas.",
-      "Oui, j'ai été payé",
+    if (!du){ toast("Rien à retirer pour l'instant — au travail !"); return; }
+    /* LE RETRAIT EST À LUI (26 août 2026).
+
+       Avant, ce bouton disait « Papa m'a payé » : l'enfant confirmait une
+       décision prise par quelqu'un d'autre. Il dit maintenant « je retire » —
+       c'est lui qui choisit le moment. Choisir quand on touche son argent est
+       l'une des rares dimensions par lesquelles une récompense matérielle
+       soutient l'autonomie au lieu de la réduire ; le reste du montage
+       (le tarif, le montant, le calendrier) ne lui appartient pas.
+
+       La demande part dans le bilan ; l'argent, lui, est viré par le parent :
+       aucune API ne permet de créditer un TWINT depuis un serveur. */
+    demander("Retirer " + chf(du) + " CHF ?",
+      "Ton argent part sur ton compte. Envoie ton bilan juste après pour que "
+      + "Papa voie la demande — le virement, c'est lui qui le fait.",
+      "Oui, je retire",
       () => {
+        S.retraits = (S.retraits || []).concat({ d: today(), cts: du }).slice(-20);
         S.wallet.verse = S.wallet.cts;
         save(); render();
-        toast(chf(du) + " CHF encaissés 💰");
+        toast(chf(du) + " CHF demandés 💰 — envoie ton bilan !");
       });
   });
   const depon = root.querySelector("#depon");
@@ -3538,6 +3551,8 @@ function bilan(){
       a_verser_cts: aVerser(),
       tarif: { juste: CTS_JUSTE, essai: CTS_ESSAI, bloc: CTS_BLOC }
     },
+    // ce qu'il a demandé à retirer, et quand : c'est LUI qui choisit le moment
+    retraits: (S.retraits || []).map(r => ({ date: r.d, cts: r.cts })),
     jours_avant_rentree: Math.max(0, diffDays(t0, SCHOOL_START)),
     serie: { actuelle: S.streak, record: S.best },
     xp: S.xp,
