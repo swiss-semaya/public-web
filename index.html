@@ -1177,6 +1177,70 @@ BANK.allemand = { label:"Allemand", short:"DE", themes:[
     {f:"qcm", q:"Quel est le participe passé de « umdrehen » ?", o:["umgedreht","geumdreht","umdreht"], a:"umgedreht", e:"Verbe séparable : le ge- se glisse ENTRE la particule et le radical."},
     {f:"txt", q:"Traduis avec l'article : *la pincée*", a:"die Prise", e:"eine Prise Salz — une pincée de sel."},
     {f:"txt", q:"Traduis avec l'article : *le plat*", a:"das Gericht", e:"das Gericht — « Burger und Döner sind typische Fastfood-Gerichte. »"}
+  ]},
+
+/* ============================================================
+   La GRAMMAIRE du chapitre 5, ajoutée le 29 août 2026 sur deux photos du KB.
+
+   Jusqu'ici l'unité 5 n'existait dans l'app que comme sept listes de mots. Or
+   le chapitre a un point de grammaire — le datif (KB p. 54, Übung 4 : « Verben
+   mit Dativ : schmecken, gefallen, helfen, geben, gehören », puis le tableau des
+   possessifs) — et une exigence de rédaction que la prof a écrite deux fois de
+   sa main sur la feuille de goûts corrigée : « Écris une phrase entière ».
+   Un mot juste sur une ligne ne vaut rien si la consigne demandait une phrase.
+   ============================================================ */
+
+{ id:"de-u5-dativ", t:"Unité 5 · Le datif : schmecken, gefallen, gehören", tier:"programme",
+  from:"2026-08-29",
+  lesson:{ why:"Le point de grammaire du chapitre (KB p. 54). Cinq verbes très fréquents refusent l'accusatif : si tu leur donnes le mauvais cas, la phrase est fausse même avec les bons mots.",
+    pts:["Cinq verbes de ce chapitre commandent le *datif* : *schmecken*, *gefallen*, *helfen*, *gehören*, *geben*. Ce n'est pas une logique, c'est une liste — apprends-la comme du vocabulaire.",
+      "Avec *schmecken* et *gefallen*, la personne n'est PAS le sujet : « Die Pizza schmeckt *mir* » = la pizza me plaît (au goût). Le verbe s'accorde avec la chose : « Meiner Schwester *schmecken* Hamburger » — pluriel, parce que ce sont les hamburgers qui plaisent.",
+      "Pronoms au datif : ich → *mir*, du → *dir*, er/es → *ihm*, sie → *ihr*, wir → *uns*, ihr → *euch*, sie → *ihnen*.",
+      "Possessifs au datif : *meinem* Bruder et *meinem* Haustier (der et das), *meiner* Schwester (die), *meinen* Eltern (pluriel).",
+      "La terminaison suffit à contrôler : masculin et neutre en *-em*, féminin en *-er*, pluriel en *-en* — exactement comme *dem / der / den*.",
+      "Au pluriel, le nom lui-même prend souvent un *-n* : mit *meinen Kindern*, mit *meinen Freunden*."],
+    ex:"« Meinem Bruder gefällt das alles gar nicht. » — tout cela ne plaît pas du tout à mon frère : la personne est au datif, et c'est *das alles* qui est sujet." },
+  items:[
+    {f:"gap", q:"Die Pizza schmeckt ___ sehr gut. (à moi)", a:"mir", e:"ich → mir. La pizza est le sujet, moi je suis au datif."},
+    {f:"gap", q:"Wie schmeckt ___ das Essen? (à toi)", a:"dir", e:"du → dir."},
+    {f:"gap", q:"___ Bruder gefällt das gar nicht. (à mon)", a:"meinem", e:"der Bruder → meinem Bruder : masculin au datif, terminaison -em."},
+    {f:"gap", q:"Das Fahrrad gehört ___ Schwester. (à ma)", a:"meiner", e:"die Schwester → meiner Schwester : féminin au datif, terminaison -er."},
+    {f:"gap", q:"Ich helfe ___ Eltern. (à mes)", a:"meinen", e:"die Eltern → meinen Eltern : pluriel au datif, terminaison -en."},
+    {f:"qcm", q:"___ Haustier gebe ich Wasser.", o:["Meinem","Meiner","Meinen"], a:"Meinem", e:"das Haustier est neutre : au datif, -em, comme le masculin."},
+    {f:"qcm", q:"Lequel de ces verbes ne demande PAS le datif ?", o:["essen","helfen","gefallen"], a:"essen", e:"« Ich esse einen Apfel » : accusatif. helfen et gefallen, eux, sont dans la liste du datif."},
+    {f:"qcm", q:"Dans « Meiner Schwester schmecken Hamburger », le sujet du verbe est…", o:["Hamburger","Meiner Schwester","schmecken"], a:"Hamburger", e:"C'est pour cela que le verbe est au pluriel : ce sont les hamburgers qui plaisent, à ma sœur."},
+    {f:"gap", q:"Dem Baby ___ nur Milch. (schmecken, présent)", a:"schmeckt", e:"Le sujet est *Milch*, au singulier : schmeckt."},
+    {f:"qcm", q:"Ich gebe ___ Kind einen Apfel.", o:["dem","den","das"], a:"dem", e:"geben prend deux compléments : la personne au datif (dem Kind), la chose à l'accusatif (einen Apfel)."},
+    {f:"pair", q:"Relie chaque pronom à sa forme au datif :", p:[["ich","mir"],["du","dir"],["er","ihm"],["sie (elle)","ihr"]], e:"Ce sont les quatre qui reviennent tout le temps avec schmecken et gefallen."},
+    {f:"gap", q:"Das Restaurant gehört ___ Eltern. (à ses, à elle)", a:"ihren", e:"ihre Eltern → ihren Eltern : le pluriel du datif prend -en, comme meinen."},
+    {f:"ord", q:"Remets la phrase dans l'ordre :", w:["Das","Essen","schmeckt","meiner","Mutter"], a:"Das Essen schmeckt meiner Mutter", e:"La chose est sujet et vient en tête ; la personne suit, au datif."},
+    {f:"qcm", q:"« Das gefällt mir » veut dire…", o:["ça me plaît","je plais","j'aime manger ça"], a:"ça me plaît", e:"Le sujet, c'est *das* — ce qui plaît."}
+  ]},
+
+{ id:"de-u5-phrases", t:"Unité 5 · Répondre par une phrase entière", tier:"programme",
+  from:"2026-08-29",
+  lesson:{ why:"Sur ta feuille de goûts corrigée, la prof a écrit deux fois « Écris une phrase entière ». Le mot juste ne rapporte rien si la consigne demandait une phrase : ce qui est noté, c'est la phrase.",
+    pts:["Une phrase entière a au minimum un *sujet* et un *verbe conjugué*. « Orangensaft » ne répond pas ; « *Ich trinke* Orangensaft » répond.",
+      "Le verbe est toujours en *deuxième position* : *Ich esse* gern Äpfel. — et si la phrase commence par autre chose, le sujet passe derrière le verbe : *Am liebsten esse ich* Schokolade.",
+      "Dire ce qu'on aime : *Ich mag …* / *Ich esse gern …* / *Ich trinke gern …* / *Ich esse … am liebsten*.",
+      "Dire ce qu'on n'aime pas : *Ich mag kein…* ou *Das esse ich nicht so gern*. Et *kein* s'accorde : *keinen* Fisch (m), *keine* Wurst (f), *kein* Fleisch (n), *keine* Pommes (pl).",
+      "Deux fautes à ne plus refaire : *Ich mag Wasser trinken* (avec mögen, on met le nom seul : *Ich mag Wasser*, ou alors *Ich trinke gern Wasser*), et *Ich mag esse gern Schinken* — un seul verbe conjugué par phrase.",
+      "Et jusqu'au bout : majuscule aux noms, point final."],
+    ex:"Question : « Das esse und trinke ich, wenn ich krank bin: » — réponse attendue : *Ich trinke Orangensaft, wenn ich krank bin.*, pas « Orangensaft »." },
+  items:[
+    {f:"qcm", q:"Laquelle est une phrase entière ?", o:["Ich esse gern Tomaten.","Tomaten.","Gern Tomaten."], a:"Ich esse gern Tomaten.", e:"Sujet + verbe conjugué. Les deux autres n'ont pas de verbe."},
+    {f:"qcm", q:"Quelle phrase est correcte ?", o:["Ich mag Wasser.","Ich mag Wasser trinken.","Ich mag trinke Wasser."], a:"Ich mag Wasser.", e:"Avec *mögen*, on met le nom seul. Pour l'action : « Ich trinke gern Wasser »."},
+    {f:"qcm", q:"Quelle phrase est correcte ?", o:["Ich esse gern Schinken.","Ich mag esse gern Schinken.","Ich mag gern esse Schinken."], a:"Ich esse gern Schinken.", e:"Un seul verbe conjugué par phrase : soit *ich mag*, soit *ich esse gern*."},
+    {f:"ord", q:"Remets la phrase dans l'ordre :", w:["Ich","esse","gern","Äpfel"], a:"Ich esse gern Äpfel", e:"Sujet, verbe en 2e position, puis *gern*, puis le nom."},
+    {f:"ord", q:"Remets la phrase dans l'ordre :", w:["Am","liebsten","esse","ich","Schokolade"], a:"Am liebsten esse ich Schokolade", e:"La phrase commence par *am liebsten*, donc le verbe reste 2e et le sujet passe après."},
+    {f:"txt", q:"Réponds par une phrase entière : *Was isst du gern?* (les tomates)", a:"Ich esse gern Tomaten", alt:["Ich mag Tomaten"], e:"Ich esse gern Tomaten. — le mot seul ne répond pas à la question."},
+    {f:"txt", q:"Réponds par une phrase entière : *Hast du eine Allergie?* (non, aucune)", a:"Ich habe keine Allergie", e:"die Allergie est féminin : *keine* Allergie."},
+    {f:"gap", q:"Complète : Ich mag ___ Fisch. (aucun — der Fisch)", a:"keinen", e:"Masculin à l'accusatif : keinen Fisch."},
+    {f:"gap", q:"Complète : Ich mag ___ Wurst. (aucune — die Wurst)", a:"keine", e:"Féminin : keine Wurst."},
+    {f:"gap", q:"Complète : Ich esse ___ Fleisch. (pas de — das Fleisch)", a:"kein", e:"Neutre : kein Fleisch."},
+    {f:"qcm", q:"« Das esse ich nicht so gern » veut dire…", o:["je n'aime pas trop ça","je ne mange jamais ça","je mange ça avec plaisir"], a:"je n'aime pas trop ça", e:"C'est la tournure polie pour dire qu'on n'aime pas — celle que la feuille de goûts demande."},
+    {f:"qcm", q:"« Das esse und trinke ich, wenn ich krank bin: » — quelle réponse convient ?", o:["Ich trinke Orangensaft, wenn ich krank bin.","Orangensaft.","Wenn krank Orangensaft."], a:"Ich trinke Orangensaft, wenn ich krank bin.", e:"C'est exactement la ligne où la prof a écrit « Écris une phrase entière » : « Orangensaft » seul ne répond pas."},
+    {f:"txt", q:"Réponds par une phrase entière : *Was magst du am liebsten?* (le chocolat)", a:"Ich mag Schokolade am liebsten", alt:["Am liebsten mag ich Schokolade"], e:"Les deux ordres sont justes ; ce qui compte, c'est qu'il y ait un sujet et un verbe."}
   ]}
 
 ]};
@@ -1925,6 +1989,31 @@ BANK.anglais = { label:"Anglais", short:"EN", themes:[
 </script>
 <script>
 /* ===================== MATHS ===================== */
+
+/* ---------- le découpage annuel de la classe (29 août 2026) ----------
+   Feuille de la prof : « MATHS 11VG niv2 : découpage annuel 2026-2027 ». Dix
+   thèmes, semaine par semaine, vacances et stages compris. Les dates ci-dessous
+   sont les lundis et vendredis des semaines annoncées ; elles disent QUAND la
+   classe travaille quoi, pas quand elle interroge — la feuille ne porte aucune
+   date de test, et on n'en invente pas (voir `ecole`, plus bas dans la page).
+
+   Une notion peut appartenir à deux thèmes (les aires reviennent au thème 6 et
+   au thème 9) et un thème peut rassembler plusieurs notions (le thème 6 tient
+   Pythagore, Thalès, les aires et la trigonométrie). */
+const MA_ANNEE = {
+  T1:  { t:"Thème 1 · Nombres réels",                from:"2026-08-17", to:"2026-09-11" },
+  T2:  { t:"Thème 2 · Calcul littéral",              from:"2026-09-14", to:"2026-10-09" },
+  T3:  { t:"Thème 3 · Figures géométriques planes",  from:"2026-10-26", to:"2026-11-20" },
+  T4:  { t:"Thème 4 · Fonctions et diagrammes",      from:"2026-11-23", to:"2026-12-25" },
+  T5:  { t:"Thème 5 · Transformations géométriques", from:"2027-01-11", to:"2027-01-22" },
+  T6:  { t:"Thème 6 · Lignes, surfaces, théorèmes et trigonométrie",
+                                                     from:"2027-01-25", to:"2027-03-05" },
+  T7:  { t:"Thème 7 · Équations",                    from:"2027-03-08", to:"2027-04-23" },
+  T8:  { t:"Thème 8 · Représentation de solides",    from:"2027-05-03", to:"2027-05-07" },
+  T9:  { t:"Thème 9 · Solides et diverses mesures",  from:"2027-05-10", to:"2027-05-28" },
+  T10: { t:"Thème 10 · Situations aléatoires",       from:"2027-05-31", to:"2027-06-04" }
+};
+
 BANK.maths = { label:"Maths", short:"MA", themes:[
 
 { id:"ma-rel", t:"Nombres relatifs et priorités", tier:"revision", gen:"ma-rel",
@@ -1983,7 +2072,7 @@ BANK.maths = { label:"Maths", short:"MA", themes:[
     {f:"qcm", q:"Sur une carte à l'échelle 1 : 25 000, 4 cm représentent…", o:["1 km","400 m","25 km"], a:"1 km", e:"4 × 25 000 = 100 000 cm = 1 km."}
   ]},
 
-{ id:"ma-pow", t:"Puissances et notation scientifique", tier:"consolidation", gen:"ma-pow",
+{ id:"ma-pow", t:"Puissances et notation scientifique", tier:"consolidation", gen:"ma-pow", ecole:MA_ANNEE.T1,
   lesson:{ why:"Indispensable pour les sciences, et les règles sont peu nombreuses.",
     pts:["aⁿ = a × a × … (n facteurs). a⁰ = *1* pour tout a ≠ 0.",
       "Même base : aᵘ × aᵛ = a^(u+*v*) ; aᵘ ÷ aᵛ = a^(u−v) ; (aᵘ)ᵛ = a^(u×v).",
@@ -2002,7 +2091,7 @@ BANK.maths = { label:"Maths", short:"MA", themes:[
     {f:"qcm", q:"(3²)³ = ?", o:["3⁶","3⁵","9³"], a:"3⁶", e:"On multiplie les exposants : 2 × 3 = 6."}
   ]},
 
-{ id:"ma-lit", t:"Calcul littéral", tier:"consolidation", gen:"ma-lit",
+{ id:"ma-lit", t:"Calcul littéral", tier:"consolidation", gen:"ma-lit", ecole:MA_ANNEE.T2,
   lesson:{ why:"Développer, réduire, factoriser : l'outil de base de toute la 11e, puis du gymnase.",
     pts:["*Réduire* : on additionne uniquement les termes semblables — 3x + 5 − x + 2 = *2x + 7* (x et constantes séparés).",
       "*Développer* (distributivité) : a(b + c) = ab + ac. Ainsi 3(2x + 5) = *6x + 15*.",
@@ -2021,7 +2110,7 @@ BANK.maths = { label:"Maths", short:"MA", themes:[
     {f:"qcm", q:"Factorise : 10x − 15", o:["5(2x − 3)","5(2x + 3)","10(x − 15)"], a:"5(2x − 3)", e:"Facteur commun 5."}
   ]},
 
-{ id:"ma-eq", t:"Équations du premier degré", tier:"consolidation", gen:"ma-eq",
+{ id:"ma-eq", t:"Équations du premier degré", tier:"consolidation", gen:"ma-eq", ecole:MA_ANNEE.T7,
   lesson:{ why:"L'outil qui transforme un problème en réponse. Le raisonnement est toujours le même.",
     pts:["On garde l'*égalité* : ce qu'on fait d'un côté, on le fait de l'autre.",
       "Méthode : développer, regrouper les x d'un côté et les nombres de l'autre, puis diviser par le coefficient de x.",
@@ -2040,7 +2129,7 @@ BANK.maths = { label:"Maths", short:"MA", themes:[
     {f:"txt", m:1, q:"Résous : x/3 = 4. x = ?", a:"12", e:"On multiplie les deux côtés par 3."}
   ]},
 
-{ id:"ma-pyth", t:"Théorème de Pythagore", tier:"consolidation", gen:"ma-pyth",
+{ id:"ma-pyth", t:"Théorème de Pythagore", tier:"consolidation", gen:"ma-pyth", ecole:MA_ANNEE.T6,
   lesson:{ why:"Le théorème le plus rentable de la scolarité : longueurs, diagonales, vérification d'angle droit.",
     pts:["Dans un triangle *rectangle* : hypoténuse² = côté² + côté² (a² + b² = c²).",
       "L'*hypoténuse* est le côté opposé à l'angle droit — c'est toujours le plus long.",
@@ -2060,6 +2149,7 @@ BANK.maths = { label:"Maths", short:"MA", themes:[
   ]},
 
 { id:"ma-aire", t:"Périmètres, aires et volumes", tier:"consolidation", gen:"ma-vol",
+  ecole:[MA_ANNEE.T6, MA_ANNEE.T9],
   lesson:{ why:"Des formules à connaître par cœur — et une erreur d'unité coûte tout le point.",
     pts:["Rectangle : périmètre 2(L + l), aire L × l. Carré : périmètre 4c, aire c².",
       "Triangle : aire = (base × hauteur) ÷ 2. Disque : périmètre 2πr, aire πr².",
@@ -2078,7 +2168,7 @@ BANK.maths = { label:"Maths", short:"MA", themes:[
     {f:"qcm", q:"Volume d'un cylindre :", o:["πr² × h","2πr × h","πr² ÷ 3"], a:"πr² × h", e:"Aire de la base × hauteur."}
   ]},
 
-{ id:"ma-sys", t:"Systèmes de deux équations", tier:"anticipation", gen:"ma-sys",
+{ id:"ma-sys", t:"Systèmes de deux équations", tier:"anticipation", gen:"ma-sys", ecole:MA_ANNEE.T7,
   lesson:{ why:"Le grand nouveau chapitre de la 11e : deux inconnues, deux équations.",
     pts:["Deux méthodes : *substitution* (on exprime une inconnue et on la remplace) et *addition / soustraction* (on élimine une inconnue).",
       "Substitution : de x + y = 10 on tire y = 10 − x, puis on remplace dans la seconde équation.",
@@ -2098,6 +2188,7 @@ BANK.maths = { label:"Maths", short:"MA", themes:[
   ]},
 
 { id:"ma-stat", t:"Statistiques et probabilités", tier:"anticipation", gen:"ma-stat",
+  ecole:[MA_ANNEE.T4, MA_ANNEE.T10],
   lesson:{ why:"Deux notions simples et très rentables : les indicateurs d'une série, et la probabilité d'un événement.",
     pts:["*Moyenne* = somme des valeurs ÷ nombre de valeurs.",
       "*Médiane* = valeur du milieu quand la série est *rangée dans l'ordre* (moyenne des deux valeurs centrales si le nombre est pair).",
@@ -2125,7 +2216,7 @@ BANK.maths = { label:"Maths", short:"MA", themes:[
    chapitre de plus.
    ============================================================ */
 
-{ id:"ma-rac", t:"Carrés et racines carrées", tier:"consolidation", gen:"ma-rac",
+{ id:"ma-rac", t:"Carrés et racines carrées", tier:"consolidation", gen:"ma-rac", ecole:MA_ANNEE.T1,
   lesson:{ why:"La racine carrée est l'outil de Pythagore et de toute la géométrie de 11e. Elle s'apprivoise avec vingt carrés connus par cœur.",
     pts:["Le carré fait l'aller : 7² = 7 × 7 = *49*. La racine carrée fait le retour : *√49 = 7*.",
       "Les carrés parfaits jusqu'à 20², à savoir sans réfléchir : 1, 4, 9, 16, 25, 36, 49, 64, 81, 100, 121, 144, 169, 196, 225, 256, 289, 324, 361, 400.",
@@ -2145,6 +2236,7 @@ BANK.maths = { label:"Maths", short:"MA", themes:[
   ]},
 
 { id:"ma-thales", t:"Thalès, échelles et agrandissements", tier:"consolidation", gen:"ma-thales",
+  ecole:MA_ANNEE.T6,
   lesson:{ why:"Une seule idée — la proportionnalité des longueurs — qui sert pour les cartes, les maquettes, les ombres et la moitié des exercices de géométrie.",
     pts:["Dans un triangle, si (MN) est *parallèle* à (BC), les longueurs sont proportionnelles : AM/AB = AN/AC = MN/BC.",
       "Le *rapport* k se calcule toujours entre deux longueurs qui se correspondent — jamais entre deux longueurs de la même figure.",
@@ -2163,7 +2255,7 @@ BANK.maths = { label:"Maths", short:"MA", themes:[
     {f:"qcm", q:"Si (MN) ∥ (BC), alors…", o:["AM/AB = AN/AC","AM/AB = AC/AN","AM × AB = AN × AC"], a:"AM/AB = AN/AC", e:"On garde le même sens de lecture des deux côtés de l'égalité."}
   ]},
 
-{ id:"ma-fonc", t:"Fonctions affines et droites", tier:"anticipation", gen:"ma-fonc",
+{ id:"ma-fonc", t:"Fonctions affines et droites", tier:"anticipation", gen:"ma-fonc", ecole:MA_ANNEE.T4,
   lesson:{ why:"Le chapitre qui structure toute la fin de la 11e — et la lecture d'un graphique de tarif, de vitesse ou d'abonnement.",
     pts:["Une fonction affine s'écrit *f(x) = ax + b* : *a* est la *pente*, *b* l'*ordonnée à l'origine*.",
       "Calculer une *image*, c'est remplacer x : f(x) = 3x − 2 donne f(4) = 12 − 2 = *10*.",
@@ -2199,6 +2291,164 @@ BANK.maths = { label:"Maths", short:"MA", themes:[
     {f:"txt", m:1, q:"Dans une classe de 24 élèves, 5/8 sont des filles. Combien y a-t-il de garçons ?", a:"9", e:"5/8 de 24 = 15 filles, donc 24 − 15 = 9."},
     {f:"qcm", q:"Pour trouver une durée à partir d'une distance et d'une vitesse, on…", o:["divise la distance par la vitesse","les multiplie","divise la vitesse par la distance"], a:"divise la distance par la vitesse", e:"t = d ÷ v."},
     {f:"txt", m:1, q:"Un livre coûte 32 CHF, plus 8 % de frais de port. Prix total, en CHF ?", a:"34.56", e:"32 × 1,08 = 34,56."}
+  ]},
+
+/* ============================================================
+   Les six notions du programme annoncé (29 août 2026).
+
+   La prof a donné le découpage de l'année : dix thèmes, semaine par semaine.
+   Six d'entre eux n'avaient aucune notion dans la banque — on ne peut pas
+   « caler l'app sur le programme » et laisser six thèmes sur dix hors champ.
+
+   Elles portent toutes `from` : ce sont de la matière NEUVE, et les ouvrir
+   avant que la classe y arrive serait enseigner à contretemps. Elles
+   s'ouvriront donc toutes seules, le lundi de la semaine annoncée — les
+   nombres réels sont déjà là (17 août), la trigonométrie attendra le 25
+   janvier. Les banques des thèmes lointains sont volontairement courtes : elles
+   seront reprises quand leur date approchera, avec le cahier de l'élève sous les
+   yeux plutôt que le plan de l'année seul.
+   ============================================================ */
+
+{ id:"ma-reels", t:"Thème 1 · Nombres réels", tier:"programme",
+  from:"2026-08-17", ecole:MA_ANNEE.T1,
+  lesson:{ why:"Le thème qui ouvre l'année, et celui sur lequel tout le reste s'appuie : savoir dans quelle famille vit un nombre, c'est savoir ce qu'on a le droit d'en faire.",
+    pts:["Quatre familles emboîtées : *ℕ* (0, 1, 2, …), *ℤ* (les mêmes plus les négatifs), *ℚ* (tout ce qui s'écrit en fraction), *ℝ* (tous les nombres de la droite graduée). Chacune contient la précédente.",
+      "Un nombre est *rationnel* si son écriture décimale s'arrête (0,75) ou se répète à l'infini (0,333…) : il s'écrit alors en fraction — 0,75 = 3/4 et 0,333… = 1/3.",
+      "*√2* et *π* ne s'arrêtent ni ne se répètent : ce sont des *irrationnels*. On ne les écrit jamais « en entier », on les garde tels quels.",
+      "*Valeur exacte* et *valeur approchée* ne sont pas la même chose : √2 est exact, 1,414 est un arrondi. Dans un résultat, on garde l'exact tant qu'on peut.",
+      "Arrondir, c'est regarder le chiffre juste après : au centième, 3,14159 → *3,14* ; 2,236 → *2,24*.",
+      "Encadrer, c'est enfermer entre deux nombres simples : 5 < √30 < 6, parce que 25 < 30 < 36."],
+    ex:"√9 = 3 : la racine d'un carré parfait retombe dans ℕ. √2, elle, n'en sort jamais — c'est ce qui la rend irrationnelle." },
+  items:[
+    {f:"qcm", q:"À quelle famille appartient −7 ?", o:["ℤ","ℕ","aucune des deux"], a:"ℤ", e:"−7 est entier mais négatif : il est dans ℤ, pas dans ℕ."},
+    {f:"qcm", q:"Lequel de ces nombres est *irrationnel* ?", o:["√2","√9","0,333…"], a:"√2", e:"√9 = 3 et 0,333… = 1/3. Seul √2 ne s'écrit pas en fraction."},
+    {f:"txt", m:1, q:"Écris 0,25 en fraction simplifiée", a:"1/4", e:"25/100 se simplifie par 25."},
+    {f:"txt", m:1, q:"Arrondis 3,14159 au centième", a:"3.14", e:"Le chiffre suivant est 1 : on n'augmente pas."},
+    {f:"txt", m:1, q:"Arrondis 2,236 au dixième", a:"2.2", e:"Le chiffre suivant est 3 : on n'augmente pas. (2,236 ≈ √5.)"},
+    {f:"txt", m:1, q:"√50 est entre deux entiers consécutifs. Écris le plus petit.", a:"7", e:"49 < 50 < 64, donc 7 < √50 < 8."},
+    {f:"qcm", q:"Tout nombre entier est aussi…", o:["un nombre rationnel","un nombre irrationnel","un nombre décimal illimité"], a:"un nombre rationnel", e:"5 = 5/1 : les entiers sont des fractions particulières."},
+    {f:"txt", m:1, q:"Écris 7/8 en écriture décimale", a:"0.875", e:"7 ÷ 8 = 0,875 — l'écriture s'arrête, donc c'est bien un rationnel."},
+    {f:"qcm", q:"La valeur *exacte* de l'aire d'un disque de rayon 2 est…", o:["4π","12,56","3,14 × 4"], a:"4π", e:"12,56 est une valeur approchée : on garde π tant qu'on peut."},
+    {f:"qcm", q:"Quelle affirmation est vraie ?", o:["ℕ ⊂ ℤ ⊂ ℚ ⊂ ℝ","ℝ ⊂ ℚ ⊂ ℤ ⊂ ℕ","ℚ ⊂ ℤ ⊂ ℕ ⊂ ℝ"], a:"ℕ ⊂ ℤ ⊂ ℚ ⊂ ℝ", e:"De la plus petite famille à la plus grande : les entiers naturels sont les moins nombreux."},
+    {f:"txt", m:1, q:"Écris 1/3 en écriture décimale arrondie au centième", a:"0.33", e:"0,333… : le troisième 3 n'arrondit pas le deuxième."},
+    {f:"qcm", q:"Lequel de ces nombres n'est PAS un rationnel ?", o:["π","−4","2,5"], a:"π", e:"−4 = −4/1 et 2,5 = 5/2. π ne s'écrit pas en fraction."},
+    {f:"pair", q:"Relie chaque nombre à la plus petite famille qui le contient :", p:[["6","ℕ"],["−3","ℤ"],["3/4","ℚ"],["√2","ℝ"]], e:"Chaque nombre appartient aussi à toutes les familles suivantes : 6 est dans ℕ, mais aussi dans ℤ, ℚ et ℝ."}
+  ]},
+
+{ id:"ma-ident", t:"Thème 2 · Identités remarquables et factorisation", tier:"programme",
+  from:"2026-09-14", ecole:MA_ANNEE.T2,
+  lesson:{ why:"Trois formules à reconnaître dans les deux sens. Elles reviennent dans toutes les équations et toute la géométrie de la fin de l'année.",
+    pts:["(a + b)² = *a² + 2ab + b²*. Le *double produit* est la faute la plus fréquente du chapitre : (x + 3)² n'est pas x² + 9.",
+      "(a − b)² = *a² − 2ab + b²* — même formule, le double produit change de signe.",
+      "(a + b)(a − b) = *a² − b²* : les deux termes en ab se détruisent. C'est la seule des trois où le résultat n'a que deux termes.",
+      "*Factoriser*, c'est faire le chemin inverse : on cherche un facteur commun, ou une identité déjà connue.",
+      "Mise en évidence : 6x² + 9x = *3x(2x + 3)*. On sort le plus grand facteur commun — 3x, pas seulement 3.",
+      "Développé = une *somme* ; factorisé = un *produit*. La consigne dit toujours lequel des deux elle veut."],
+    ex:"x² − 49 = x² − 7² = *(x + 7)(x − 7)* : dès qu'on voit une différence de deux carrés, la factorisation est immédiate." },
+  items:[
+    {f:"qcm", q:"(x + 3)² = ?", o:["x² + 6x + 9","x² + 9","x² + 3x + 9"], a:"x² + 6x + 9", e:"Le double produit vaut 2 × x × 3 = 6x. C'est lui qu'on oublie."},
+    {f:"qcm", q:"(x − 5)² = ?", o:["x² − 10x + 25","x² − 25","x² + 10x + 25"], a:"x² − 10x + 25", e:"Le carré d'un nombre négatif est positif : +25. Seul le double produit est négatif."},
+    {f:"qcm", q:"(x + 4)(x − 4) = ?", o:["x² − 16","x² + 16","x² − 8x − 16"], a:"x² − 16", e:"+4x et −4x se détruisent : il ne reste que la différence des carrés."},
+    {f:"txt", m:1, q:"Factorise : x² − 49", a:"(x+7)(x-7)", alt:["(x-7)(x+7)"], e:"49 = 7², donc c'est a² − b² avec a = x et b = 7."},
+    {f:"txt", m:1, q:"Factorise : 6x² + 9x", a:"3x(2x+3)", e:"Le facteur commun est 3x, pas seulement 3."},
+    {f:"txt", m:1, q:"Factorise : x² − 1", a:"(x+1)(x-1)", alt:["(x-1)(x+1)"], e:"1 = 1² : c'est encore une différence de deux carrés."},
+    {f:"qcm", q:"Quelle expression est *factorisée* ?", o:["3(x + 2)","3x + 6","x² + 5x"], a:"3(x + 2)", e:"Factorisé veut dire écrit comme un produit. x² + 5x est une somme — factorisable, mais pas encore factorisée."},
+    {f:"txt", m:1, q:"Factorise : 5x + 10", a:"5(x+2)", e:"Facteur commun 5."},
+    {f:"qcm", q:"x² + 10x + 25 s'écrit aussi…", o:["(x + 5)²","(x + 25)²","(x + 5)(x − 5)"], a:"(x + 5)²", e:"25 = 5² et 10x = 2 × x × 5 : les trois morceaux de l'identité y sont."},
+    {f:"txt", m:1, q:"Factorise : 4x² − 9", a:"(2x+3)(2x-3)", alt:["(2x-3)(2x+3)"], e:"4x² = (2x)² et 9 = 3² : a = 2x, b = 3."},
+    {f:"qcm", q:"Développer (a − b)² donne…", o:["a² − 2ab + b²","a² − b²","a² + b²"], a:"a² − 2ab + b²", e:"Trois termes, et le double produit est négatif."},
+    {f:"txt", m:1, q:"Factorise : x² + 6x + 9", a:"(x+3)^2", alt:["(x+3)(x+3)","(x+3)²"], e:"9 = 3² et 6x = 2 × x × 3 : c'est (x + 3)²."}
+  ]},
+
+{ id:"ma-fig", t:"Thème 3 · Figures géométriques planes", tier:"programme",
+  from:"2026-10-26", ecole:MA_ANNEE.T3,
+  lesson:{ why:"Presque tout se déduit de deux nombres — 180° dans un triangle, 360° dans un quadrilatère — et d'un vocabulaire précis qu'il faut employer juste.",
+    pts:["Les trois angles d'un *triangle* font toujours *180°* ; les quatre angles d'un *quadrilatère* font *360°*.",
+      "Deux droites parallèles coupées par une sécante : les angles *correspondants* sont égaux, les angles *alternes-internes* aussi. C'est l'outil qui fait circuler une mesure d'angle dans toute la figure.",
+      "Triangle *isocèle* : deux côtés égaux, donc deux angles à la base égaux. Triangle *équilatéral* : trois côtés égaux, donc trois angles de *60°*.",
+      "Quatre droites remarquables, à ne pas confondre : la *médiane* joint un sommet au milieu du côté opposé ; la *médiatrice* coupe un côté en son milieu à angle droit ; la *hauteur* tombe perpendiculairement d'un sommet ; la *bissectrice* coupe un angle en deux.",
+      "Dans un cercle, un triangle dont un côté est un *diamètre* est toujours *rectangle* — l'angle droit est au sommet posé sur le cercle."],
+    ex:"Un triangle a deux angles de 40° et 65° : le troisième vaut 180 − 40 − 65 = *75°*." },
+  items:[
+    {f:"txt", m:1, q:"Deux angles d'un triangle valent 40° et 65°. Combien vaut le troisième, en degrés ?", a:"75", e:"180 − 40 − 65 = 75."},
+    {f:"txt", m:1, q:"Combien vaut chaque angle d'un triangle équilatéral, en degrés ?", a:"60", e:"180 ÷ 3 = 60."},
+    {f:"txt", m:1, q:"Un triangle isocèle a un angle au sommet de 40°. Combien vaut chacun des deux angles à la base, en degrés ?", a:"70", e:"180 − 40 = 140, à partager en deux : 70 et 70."},
+    {f:"qcm", q:"La droite qui coupe un côté en son milieu *et* perpendiculairement s'appelle…", o:["la médiatrice","la médiane","la hauteur"], a:"la médiatrice", e:"La médiane joint le sommet au milieu ; la médiatrice, elle, est perpendiculaire au côté."},
+    {f:"qcm", q:"La droite qui joint un sommet au milieu du côté opposé s'appelle…", o:["la médiane","la médiatrice","la bissectrice"], a:"la médiane", e:"Elle part d'un sommet et vise un milieu."},
+    {f:"txt", m:1, q:"Somme des angles d'un quadrilatère, en degrés ?", a:"360", e:"Un quadrilatère se coupe en deux triangles : 2 × 180."},
+    {f:"qcm", q:"Un triangle inscrit dans un cercle, dont un côté est un diamètre, est…", o:["rectangle","équilatéral","isocèle"], a:"rectangle", e:"L'angle droit se trouve au sommet posé sur le cercle."},
+    {f:"qcm", q:"Deux parallèles coupées par une sécante : les angles alternes-internes sont…", o:["égaux","supplémentaires","complémentaires"], a:"égaux", e:"Comme les correspondants — c'est ce qui permet de transporter une mesure d'angle."},
+    {f:"txt", m:1, q:"Dans un triangle rectangle, un angle aigu vaut 35°. Combien vaut l'autre, en degrés ?", a:"55", e:"90 + 35 = 125, et 180 − 125 = 55. Les deux angles aigus font toujours 90° à eux deux."},
+    {f:"qcm", q:"Un parallélogramme a un angle de 70°. L'angle voisin vaut…", o:["110°","70°","20°"], a:"110°", e:"Deux angles consécutifs d'un parallélogramme sont supplémentaires : 180 − 70."},
+    {f:"pair", q:"Relie chaque droite à sa définition :", p:[["médiane","joint un sommet au milieu du côté opposé"],["hauteur","tombe d'un sommet perpendiculairement au côté opposé"],["bissectrice","partage un angle en deux angles égaux"],["médiatrice","perpendiculaire à un côté en son milieu"]], e:"Quatre droites, quatre définitions — c'est le vocabulaire que l'énoncé emploie sans l'expliquer."},
+    {f:"txt", m:1, q:"Un losange a un angle de 120°. Combien vaut l'angle opposé, en degrés ?", a:"120", e:"Dans un losange comme dans tout parallélogramme, les angles opposés sont égaux."}
+  ]},
+
+{ id:"ma-transf", t:"Thème 5 · Transformations géométriques", tier:"programme",
+  from:"2027-01-11", ecole:MA_ANNEE.T5,
+  lesson:{ why:"Quatre façons de déplacer une figure, et une seule question à se poser à chaque fois : qu'est-ce qui change, qu'est-ce qui reste ?",
+    pts:["*Symétrie axiale* : on replie le long d'un axe. *Symétrie centrale* : on fait un demi-tour autour d'un point (c'est la rotation de 180°).",
+      "*Translation* : on glisse, sans tourner — la même flèche pour tous les points.",
+      "*Rotation* : on tourne d'un angle donné, autour d'un centre donné. Il faut les deux pour qu'elle soit définie.",
+      "Ces quatre-là conservent *tout* : longueurs, angles, aires. La figure obtenue est superposable à celle de départ.",
+      "L'*homothétie*, elle, agrandit ou réduit d'un rapport k : les longueurs sont multipliées par k, les *aires par k²*. Les angles, eux, ne changent pas."],
+    ex:"Une homothétie de rapport 3 triple les longueurs mais multiplie l'aire par 9 — c'est le piège du chapitre." },
+  items:[
+    {f:"qcm", q:"Quelle transformation fait *glisser* la figure sans la tourner ?", o:["la translation","la rotation","la symétrie axiale"], a:"la translation", e:"Tous les points suivent la même flèche."},
+    {f:"qcm", q:"Une symétrie centrale est aussi…", o:["une rotation de 180°","une translation","une homothétie de rapport 2"], a:"une rotation de 180°", e:"Un demi-tour autour du centre."},
+    {f:"qcm", q:"Laquelle de ces transformations NE conserve PAS les longueurs ?", o:["l'homothétie de rapport 2","la rotation","la symétrie axiale"], a:"l'homothétie de rapport 2", e:"Elle les multiplie par 2. Les trois autres donnent une figure superposable."},
+    {f:"txt", m:1, q:"Une homothétie de rapport 3 est appliquée à un triangle d'aire 5 cm². Aire de l'image, en cm² ?", a:"45", e:"Les aires suivent k² : 5 × 9."},
+    {f:"txt", m:1, q:"Un segment de 6 cm subit une homothétie de rapport 0,5. Longueur de l'image, en cm ?", a:"3", e:"6 × 0,5 = 3 : un rapport plus petit que 1 réduit."},
+    {f:"qcm", q:"Pour définir une rotation, il faut donner…", o:["un centre et un angle","un axe","une flèche"], a:"un centre et un angle", e:"Un axe définit une symétrie axiale, une flèche une translation."},
+    {f:"qcm", q:"Après une symétrie axiale, les angles de la figure sont…", o:["inchangés","doublés","supprimés"], a:"inchangés", e:"Longueurs et angles sont conservés."},
+    {f:"txt", m:1, q:"Une homothétie de rapport 4 transforme un carré de côté 2 cm. Aire de l'image, en cm² ?", a:"64", e:"Le côté devient 8 cm, donc l'aire vaut 64 cm² — c'est bien 4 × 4 = 16 fois l'aire de départ."},
+    {f:"pair", q:"Relie chaque transformation à ce qu'il faut donner pour la définir :", p:[["translation","une flèche"],["rotation","un centre et un angle"],["symétrie axiale","un axe"],["symétrie centrale","un point"]], e:"Un énoncé qui ne donne pas ces éléments ne définit pas la transformation."},
+    {f:"qcm", q:"Une homothétie de rapport négatif (−2)…", o:["agrandit et retourne la figure","est impossible","réduit la figure"], a:"agrandit et retourne la figure", e:"Le signe indique le côté du centre : la figure passe de l'autre côté."}
+  ]},
+
+{ id:"ma-trigo", t:"Thème 6 · Trigonométrie du triangle rectangle", tier:"programme",
+  from:"2027-01-25", ecole:MA_ANNEE.T6,
+  lesson:{ why:"Pythagore relie trois côtés ; la trigonométrie relie un angle à deux côtés. C'est ce qui permet de trouver une hauteur qu'on ne peut pas mesurer.",
+    pts:["Trois rapports, à retenir dans cet ordre : *sin = opposé / hypoténuse*, *cos = adjacent / hypoténuse*, *tan = opposé / adjacent*.",
+      "Le moyen mnémotechnique : *SOH · CAH · TOA*.",
+      "« Opposé » et « adjacent » se lisent *par rapport à l'angle* qu'on utilise — le même côté change de nom si on change d'angle. C'est la faute n° 1.",
+      "L'hypoténuse est toujours le côté face à l'angle droit, et c'est toujours le plus long.",
+      "Pour trouver un *côté*, on multiplie ou on divise. Pour trouver un *angle*, on utilise les touches *sin⁻¹, cos⁻¹, tan⁻¹* de la calculatrice.",
+      "Vérifie toujours que la calculatrice est en *degrés* (DEG) : c'est l'erreur qui fait rater tout l'exercice sans qu'on comprenne pourquoi."],
+    ex:"Angle de 30°, hypoténuse 10 : le côté opposé vaut 10 × sin(30°) = 10 × 0,5 = *5*." },
+  items:[
+    {f:"qcm", q:"sin d'un angle, c'est…", o:["opposé / hypoténuse","adjacent / hypoténuse","opposé / adjacent"], a:"opposé / hypoténuse", e:"SOH : Sinus, Opposé, Hypoténuse."},
+    {f:"qcm", q:"tan d'un angle, c'est…", o:["opposé / adjacent","opposé / hypoténuse","hypoténuse / adjacent"], a:"opposé / adjacent", e:"TOA — c'est le seul rapport où l'hypoténuse n'apparaît pas."},
+    {f:"txt", m:1, q:"Triangle rectangle : angle 30°, hypoténuse 10 cm. Longueur du côté opposé, en cm ?", a:"5", e:"10 × sin(30°) = 10 × 0,5."},
+    {f:"qcm", q:"Dans un triangle rectangle, l'hypoténuse est…", o:["le côté face à l'angle droit","le côté le plus court","toujours horizontale"], a:"le côté face à l'angle droit", e:"Et c'est toujours le plus long des trois."},
+    {f:"qcm", q:"On connaît les deux côtés de l'angle droit et on cherche un angle. On utilise…", o:["tan⁻¹","sin","Pythagore"], a:"tan⁻¹", e:"Les deux côtés connus sont l'opposé et l'adjacent : c'est la tangente, puis sa touche inverse."},
+    {f:"txt", m:1, q:"Combien vaut sin(30°) ? (nombre décimal)", a:"0.5", e:"Une valeur à connaître par cœur — c'est celle qui sert à vérifier que la calculatrice est en degrés."},
+    {f:"qcm", q:"La calculatrice affiche sin(30) = −0,988. Que s'est-il passé ?", o:["elle est en radians, pas en degrés","le triangle est faux","sin ne s'applique pas ici"], a:"elle est en radians, pas en degrés", e:"sin(30°) vaut 0,5. Un résultat négatif ou bizarre, c'est presque toujours le mode DEG."},
+    {f:"qcm", q:"On cherche le côté *adjacent*, connaissant l'angle et l'hypoténuse. On utilise…", o:["le cosinus","le sinus","la tangente"], a:"le cosinus", e:"CAH : Cosinus, Adjacent, Hypoténuse."},
+    {f:"txt", m:1, q:"Une échelle de 4 m fait un angle de 60° avec le sol. À quelle hauteur touche-t-elle le mur, en m ? (arrondi au dixième)", a:"3.5", e:"4 × sin(60°) = 4 × 0,866 = 3,46 → 3,5 m."},
+    {f:"qcm", q:"Le côté « adjacent » à un angle, c'est…", o:["celui qui le touche, sans être l'hypoténuse","celui d'en face","toujours le plus court"], a:"celui qui le touche, sans être l'hypoténuse", e:"Opposé et adjacent changent de nom quand on change d'angle : c'est la faute la plus fréquente du chapitre."}
+  ]},
+
+{ id:"ma-solides", t:"Thème 8 · Représentation de solides", tier:"programme",
+  from:"2027-05-03", ecole:MA_ANNEE.T8,
+  lesson:{ why:"Un solide se dessine à plat, et se reconnaît à plat. Tout le thème tient dans le passage entre l'objet en trois dimensions et sa trace sur une feuille.",
+    pts:["En *perspective cavalière* : ce qui est parallèle reste parallèle, les faces de face gardent leurs vraies dimensions, et les arêtes cachées se dessinent en *pointillés*.",
+      "Un *développement* (un patron) est le solide déplié : autant de morceaux que de faces, et ils doivent se recoller sans trou ni chevauchement.",
+      "Un *cube* : 6 faces, 12 arêtes, 8 sommets. Un *pavé droit* aussi — seules les dimensions changent.",
+      "Le développement d'un *cylindre* : deux disques et un rectangle, dont la longueur est le *périmètre du disque* (2πr).",
+      "Une *pyramide* à base carrée : une base carrée et quatre triangles. Un *cône* : un disque et une portion de disque."],
+    ex:"Un cylindre de rayon 3 cm : le rectangle de son développement mesure 2π × 3 ≈ *18,8 cm* de long." },
+  items:[
+    {f:"txt", m:1, q:"Combien un cube a-t-il d'arêtes ?", a:"12", e:"12 arêtes, 6 faces, 8 sommets."},
+    {f:"txt", m:1, q:"Combien un cube a-t-il de sommets ?", a:"8", e:"Quatre en haut, quatre en bas."},
+    {f:"qcm", q:"Dans une perspective cavalière, les arêtes cachées se dessinent…", o:["en pointillés","en gras","pas du tout"], a:"en pointillés", e:"Elles existent : on les montre autrement, on ne les supprime pas."},
+    {f:"qcm", q:"Le développement d'un cylindre, c'est…", o:["deux disques et un rectangle","deux disques et un triangle","un disque et un carré"], a:"deux disques et un rectangle", e:"Le rectangle est la surface latérale déroulée."},
+    {f:"qcm", q:"Le développement d'une pyramide à base carrée, c'est…", o:["un carré et quatre triangles","un carré et quatre carrés","un disque et quatre triangles"], a:"un carré et quatre triangles", e:"Une face par morceau : la base plus les quatre faces latérales."},
+    {f:"txt", m:1, q:"Un cylindre a un rayon de 3 cm. Longueur du rectangle de son développement, en cm ? (arrondi au dixième)", a:"18.8", e:"C'est le périmètre du disque : 2π × 3 ≈ 18,85 → 18,8."},
+    {f:"qcm", q:"Combien de faces a un pavé droit ?", o:["6","8","12"], a:"6", e:"Comme le cube : 6 faces, 12 arêtes, 8 sommets."},
+    {f:"qcm", q:"En perspective cavalière, deux arêtes parallèles du solide sont dessinées…", o:["parallèles","perpendiculaires","de même longueur exacte"], a:"parallèles", e:"Le parallélisme est conservé ; les longueurs des fuyantes, elles, sont réduites."},
+    {f:"pair", q:"Relie chaque solide au nombre de ses faces :", p:[["le cube","6"],["la pyramide à base carrée","5"],["le cylindre","3"],["le tétraèdre","4"]], e:"On compte toutes les faces, bases comprises."},
+    {f:"qcm", q:"Le développement d'un cône, c'est…", o:["un disque et une portion de disque","deux disques","un triangle et un disque"], a:"un disque et une portion de disque", e:"La surface latérale déroulée donne un secteur de disque, pas un triangle."}
   ]}
 
 ]};
@@ -2499,27 +2749,30 @@ const XP_RIGHT = 10, XP_COMBO = 5, XP_BLOCK = 25, XP_DAY = 50;
    Le travail est payé, en argent réel, et le tarif est public — c'est tout
    l'intérêt : il doit pouvoir compter ce qu'il gagne pendant qu'il le gagne.
 
-   · une bonne réponse :  8 centimes
-   · un essai faux :      5 centimes — il rapporte quand même, sinon la
+   · une bonne réponse :  7 centimes
+   · un essai faux :      4 centimes — il rapporte quand même, sinon la
      stratégie payante serait de ne répondre qu'aux questions sûres, ou de ne
      pas répondre du tout. C'est exactement ce qui s'est passé le 23 août.
-   · un bloc terminé :   50 centimes — le bloc est tout-ou-rien, et quitter en
+   · un bloc terminé :   45 centimes — le bloc est tout-ou-rien, et quitter en
      cours de route ne rapporte rien.
 
-   Journée complète (52 questions, 3 blocs) : environ 5.00 CHF à 80 % de
-   réussite, 4.40 au pire, 5.66 au mieux. La cible fixée est ~5 CHF.
+   Journée complète (64 questions, 3 blocs) : environ 5.04 CHF à 80 % de
+   réussite, 5.83 au mieux. La cible fixée est ~5 CHF.
 
-   TARIF REVU LE 26 AOÛT 2026 — « des leçons plus longues pour la même somme ».
-   Le bloc passe de 16 à 20 questions (52 par jour au lieu de 44) et le tarif
-   baisse de 10/6/40 à 8/5/50 : le montant d'une journée ne bouge pas, le
-   travail qu'il demande augmente d'un quart. La prime de fin de bloc monte,
-   elle : c'est elle qui paie l'endurance sur un bloc plus long.
+   LE TARIF SUIT LE VOLUME, PAS L'INVERSE. 44 questions à 10/6/40 le 25 août,
+   52 à 8/5/50 le 26, 64 à 7/4/45 le 29 : à chaque fois le bloc s'allonge et le
+   tarif baisse d'autant, pour que la journée vaille toujours cinq francs. Ce
+   qui change, c'est le travail qu'il faut fournir pour les gagner.
+
+   ⚠ CE QUI EST DÉJÀ GAGNÉ NE BOUGE JAMAIS. Chaque journée porte le montant
+   calculé le jour même (`days[j].cts`), et le porte-monnaie n'est que leur
+   somme : changer le tarif ne rétro-tarife rien. Vérifié par tests/argent.js.
 
    ⚠ SEULS LES PREMIERS PASSAGES SONT PAYÉS. Une reprise entraîne, elle ne
    rapporte pas : sans cette règle, rater exprès pour faire revenir la question
    serait une machine à centimes. C'est le même invariant que la mesure.
    Le nombre de questions par jour étant fixe, aucun plafond n'est nécessaire. */
-const CTS_JUSTE = 8, CTS_ESSAI = 5, CTS_BLOC = 50;
+const CTS_JUSTE = 7, CTS_ESSAI = 4, CTS_BLOC = 45;
 
 /* ---------- le grand défi (26 août 2026) ----------
    « Toutes les trois sessions, une chance de gagner plus en résolvant des
@@ -2534,7 +2787,7 @@ const CTS_JUSTE = 8, CTS_ESSAI = 5, CTS_BLOC = 50;
    Il se mérite (trois journées de trois blocs), il ne se répète pas (chaque
    palier de trois journées n'ouvre qu'un seul défi) et il ne se brade pas : un
    défi abandonné ne rapporte rien, comme les autres blocs. */
-const BLOC_BONUS = 28, BONUS_TOUS_LES = 3;
+const BLOC_BONUS = 32, BONUS_TOUS_LES = 3;
 const CTS_BONUS_JUSTE = 15, CTS_BONUS_ESSAI = 4, CTS_BONUS_BLOC = 100;
 const chf = cts => (cts / 100).toLocaleString("fr-CH", { minimumFractionDigits:2, maximumFractionDigits:2 });
 
@@ -2561,7 +2814,7 @@ const chf = cts => (cts / 100).toLocaleString("fr-CH", { minimumFractionDigits:2
    trois questions plus loin, puis huit plus loin (rappel expansé), et il faut
    le réussir DEUX fois pour qu'il cesse de revenir. C'est le même critère que
    le rachat entre sessions (`miss.s >= 2`), appliqué à l'intérieur du bloc. */
-const BLOC_LONG = 20, BLOC_DEFI = 12, PALIER = 8;
+const BLOC_LONG = 24, BLOC_DEFI = 16, PALIER = 8;
 
 /* Les reprises, resserrées le 25 août 2026 : « moins de répétitions ».
    Un mot raté revenait jusqu'à QUATRE fois dans le même bloc, et deux reprises
@@ -2781,6 +3034,33 @@ function testLabel(t){                     // « test dans 3 jours », pour l'af
   if (d === 1) return "test demain";
   return "test dans " + d + " jours (" + frDate(nextTest(t)) + ")";
 }
+
+/* ---------- ce que la classe travaille en ce moment (29 août 2026) ----------
+   La prof de maths a donné le découpage de l'année — 11VG niveau 2, 2026-2027,
+   dix thèmes avec les semaines de chacun. Ce plan ne dit PAS quand elle
+   interroge. On n'invente donc pas de dates de test : elles s'afficheraient à
+   l'élève comme des faits (« test dans 3 jours »), et ce serait faux.
+
+   `ecole` dit seulement : la classe est SUR cette notion en ce moment. Pendant
+   la fenêtre, la notion passe devant — comme une liste de vocabulaire à la
+   veille d'un test ; hors fenêtre elle retombe dans la rotation ordinaire au
+   lieu de disparaître. Une notion peut avoir plusieurs fenêtres : les
+   diagrammes en novembre, les situations aléatoires en juin.
+
+   Les notions de matière NEUVE portent en plus `from` : la trigonométrie
+   n'existe pas pour lui avant le 25 janvier, et l'ouvrir plus tôt serait
+   enseigner avant la classe. Celles qui reprennent un acquis de 10e (Pythagore,
+   les aires) restent ouvertes toute l'année — la fenêtre ne fait que les
+   remettre en avant quand la classe y revient. */
+const fenetres = t => !t.ecole ? [] : (Array.isArray(t.ecole) ? t.ecole : [t.ecole]);
+function fenetreDuJour(t){
+  const d = today();
+  return fenetres(t).find(f => f.from <= d && d <= f.to) || null;
+}
+function enClasse(t){ return !!fenetreDuJour(t); }
+function classeThemes(){ return THEMES.filter(t => isOpen(t) && enClasse(t)); }
+function classeLabel(t){ const f = fenetreDuJour(t); return f ? f.t : ""; }
+
 function mastery(t){
   const st = S.themes[t.id];
   if (!st.seen) return null;
@@ -2957,8 +3237,12 @@ function todaysPlan(){
   // 1. Révision : ce que les boîtes réclament aujourd'hui — les notions
   // récemment ratées passent devant, et une liste dont le test approche revient
   // qu'elle soit due ou non : l'école ne consulte pas les boîtes.
+  // un test qui approche passe en premier, puis ce que la classe travaille en
+  // ce moment (le découpage annuel de maths) — les deux devant les boîtes
   const urgent = urgentThemes();
-  const forced = urgent.filter(t => S.themes[t.id].box >= 1);
+  const enCours = classeThemes().filter(t => urgent.indexOf(t) === -1);
+  const devant = urgent.concat(enCours);
+  const forced = devant.filter(t => S.themes[t.id].box >= 1);
   const due = forced.concat(
       dueThemes()
         .filter(t => forced.indexOf(t) === -1)
@@ -2966,10 +3250,14 @@ function todaysPlan(){
           const ra = histAcc(S.themes[a.id], -3), rb = histAcc(S.themes[b.id], -3);
           return (ra === null ? 1 : ra) - (rb === null ? 1 : rb);
         }))
-    .slice(0, 4);
+    // cinq notions au lieu de quatre depuis le 29 août : le bloc s'est allongé,
+    // et l'élargir plutôt que de le creuser sert la couverture des matières
+    .slice(0, 5);
   const rev = { kind:"revision", n:1, title:"Révision", themes: due.map(t => t.id),
     sub: forced.length
-      ? "Tu as un test qui arrive — " + forced[0].t + " : " + testLabel(forced[0]) + "."
+      ? (daysToTest(forced[0]) !== null
+          ? "Tu as un test qui arrive — " + forced[0].t + " : " + testLabel(forced[0]) + "."
+          : "En classe en ce moment — " + classeLabel(forced[0]) + ".")
       : due.length
         ? "Les notions que tes boîtes réclament aujourd'hui."
         : "Rien à revoir aujourd'hui — je te fais réviser tes notions les plus fragiles." };
@@ -2985,9 +3273,10 @@ function todaysPlan(){
     }
   }
 
-  // 2. Leçon du jour : une liste jamais vue dont le test approche passe devant
-  // la rotation ; sinon, nouvelle notion, matières en rotation
-  let lead = urgent.filter(t => S.themes[t.id].box === 0)[0] || null;
+  // 2. Leçon du jour : une notion jamais vue dont le test approche — ou que la
+  // classe travaille en ce moment — passe devant la rotation ; sinon, nouvelle
+  // notion, matières en rotation
+  let lead = devant.filter(t => S.themes[t.id].box === 0)[0] || null;
   for (let k = 0; k < ROTATION.length && !lead; k++){
     const sk = ROTATION[(dayIx + k) % ROTATION.length];
     const cands = newThemes(sk);
@@ -3010,9 +3299,16 @@ function todaysPlan(){
   // 4. Le grand défi : une fois toutes les trois journées complètes, plus long,
   //    plus dur, et beaucoup mieux payé. Il n'apparaît que s'il est mérité.
   if (bonusOuvert()){
-    plan.push({ kind:"bonus", n:4, title:"Le grand défi", themes: themesDurs(),
-      sub: BLOC_BONUS + " questions, tout à écrire, les notions les plus exigeantes. "
-         + CTS_BONUS_JUSTE + " ct la bonne réponse et " + chf(CTS_BONUS_BLOC) + " CHF si tu vas au bout." });
+    const encours = S.defi && S.defi.items && S.defi.i < S.defi.items.length ? S.defi : null;
+    plan.push({ kind:"bonus", n:4,
+      title: encours ? "Le grand défi — à reprendre" : "Le grand défi",
+      themes: encours ? (encours.block.themes || []) : themesDurs(),
+      sub: encours
+        ? "Tu en es à la question " + (encours.i + 1) + " sur " + encours.items.length
+          + ", avec " + encours.right + " bonne(s) réponse(s) et " + chf(encours.cts || 0)
+          + " CHF déjà gagnés. On reprend là."
+        : BLOC_BONUS + " questions, les notions les plus exigeantes, la réponse à écrire. "
+          + CTS_BONUS_JUSTE + " ct la bonne réponse et " + chf(CTS_BONUS_BLOC) + " CHF si tu vas au bout." });
   }
 
   return plan.map(b => Object.assign(b, { done: done.includes(b.kind) }));
@@ -3098,6 +3394,7 @@ function recordBlock(block, res){
   if (block.kind === "bonus"){
     S.bonus = S.bonus || {};
     S.bonus.pris = paliersBonus();
+    S.defi = null;                    // la manche est finie, plus rien à reprendre
   }
   S.wallet = S.wallet || { verse:0 };
   S.wallet.cts = ctsDepuisJours(S.days);
@@ -3184,9 +3481,13 @@ function homeHTML(){
   const toSchool = Math.max(0, diffDays(t0, SCHOOL_START));
   const weekDone = weekCount();
   // une fois la rentrée passée, le compte à rebours sert au prochain test de l'école
+  // …et à défaut de test, au thème que la classe travaille en ce moment : le
+  // bandeau ne doit jamais retomber à vide entre deux échéances
   const nextEv = urgentThemes()[0];
+  const enCl = classeThemes()[0];
   const countdown = toSchool > 0 ? "J−" + toSchool + " · rentrée"
     : nextEv ? nextEv.t + " · " + (daysToTest(nextEv) <= 0 ? "test aujourd'hui" : "J−" + daysToTest(nextEv))
+    : enCl ? classeLabel(enCl) + " · en classe"
     : "";
 
   const acq = THEMES.filter(t => S.themes[t.id].box === 5).length;
@@ -4063,6 +4364,8 @@ let sess = null;
 function startBlock(kind){
   const block = todaysPlan().find(b => b.kind === kind);
   if (!block) return;
+  // le grand défi se REPREND là où il a été laissé (voir sauverDefi)
+  if (kind === "bonus" && reprendreDefi()) return;
   const items = blockItems(block);
   if (!items.length){ alert("Pas d'exercice disponible pour ce bloc."); return; }
   sess = {
@@ -4498,13 +4801,65 @@ function nextItem(){
   sess.pl = null; sess.pr = null; sess.link = {}; sess.sel = null;
   renderSession();
 }
+/* ---------- le grand défi se reprend, il ne se recommence pas ----------
+   29 août 2026. L'élève s'y est repris à plusieurs fois en repartant de zéro pour
+   maximiser son gain, et rien ne l'en empêchait : le palier n'est consommé qu'à
+   la fin, et le tirage était refait à chaque essai. À force d'essais, le bon
+   tirage finit par arriver — on récompensait alors la persévérance du dé, pas
+   celle de l'élève.
+
+   Fermer la porte en consommant le palier à l'ouverture aurait puni une
+   interruption réelle (batterie vide, on passe à table). On sauvegarde donc la
+   manche en cours : elle attend là où il l'a laissée, avec ses questions, son
+   score et ses centimes. Une interruption ne coûte rien ; un recommencement
+   n'existe plus. */
+function sauverDefi(){
+  if (!sess || sess.block.kind !== "bonus") return;
+  const i = sess.i + (sess.answered ? 1 : 0);   // la question corrigée est acquise
+  if (i >= sess.items.length){ S.defi = null; save(); return; }
+  S.defi = {
+    block: sess.block, items: sess.items, i: i,
+    xp: sess.xp, right: sess.right, total: sess.total, cts: sess.cts,
+    byTheme: sess.byTheme, errs: sess.errs, itemLog: sess.itemLog,
+    bestCombo: sess.bestCombo, paliersVus: sess.paliersVus,
+    reprises: sess.reprises, reprisesFaites: sess.reprisesFaites, dernierRep: sess.dernierRep
+  };
+  save();
+}
+function reprendreDefi(){
+  const d = S.defi;
+  if (!d || !d.items || !d.items.length || d.i >= d.items.length) return false;
+  sess = {
+    block: d.block, items: d.items, i: d.i,
+    xp: d.xp || 0, right: d.right || 0, total: d.total || 0, combo: 0,
+    bestCombo: d.bestCombo || 0, byTheme: d.byTheme || {},
+    answered:false, correct:null, chosen:null, built:[],
+    pl:null, pr:null, link:{}, sel:null,
+    errs: d.errs || [], itemLog: d.itemLog || [],
+    reprises: d.reprises || [], paliersVus: d.paliersVus || [],
+    dernierRep: d.dernierRep == null ? null : d.dernierRep,
+    reprisesFaites: d.reprisesFaites || 0,
+    cts: d.cts || 0, vides:0, artic:null,
+    phase:"quiz"
+  };
+  view = { screen:"session" };
+  render();
+  toast("On reprend à la question " + (d.i + 1) + " sur " + d.items.length + ".");
+  return true;
+}
+
 function quitSession(){
-  if (!sess.total){ sess = null; view = { screen:"home" }; render(); return; }
-  demander("Quitter le bloc ?",
-    "Les " + sess.total + " questions déjà faites ne compteront pas, et le bloc ne "
-    + "rapportera rien. Tu pourras le reprendre depuis le début.",
-    "Quitter quand même",
-    () => { sess = null; view = { screen:"home" }; render(); });
+  if (!sess.total){ sauverDefi(); sess = null; view = { screen:"home" }; render(); return; }
+  const defi = sess.block.kind === "bonus";
+  demander(defi ? "Mettre le défi en pause ?" : "Quitter le bloc ?",
+    defi
+      ? "Le défi t'attendra à la question " + (sess.i + (sess.answered ? 2 : 1))
+        + " sur " + sess.items.length + ", avec tes " + sess.right + " bonnes réponses. "
+        + "Il ne se recommence pas depuis le début."
+      : "Les " + sess.total + " questions déjà faites ne compteront pas, et le bloc ne "
+        + "rapportera rien. Tu pourras le reprendre depuis le début.",
+    defi ? "Mettre en pause" : "Quitter quand même",
+    () => { sauverDefi(); sess = null; view = { screen:"home" }; render(); });
 }
 function finish(){
   const out = recordBlock(sess.block, { xp:sess.xp, right:sess.right, total:sess.total, byTheme:sess.byTheme,
