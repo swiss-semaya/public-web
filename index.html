@@ -2035,11 +2035,14 @@ BANK.maths = { label:"Maths", short:"MA", themes:[
   ]},
 
 { id:"ma-frac", t:"Fractions", tier:"revision", gen:"ma-frac",
-  lesson:{ why:"Les fractions reviennent partout en 11e : équations, proportions, probabilités.",
-    pts:["Additionner : *même dénominateur obligatoire*. 2/3 + 1/4 → 8/12 + 3/12 = *11/12*.",
-      "Multiplier : numérateurs entre eux, dénominateurs entre eux (2/3 × 4/5 = 8/15). Simplifier avant, c'est plus rapide.",
+  ecole:MA_ANNEE.T1, tests:["2026-09-10"],
+  lesson:{ why:"Les fractions reviennent partout en 11e : équations, proportions, probabilités. Et c'est la moitié du test de demain.",
+    pts:["Additionner ou soustraire : *même dénominateur obligatoire*. 2/3 + 1/4 → 8/12 + 3/12 = *11/12*. ⚠ On n'additionne JAMAIS les dénominateurs entre eux.",
+      "Multiplier : numérateurs entre eux, dénominateurs entre eux (2/3 × 4/5 = 8/15). Simplifier avant, c'est plus rapide. Ici, pas besoin de dénominateur commun.",
       "Diviser : on multiplie par l'inverse — 3/4 ÷ 2/5 = 3/4 × 5/2 = *15/8*.",
       "Simplifier : diviser numérateur et dénominateur par leur plus grand diviseur commun (18/24 = *3/4*).",
+      "*Comparer* : on met au même dénominateur, et on compare les numérateurs. 3/4 contre 2/3 → 9/12 contre 8/12.",
+      "*La fraction d'une quantité* : « les 3/5 de 45 » = 45 ÷ 5 × 3 = *27*. On divise par le dénominateur, on multiplie par le numérateur.",
       "Une fraction n'est vraiment terminée que *simplifiée*."],
     ex:"2/3 + 1/4 : dénominateur commun 12 → 8/12 + 3/12 = 11/12, déjà irréductible." },
   items:[
@@ -2050,7 +2053,28 @@ BANK.maths = { label:"Maths", short:"MA", themes:[
     {f:"qcm", q:"Quelle fraction est égale à 0,25 ?", o:["1/4","1/2","2/5"], a:"1/4", e:"1 ÷ 4 = 0,25."},
     {f:"txt", m:1, q:"Calcule : 5/6 − 1/3", a:"1/2", alt:["3/6"], e:"1/3 = 2/6, donc 5/6 − 2/6 = 3/6 = 1/2."},
     {f:"qcm", q:"Laquelle est la plus grande ?", o:["3/4","2/3","5/8"], a:"3/4", e:"Sur 24 : 18/24, 16/24, 15/24."},
-    {f:"txt", m:1, q:"Écris 7/2 en nombre décimal", a:"3.5", alt:["3,5"], e:"7 ÷ 2 = 3,5."}
+    {f:"txt", m:1, q:"Écris 7/2 en nombre décimal", a:"3.5", alt:["3,5"], e:"7 ÷ 2 = 3,5."},
+    /* Ajoutés le 9 septembre 2026, la veille du test de maths (thème 1). Cette
+       notion n'avait JAMAIS été ouverte : 2 notions de maths sur 20 en trois
+       semaines, et les fractions n'en faisaient pas partie. Les huit premiers
+       items suffisaient à une révision ; ils ne suffisent pas à un test. Ce qui
+       suit couvre ce que les huit ne touchaient pas : soustraire avec des
+       dénominateurs différents, diviser, comparer, la fraction d'une quantité,
+       les priorités, et l'erreur qui coûte le plus de points. */
+    {f:"txt", m:1, q:"Calcule et simplifie : 3/4 − 1/6", a:"7/12", e:"Dénominateur commun 12 : 9/12 − 2/12 = 7/12."},
+    {f:"txt", m:1, q:"Calcule et simplifie : 2/3 ÷ 4/5", a:"5/6", alt:["10/12"], e:"On multiplie par l'inverse : 2/3 × 5/4 = 10/12 = 5/6."},
+    {f:"txt", m:1, q:"Combien font les 3/5 de 45 ?", a:"27", e:"45 ÷ 5 = 9, puis 9 × 3 = 27. On divise par le dénominateur, on multiplie par le numérateur."},
+    {f:"txt", m:1, q:"Combien font les 2/7 de 63 ?", a:"18", e:"63 ÷ 7 = 9, puis 9 × 2 = 18."},
+    {f:"qcm", q:"Quelle est l'erreur dans « 1/2 + 1/3 = 2/5 » ?", o:["on a additionné les dénominateurs","on a oublié de simplifier","il fallait multiplier"], a:"on a additionné les dénominateurs", e:"Le bon calcul : 3/6 + 2/6 = 5/6. Additionner en ligne (1+1)/(2+3) est la faute la plus chère du chapitre."},
+    {f:"txt", m:1, q:"Simplifie : 36/48", a:"3/4", e:"Les deux se divisent par 12."},
+    {f:"txt", m:1, q:"Calcule et simplifie : 3 × 2/5", a:"6/5", alt:["1.2"], e:"L'entier multiplie le numérateur : 3 × 2 = 6, sur 5."},
+    {f:"txt", m:1, q:"Calcule et simplifie : 2 + 1/3", a:"7/3", e:"2 = 6/3, donc 6/3 + 1/3 = 7/3."},
+    {f:"txt", m:1, q:"Calcule : 1/2 + 1/3 × 3/4", a:"3/4", alt:["9/12","6/8"], e:"La multiplication d'abord : 1/3 × 3/4 = 3/12 = 1/4. Puis 1/2 + 1/4 = 3/4."},
+    {f:"txt", m:1, q:"Écris 1/8 en nombre décimal", a:"0.125", e:"1 ÷ 8 = 0,125."},
+    {f:"txt", m:1, q:"Écris 0,6 en fraction simplifiée", a:"3/5", alt:["6/10"], e:"6/10 se simplifie par 2."},
+    {f:"qcm", q:"Range dans l'ordre croissant : 2/3, 3/4, 5/8", o:["5/8 < 2/3 < 3/4","2/3 < 5/8 < 3/4","3/4 < 2/3 < 5/8"], a:"5/8 < 2/3 < 3/4", e:"Sur 24 : 15/24, 16/24, 18/24."},
+    {f:"qcm", q:"Pour multiplier deux fractions, faut-il le même dénominateur ?", o:["non, jamais","oui, toujours","seulement si elles sont simplifiées"], a:"non, jamais", e:"Le dénominateur commun ne sert qu'à l'addition et à la soustraction. C'est la confusion la plus fréquente."},
+    {f:"txt", m:1, q:"Calcule et simplifie : 5/6 − 3/4", a:"1/12", e:"Dénominateur commun 12 : 10/12 − 9/12 = 1/12."}
   ]},
 
 { id:"ma-prop", t:"Proportionnalité et pourcentages", tier:"revision", gen:"ma-pct",
@@ -2072,12 +2096,15 @@ BANK.maths = { label:"Maths", short:"MA", themes:[
     {f:"qcm", q:"Sur une carte à l'échelle 1 : 25 000, 4 cm représentent…", o:["1 km","400 m","25 km"], a:"1 km", e:"4 × 25 000 = 100 000 cm = 1 km."}
   ]},
 
-{ id:"ma-pow", t:"Puissances et notation scientifique", tier:"consolidation", gen:"ma-pow", ecole:MA_ANNEE.T1,
-  lesson:{ why:"Indispensable pour les sciences, et les règles sont peu nombreuses.",
+{ id:"ma-pow", t:"Puissances et notation scientifique", tier:"consolidation", gen:"ma-pow",
+  ecole:MA_ANNEE.T1, tests:["2026-09-10"],
+  lesson:{ why:"Indispensable pour les sciences, et les règles sont peu nombreuses. C'est l'autre moitié du test de demain — et c'est ta notion la mieux tenue : 25 bonnes réponses sur 28.",
     pts:["aⁿ = a × a × … (n facteurs). a⁰ = *1* pour tout a ≠ 0.",
       "Même base : aᵘ × aᵛ = a^(u+*v*) ; aᵘ ÷ aᵛ = a^(u−v) ; (aᵘ)ᵛ = a^(u×v).",
       "Exposant négatif : a^(−n) = 1/aⁿ. Ainsi 10⁻³ = 0,001.",
-      "Notation scientifique : un seul chiffre non nul avant la virgule, × une puissance de 10 — 45 000 = *4,5 × 10⁴*.",
+      "Notation scientifique : *un seul chiffre non nul avant la virgule*, × une puissance de 10 — 45 000 = *4,5 × 10⁴*. Donc 12 × 10⁵ n'est PAS en notation scientifique : il faut écrire 1,2 × 10⁶.",
+      "Les *petits* nombres prennent un exposant *négatif* : 0,00034 = *3,4 × 10⁻⁴*. Compte les rangs dont la virgule se déplace — quatre, vers la droite.",
+      "Le signe de l'exposant dit seulement de quel côté va la virgule : *positif* = grand nombre, *négatif* = petit nombre. Il ne rend jamais le nombre négatif.",
       "Attention : (−2)⁴ = +16 mais −2⁴ = −16 ; la parenthèse change tout."],
     ex:"2³ × 2⁴ = 2⁷ = 128 — on additionne les exposants, on ne multiplie jamais les bases." },
   items:[
@@ -2088,7 +2115,26 @@ BANK.maths = { label:"Maths", short:"MA", themes:[
     {f:"qcm", q:"45 000 en notation scientifique :", o:["4,5 × 10⁴","45 × 10³","4,5 × 10⁵"], a:"4,5 × 10⁴", e:"Un seul chiffre avant la virgule."},
     {f:"qcm", q:"10⁻³ vaut…", o:["0,001","−1000","0,0001"], a:"0,001", e:"Exposant négatif → inverse de 10³."},
     {f:"txt", m:1, q:"Calcule : (−2)⁴", a:"16", e:"Exposant pair → résultat positif."},
-    {f:"qcm", q:"(3²)³ = ?", o:["3⁶","3⁵","9³"], a:"3⁶", e:"On multiplie les exposants : 2 × 3 = 6."}
+    {f:"qcm", q:"(3²)³ = ?", o:["3⁶","3⁵","9³"], a:"3⁶", e:"On multiplie les exposants : 2 × 3 = 6."},
+    /* Ajoutés le 9 septembre 2026, la veille du test. La notion est en boîte 5
+       (25/28) mais les huit premiers items ne posaient la notation scientifique
+       que dans un seul sens et sur des GRANDS nombres. Le test porte dessus :
+       on ajoute les petits nombres (exposant négatif), le retour à l'écriture
+       décimale, le produit de deux notations, et la forme « presque juste »
+       (12 × 10⁵) qui est la faute classique. */
+    {f:"qcm", q:"0,00034 en notation scientifique :", o:["3,4 × 10⁻⁴","3,4 × 10⁴","34 × 10⁻⁵"], a:"3,4 × 10⁻⁴", e:"La virgule se déplace de quatre rangs vers la droite : exposant −4. Un nombre plus petit que 1 donne toujours un exposant négatif."},
+    {f:"qcm", q:"0,072 en notation scientifique :", o:["7,2 × 10⁻²","7,2 × 10²","72 × 10⁻³"], a:"7,2 × 10⁻²", e:"Deux rangs : 10⁻². « 72 × 10⁻³ » vaut le bon nombre, mais ce n'est pas la notation scientifique — il faut un seul chiffre avant la virgule."},
+    {f:"qcm", q:"Laquelle de ces écritures est en notation scientifique ?", o:["1,2 × 10⁶","12 × 10⁵","0,12 × 10⁷"], a:"1,2 × 10⁶", e:"Les trois valent 1 200 000, mais une seule a exactement un chiffre non nul avant la virgule."},
+    {f:"txt", m:1, q:"Écris 2,5 × 10⁵ en écriture décimale (sans espace)", a:"250000", e:"La virgule se déplace de 5 rangs vers la droite : 250 000."},
+    {f:"txt", m:1, q:"Écris 6 × 10⁻² en écriture décimale", a:"0.06", e:"Exposant négatif → petit nombre : 6 ÷ 100 = 0,06."},
+    {f:"txt", m:1, q:"Écris 1,5 × 10⁻³ en écriture décimale", a:"0.0015", e:"Trois rangs vers la gauche : 0,0015."},
+    {f:"qcm", q:"(2 × 10³) × (3 × 10⁴) = ?", o:["6 × 10⁷","6 × 10¹²","5 × 10⁷"], a:"6 × 10⁷", e:"On multiplie les nombres (2 × 3 = 6) et on ADDITIONNE les exposants (3 + 4 = 7)."},
+    {f:"qcm", q:"(8 × 10⁶) ÷ (2 × 10²) = ?", o:["4 × 10⁴","4 × 10³","6 × 10⁴"], a:"4 × 10⁴", e:"8 ÷ 2 = 4, et on SOUSTRAIT les exposants : 6 − 2 = 4."},
+    {f:"qcm", q:"Lequel est le plus GRAND ?", o:["3 × 10⁵","9 × 10⁴","7 × 10⁻⁵"], a:"3 × 10⁵", e:"On regarde l'exposant d'abord : 5 > 4 > −5. Le nombre devant ne départage que si les exposants sont égaux."},
+    {f:"txt", m:1, q:"Calcule : 2⁷ ÷ 2⁴ (donne le résultat en nombre)", a:"8", e:"On soustrait les exposants : 2⁷⁻⁴ = 2³ = 8."},
+    {f:"qcm", q:"10⁻¹ vaut…", o:["0,1","−10","−0,1"], a:"0,1", e:"Un exposant négatif ne rend jamais le nombre négatif : il le rend petit."},
+    {f:"txt", m:1, q:"Calcule : (−3)²", a:"9", e:"Exposant pair, parenthèses : le résultat est positif."},
+    {f:"txt", m:1, q:"Calcule : −3²", a:"-9", e:"Sans parenthèses, le carré porte sur 3 seulement : −(3²) = −9. C'est le piège du chapitre."}
   ]},
 
 { id:"ma-lit", t:"Calcul littéral", tier:"consolidation", gen:"ma-lit", ecole:MA_ANNEE.T2,
@@ -2477,15 +2523,41 @@ BANK.maths = { label:"Maths", short:"MA", themes:[
       e:"Parenthèse d'abord : "+b+" + "+c+" = "+(b+c)+", puis "+a+" × "+(b+c)+" = "+(a*(b+c))+"." };
   };
 
+  /* Élargi le 9 septembre 2026, la veille du test : le générateur ne savait
+     qu'additionner, multiplier et simplifier. Or ce qui se rate, c'est la
+     SOUSTRACTION (dénominateur commun, mais un signe à tenir), la DIVISION
+     (multiplier par l'inverse) et la fraction d'une quantité. */
   GENS["ma-frac"] = function(){
     const b = ri(2,9), d = ri(2,9), a = ri(1,b-1), c = ri(1,d-1);
-    const t = rnd(3);
+    const t = rnd(6);
+    /* L'explication montre la somme AVANT simplification puis après : « 6/8 + 4/8
+       = 5/4 » saute l'étape où la faute se produit. */
+    const puis = (n, den) => (frac(n, den) === n+"/"+den ? "" : " = " + frac(n, den));
     if (t === 0) return { f:"txt", m:1, q:"Calcule et simplifie : "+a+"/"+b+" + "+c+"/"+d,
       a:frac(a*d + c*b, b*d), alt:[(a*d+c*b)+"/"+(b*d)],
-      e:"Dénominateur commun "+(b*d)+" : "+(a*d)+"/"+(b*d)+" + "+(c*b)+"/"+(b*d)+" = "+frac(a*d+c*b, b*d)+"." };
+      e:"Dénominateur commun "+(b*d)+" : "+(a*d)+"/"+(b*d)+" + "+(c*b)+"/"+(b*d)+" = "
+        +(a*d+c*b)+"/"+(b*d)+puis(a*d+c*b, b*d)+"." };
     if (t === 1) return { f:"txt", m:1, q:"Calcule et simplifie : "+a+"/"+b+" × "+c+"/"+d,
       a:frac(a*c, b*d), alt:[(a*c)+"/"+(b*d)],
       e:"Numérateurs entre eux, dénominateurs entre eux : "+(a*c)+"/"+(b*d)+" = "+frac(a*c,b*d)+"." };
+    if (t === 2){                       // soustraction : on garde le résultat positif
+      let A = a, B = b, C = c, D = d;
+      if (A*D < C*B){ A = c; B = d; C = a; D = b; }
+      if (A*D === C*B){ C = C > 1 ? C - 1 : C; D = D + 1; }   // sinon la réponse est 0
+      return { f:"txt", m:1, q:"Calcule et simplifie : "+A+"/"+B+" − "+C+"/"+D,
+        a:frac(A*D - C*B, B*D), alt:[(A*D-C*B)+"/"+(B*D)],
+        e:"Dénominateur commun "+(B*D)+" : "+(A*D)+"/"+(B*D)+" − "+(C*B)+"/"+(B*D)+" = "
+          +(A*D-C*B)+"/"+(B*D)+puis(A*D-C*B, B*D)+"." };
+    }
+    if (t === 3) return { f:"txt", m:1, q:"Calcule et simplifie : "+a+"/"+b+" ÷ "+c+"/"+d,
+      a:frac(a*d, b*c), alt:[(a*d)+"/"+(b*c)],
+      e:"Diviser, c'est multiplier par l'inverse : "+a+"/"+b+" × "+d+"/"+c+" = "
+        +(a*d)+"/"+(b*c)+puis(a*d, b*c)+"." };
+    if (t === 4){                       // la fraction d'une quantité, tombée telle quelle au test
+      const q = b * ri(2, 12);
+      return { f:"txt", m:1, q:"Combien font les "+a+"/"+b+" de "+q+" ?", a:String(q / b * a),
+        e:q+" ÷ "+b+" = "+(q/b)+", puis "+(q/b)+" × "+a+" = "+(q/b*a)+"." };
+    }
     const k = ri(2,6);
     return { f:"txt", m:1, q:"Simplifie : "+(a*k)+"/"+(b*k), a:frac(a,b),
       e:"On divise les deux termes par "+gcd(a*k,b*k)+" → "+frac(a,b)+"." };
@@ -2507,8 +2579,16 @@ BANK.maths = { label:"Maths", short:"MA", themes:[
       a:String(m*u), e:"Prix unitaire "+u+" CHF, donc "+m+" × "+u+" = "+(m*u)+" CHF." };
   };
 
+  /* Élargi le 9 septembre 2026, la veille du test : la notation scientifique
+     n'était posée que dans UN sens et sur de GRANDS nombres. Le test porte
+     dessus — on ajoute les petits nombres (exposant négatif), le retour à
+     l'écriture décimale, et la division de deux puissances. Les décimaux sont
+     construits à la MAIN, chiffre par chiffre : 3,4 × 1e-4 vaut
+     0.00034000000000000002 en virgule flottante, et une question de maths ne
+     peut pas afficher ça. */
   GENS["ma-pow"] = function(){
-    const t = rnd(3);
+    const t = rnd(6);
+    const petit = (dg, z) => "0," + "0".repeat(z) + dg;   // "34", 3 → "0,00034"
     if (t === 0){ const a = ri(2,6), n = ri(2,4);
       return { f:"txt", m:1, q:"Calcule : "+a+"^"+n, a:String(Math.pow(a,n)),
         e:a+" multiplié "+n+" fois par lui-même = "+Math.pow(a,n)+"." }; }
@@ -2516,6 +2596,22 @@ BANK.maths = { label:"Maths", short:"MA", themes:[
       if (u + v === u * v) v = v + 1;
       return { f:"qcm", q:a+"^"+u+" × "+a+"^"+v+" = ?", o:[a+"^"+(u+v), a+"^"+(u*v), (a*a)+"^"+(u+v)].sort(() => Math.random()-.5),
         a:a+"^"+(u+v), e:"Même base → on additionne les exposants : "+u+" + "+v+" = "+(u+v)+"." }; }
+    if (t === 2){ const a = ri(2,5); const u = ri(4,7), v = ri(1,3);
+      return { f:"qcm", q:a+"^"+u+" ÷ "+a+"^"+v+" = ?", o:[a+"^"+(u-v), a+"^"+(u+v), a+"^"+(u*v)].sort(() => Math.random()-.5),
+        a:a+"^"+(u-v), e:"Même base → on soustrait les exposants : "+u+" − "+v+" = "+(u-v)+"." }; }
+    if (t === 3){                       // petit nombre → notation scientifique
+      let dg = String(ri(11,99)); if (dg[1] === "0") dg = dg[0] + "5";
+      const z = ri(1,4), mant = dg[0] + "," + dg[1], ex = z + 1;
+      return { f:"qcm", q:"Écris "+petit(dg, z)+" en notation scientifique :",
+        o:[mant+" × 10^-"+ex, mant+" × 10^"+ex, dg+" × 10^-"+(ex+1)].sort(() => Math.random()-.5),
+        a:mant+" × 10^-"+ex,
+        e:"Plus petit que 1 → exposant négatif, et un seul chiffre non nul avant la virgule : "+mant+" × 10^-"+ex+". (« "+dg+" × 10^-"+(ex+1)+" » vaut le même nombre, mais ce n'est pas la notation scientifique.)" }; }
+    if (t === 4){                       // notation scientifique → écriture décimale
+      let dg = String(ri(11,99)); if (dg[1] === "0") dg = dg[0] + "5";
+      const z = ri(1,3), mant = dg[0] + "," + dg[1], ex = z + 1;
+      return { f:"txt", m:1, q:"Écris "+mant+" × 10^-"+ex+" en écriture décimale",
+        a:petit(dg, z).replace(",", "."),
+        e:"La virgule recule de "+ex+" rangs : "+petit(dg, z)+"." }; }
     const mant = ri(11,99)/10, e = ri(3,6);
     const val = mant * Math.pow(10,e);
     return { f:"qcm", q:"Écris "+val.toLocaleString("fr-CH")+" en notation scientifique :",
@@ -3243,24 +3339,44 @@ function todaysPlan(){
   const enCours = classeThemes().filter(t => urgent.indexOf(t) === -1);
   const devant = urgent.concat(enCours);
   const forced = devant.filter(t => S.themes[t.id].box >= 1);
-  const due = forced.concat(
+
+  /* ---------- la veille d'un test, la journée converge (9 septembre 2026) ----------
+     Jusqu'ici, une notion interrogée le lendemain revenait en révision — mais
+     seulement si sa boîte l'avait déjà vue (`box >= 1`), et elle partageait le
+     bloc avec trois notions que les boîtes réclamaient. Le 9 septembre, à la
+     veille du test de maths, cela donnait : « Fractions » jamais ouverte donc
+     absente du bloc de révision, et le reste de la journée sur autre chose.
+     La veille et le jour même d'un test, le bloc de révision ne contient donc
+     QUE les notions interrogées, quelle que soit leur boîte. Les autres
+     attendent un jour : c'est ce que ferait n'importe qui. */
+  const veille = devant.filter(t => { const d = daysToTest(t); return d !== null && d <= 1; });
+  const due = (veille.length ? veille : forced.concat(
       dueThemes()
         .filter(t => forced.indexOf(t) === -1)
         .sort((a,b) => {
           const ra = histAcc(S.themes[a.id], -3), rb = histAcc(S.themes[b.id], -3);
           return (ra === null ? 1 : ra) - (rb === null ? 1 : rb);
-        }))
+        })))
     // cinq notions au lieu de quatre depuis le 29 août : le bloc s'est allongé,
     // et l'élargir plutôt que de le creuser sert la couverture des matières
     .slice(0, 5);
-  const rev = { kind:"revision", n:1, title:"Révision", themes: due.map(t => t.id),
-    sub: forced.length
-      ? (daysToTest(forced[0]) !== null
-          ? "Tu as un test qui arrive — " + forced[0].t + " : " + testLabel(forced[0]) + "."
-          : "En classe en ce moment — " + classeLabel(forced[0]) + ".")
-      : due.length
-        ? "Les notions que tes boîtes réclament aujourd'hui."
-        : "Rien à revoir aujourd'hui — je te fais réviser tes notions les plus fragiles." };
+  const tete = veille[0] || forced[0];
+  const rev = { kind:"revision", n:1, title: veille.length ? "Révision du test" : "Révision",
+    themes: due.map(t => t.id),
+    sub: veille.length
+      ? (daysToTest(veille[0]) === 0 ? "Test aujourd'hui" : "Test demain")
+        + " — aujourd'hui on ne fait que ça : "
+        + (veille.length > 3
+            ? veille.length + " notions interrogées, en "
+              + [...new Set(veille.map(t => SUB[t.subject].label.toLowerCase()))].join(" et ")
+            : veille.map(t => t.t).join(", ")) + "."
+      : tete
+        ? (daysToTest(tete) !== null
+            ? "Tu as un test qui arrive — " + tete.t + " : " + testLabel(tete) + "."
+            : "En classe en ce moment — " + classeLabel(tete) + ".")
+        : due.length
+          ? "Les notions que tes boîtes réclament aujourd'hui."
+          : "Rien à revoir aujourd'hui — je te fais réviser tes notions les plus fragiles." };
   if (!due.length){
     const weak = seenThemes().sort((a,b) => (mastery(a)||0) - (mastery(b)||0)).slice(0,2);
     if (weak.length){
@@ -3276,7 +3392,12 @@ function todaysPlan(){
   // 2. Leçon du jour : une notion jamais vue dont le test approche — ou que la
   // classe travaille en ce moment — passe devant la rotation ; sinon, nouvelle
   // notion, matières en rotation
-  let lead = devant.filter(t => S.themes[t.id].box === 0)[0] || null;
+  let lead = devant.filter(t => S.themes[t.id].box === 0)[0]
+    // la veille du test, si tout a déjà été vu au moins une fois, la leçon du
+    // jour porte quand même sur la notion interrogée la plus fragile — pas sur
+    // la rotation des matières : demain, c'est elle qui compte
+    || (veille.length ? veille.slice().sort((a,b) => (mastery(a) || 0) - (mastery(b) || 0))[0] : null)
+    || null;
   for (let k = 0; k < ROTATION.length && !lead; k++){
     const sk = ROTATION[(dayIx + k) % ROTATION.length];
     const cands = newThemes(sk);
