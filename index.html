@@ -8,6 +8,13 @@
 <meta name="theme-color" content="#EFF2F6" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0F151B" media="(prefers-color-scheme: dark)">
 <meta name="description" content="ONZE — entraînement quotidien : français, allemand, anglais, maths.">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="manifest" href="manifest.webmanifest">
+<script>
+if ("serviceWorker" in navigator && location.protocol === "https:")
+  addEventListener("load", function(){ navigator.serviceWorker.register("sw.js").catch(function(){}); });
+</script>
 </head>
 <body>
 <title>ONZE — cap sur la 11e</title>
