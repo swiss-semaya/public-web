@@ -327,6 +327,35 @@ body{margin:0;}
 .mrow .val{font-family:var(--mono); font-variant-numeric:tabular-nums; font-size:12px; color:var(--ink-2); text-align:right;}
 .mrow .val b{color:var(--ink); font-weight:600;}
 
+/* LA CARTE EN ÎLES (19 septembre 2026, maquette de Selma).
+   Les dix thèmes de l'année de maths, dans l'ordre du découpage de la prof.
+   Une île se remplit quand ses notions montent dans les boîtes ; celle que la
+   classe travaille porte un anneau d'accent. ⚠ Jamais la couleur seule : chaque
+   île porte son numéro et son compte écrit — c'est la règle de l'app depuis le
+   début, et elle vaut aussi pour un dessin. */
+.iles{display:grid; grid-template-columns:repeat(5,1fr); gap:6px; margin-bottom:14px;}
+.ile{
+  position:relative; background:var(--panel-2); border:1px solid var(--line);
+  border-radius:var(--r-m); padding:7px 4px 6px; text-align:center; overflow:hidden;
+}
+.ile .fill{
+  position:absolute; left:0; right:0; bottom:0; background:var(--ma-soft);
+  border-top:2px solid var(--ma);
+}
+.ile .n, .ile .l, .ile .c{position:relative;}
+.ile .n{font-family:var(--mono); font-variant-numeric:tabular-nums; font-size:14px; font-weight:600;}
+.ile .l{
+  display:block; font-size:8.5px; line-height:1.2; color:var(--ink-3); margin-top:2px;
+  overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+}
+.ile .c{display:block; font-family:var(--mono); font-size:9px; color:var(--ink-2); margin-top:2px;}
+.ile.ici{border-color:var(--accent); box-shadow:0 0 0 2px var(--accent-soft);}
+.ile.ici .n{color:var(--accent);}
+.iles-lab{
+  font-family:var(--display); text-transform:uppercase; letter-spacing:.08em;
+  font-size:9.5px; color:var(--ink-3); margin-bottom:7px;
+}
+
 .boxes{display:grid; grid-template-columns:repeat(5,1fr); gap:6px; margin-top:12px;}
 .boxcell{background:var(--panel-2); border-radius:var(--r-s); padding:8px 4px; text-align:center;}
 .boxcell .n{font-family:var(--mono); font-variant-numeric:tabular-nums; font-size:16px; font-weight:600;}
@@ -3920,6 +3949,7 @@ function homeHTML(){
     <div class="sec">
       <div class="sec-h"><h2>Maîtrise</h2><span class="note">${THEMES.length} notions</span></div>
       <div class="card">
+        ${ilesHTML()}
         ${ORDER.map(sk => {
           const m = subjectMastery(sk);
           const seen = BANK[sk].themes.filter(t => S.themes[t.id].box >= 1).length;
@@ -3972,6 +4002,45 @@ function homeHTML(){
   </div>`;
 }
 function shortVar(sk){ return { francais:"fr", allemand:"de", anglais:"en", maths:"ma" }[sk]; }
+
+/* ---------- la carte en îles ----------
+   Les dix thèmes du découpage annuel, reconstitués depuis les fenêtres `ecole`
+   que portent les notions elles-mêmes — et non depuis `MA_ANNEE`, qui vit dans
+   un autre bloc <script>. Une notion peut appartenir à deux thèmes (les aires
+   reviennent au 6 et au 9) : elle compte alors dans les deux îles, ce qui est
+   la vérité du programme.
+
+   Le remplissage est la moyenne des boîtes de l'île, pas un pourcentage de
+   réussite : une île pleine veut dire « ces notions sont installées », ce que
+   les boîtes mesurent déjà. */
+function ilesHTML(){
+  const par = new Map();
+  THEMES.forEach(t => fenetres(t).forEach(f => {
+    if (!par.has(f.t)) par.set(f.t, { f, ids: [] });
+    par.get(f.t).ids.push(t.id);
+  }));
+  if (!par.size) return "";
+  const t0 = today();
+  const iles = [...par.values()].sort((a, b) => a.f.from.localeCompare(b.f.from));
+
+  return `<div class="iles-lab">L'année en dix thèmes</div>
+  <div class="iles">${iles.map(({ f, ids }) => {
+    const boxes = ids.map(id => (S.themes[id] || {}).box || 0);
+    const vus = boxes.filter(b => b >= 1).length;
+    const plein = Math.round(100 * boxes.reduce((s, b) => s + b, 0) / (boxes.length * 5));
+    const ici = f.from <= t0 && t0 <= f.to;
+    const num = (f.t.match(/Thème (\d+)/) || [, "?"])[1];
+    const nom = f.t.replace(/^Thème \d+ · /, "");
+    return `<div class="ile${ici ? " ici" : ""}"
+      title="${esc(f.t)} — ${vus} notion${vus > 1 ? "s" : ""} sur ${ids.length} vue${vus > 1 ? "s" : ""}${ici ? ", en classe en ce moment" : ""}"
+      aria-label="${esc(f.t)} : ${vus} sur ${ids.length} vues${ici ? ", en classe" : ""}">
+      <span class="fill" style="height:${plein}%"></span>
+      <span class="n">${num}</span>
+      <span class="l">${esc(nom.split(/[ ,]/)[0])}</span>
+      <span class="c">${vus}/${ids.length}</span>
+    </div>`;
+  }).join("")}</div>`;
+}
 
 function blockHTML(b){
   const chips = b.kind === "defi"
