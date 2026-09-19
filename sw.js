@@ -1,5 +1,5 @@
 /* ONZE — service worker. Généré par build.py, ne pas éditer. */
-const CACHE = "onze-d0b0207ba7ae";
+const CACHE = "onze-3c66f6e1a25a";
 const SHELL = ["./", "./manifest.webmanifest", "./icon-180.png", "./icon-192.png", "./icon-512.png"];
 
 self.addEventListener("install", e => {

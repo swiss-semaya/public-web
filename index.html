@@ -413,6 +413,36 @@ body{margin:0;}
   font-size:24px; margin:0 0 4px; font-weight:700; text-wrap:balance; line-height:1.1;
 }
 .lesson .why{font-size:13px; color:var(--ink-2); margin-bottom:14px;}
+
+/* VOIR → TOUCHER (19 septembre 2026).
+   Structure de Selma (on montre avant d'expliquer), contrat d'interaction de
+   Rose : un exemple juste et complet, UN geste qui le transforme, la
+   conséquence nommée en toutes lettres, et une aide facultative qui ne retire
+   rien de ce qui est affiché. Pas de glisser-déposer — tout au bouton, sur un
+   téléphone c'est la seule chose fiable. Rien ne démarre tout seul : la
+   transformation attend d'être demandée. */
+.voir{
+  margin:0 0 14px; background:var(--panel); border:1px solid var(--line);
+  border-radius:var(--r-l); padding:14px;
+}
+.voir .scene{display:block; width:100%; height:auto; border-radius:var(--r-m); background:var(--panel-2);}
+.voir .dit{
+  font-size:13.5px; line-height:1.5; color:var(--ink); margin:12px 2px 0;
+  min-height:2.8em;                     /* la hauteur ne saute pas au basculement */
+}
+.voir .dit b{color:var(--accent);}
+.voir .actions{display:flex; gap:8px; margin-top:12px; flex-wrap:wrap;}
+.voir .actions button{
+  font-family:var(--body); font-size:14px; color:var(--ink); background:var(--panel-2);
+  border:1px solid var(--line); border-radius:999px; padding:9px 15px; cursor:pointer;
+  min-height:44px;                      /* cible tactile */
+}
+.voir .actions button.on{background:var(--accent); border-color:var(--accent); color:var(--accent-ink); font-weight:600;}
+.voir .actions button:focus-visible{outline:2px solid var(--accent); outline-offset:2px;}
+.voir .aide{
+  margin:12px 2px 0; padding:11px 13px; background:var(--accent-soft);
+  border-radius:var(--r-m); font-size:13px; line-height:1.55; color:var(--ink);
+}
 .pts{margin:0; padding:0; list-style:none; display:flex; flex-direction:column; gap:10px;}
 .pts li{display:grid; grid-template-columns:auto 1fr; gap:10px; font-size:14.5px; line-height:1.5;}
 .pts li .d{
@@ -2250,6 +2280,7 @@ BANK.maths = { label:"Maths", short:"MA", themes:[
   ]},
 
 { id:"ma-lit", t:"Calcul littéral", tier:"consolidation", gen:"ma-lit", ecole:MA_ANNEE.T2,
+  anim:"ma-lit",          // première leçon animée : voir ANIMS, plus bas dans la page
   lesson:{ why:"Développer, réduire, factoriser : l'outil de base de toute la 11e, puis du gymnase.",
     pts:["*Réduire* : on additionne uniquement les termes semblables — 3x + 5 − x + 2 = *2x + 7* (x et constantes séparés).",
       "*Développer* (distributivité) : a(b + c) = ab + ac. Ainsi 3(2x + 5) = *6x + 15*.",
@@ -4764,6 +4795,76 @@ function renderSession(){
   root.innerHTML = quizHTML(); bindQuiz();
 }
 
+/* ============================================================
+   LES LEÇONS ANIMÉES — « Voir → Toucher », avant les points écrits
+   19 septembre 2026
+
+   D'où ça vient : la maquette de Selma pose la séquence (on montre, on
+   manipule, puis on s'entraîne) ; le complément de Rose pose le contrat
+   d'interaction — un exemple juste et complet, UN geste, la conséquence
+   nommée, une aide facultative qui ne retire rien.
+
+   Comment c'est branché : une notion porte `anim:"<clé>"` et ANIMS fournit le
+   dessin. Une notion sans `anim` garde exactement l'écran d'avant — c'est ce
+   qui permet d'en ajouter une par une, sans jamais casser les 62 autres.
+
+   ⚠ Le bouton de sortie reste `#go`, seul et à sa place : huit tests cliquent
+   dessus pour franchir cet écran. Les deux boutons ajoutés ici en sont
+   distincts et ne sortent jamais de la leçon.
+
+   ⚠ Le SVG est écrit à la main, sans bibliothèque, et ne s'anime pas tout
+   seul : il est redessiné à chaque état. Le mode calme n'a donc rien à
+   désactiver ici — il n'y a aucune animation qui tourne. */
+const ANIMS = {
+  /* Calcul littéral — le thème que la classe travaille jusqu'au 9 octobre.
+     L'idée qui doit se voir : développer, c'est découper un rectangle. Son
+     aire ne change pas ; c'est la même surface, comptée autrement. Et le
+     piège du chapitre — (x+3)² ≠ x²+9 — est exactement la case qu'on oublie. */
+  "ma-lit": {
+    avant: "Un rectangle de <b>3</b> de haut et <b>x + 2</b> de large. Son aire, c'est 3 × (x + 2).",
+    apres: "La même surface, coupée en deux : <b>3x</b> et <b>6</b>. Rien n'a été ajouté ni enlevé — 3(x + 2) = <b>3x + 6</b>.",
+    geste: "Découper le rectangle",
+    retour: "Recoller le rectangle",
+    aide: "Développer ne fabrique pas de la surface : on recompte la même. C'est pour ça que le 3 doit multiplier les DEUX morceaux — celui en x et celui qui vaut 2. Oublier le second, c'est écrire 3x + 2, et il manque un bout de rectangle.",
+    svg: coupe => {
+      const H = 92, y = 14, xw = 150, uw = 96;        // largeurs : x et 2
+      const bloc = (x, w, fill, txt, sub) =>
+        `<rect x="${x}" y="${y}" width="${w}" height="${H}" rx="6" fill="${fill}"
+               stroke="var(--ma)" stroke-width="2"></rect>
+         <text x="${x + w / 2}" y="${y + H / 2 + 2}" text-anchor="middle"
+               font-size="19" font-weight="700" fill="var(--ink)">${txt}</text>
+         <text x="${x + w / 2}" y="${y + H - 9}" text-anchor="middle"
+               font-size="10.5" fill="var(--ink-3)">${sub}</text>`;
+      return `<svg class="scene" viewBox="0 0 300 136" role="img"
+        aria-label="${coupe ? "Le rectangle est coupé en deux : une part 3x et une part 6"
+                            : "Un rectangle de 3 de haut et x plus 2 de large"}">
+        <text x="6" y="${y + H / 2 + 4}" font-size="13" font-weight="700" fill="var(--ma)">3</text>
+        ${coupe
+          ? bloc(22, xw - 4, "var(--ma-soft)", "3x", "3 × x")
+            + bloc(22 + xw + 4, uw - 4, "var(--accent-soft)", "6", "3 × 2")
+          : bloc(22, xw + uw, "var(--ma-soft)", "3 × (x + 2)", "une seule surface")}
+        <text x="${22 + (xw + uw) / 2}" y="130" text-anchor="middle" font-size="10.5"
+              fill="var(--ink-3)">${coupe ? "x + 2, en deux morceaux" : "largeur : x + 2"}</text>
+      </svg>`;
+    }
+  }
+};
+
+function animPour(t){ return (t && t.anim && ANIMS[t.anim]) ? ANIMS[t.anim] : null; }
+
+function voirHTML(a){
+  const on = !!sess.anim;
+  return `<div class="voir">
+    ${a.svg(on)}
+    <p class="dit">${on ? a.apres : a.avant}</p>
+    <div class="actions">
+      <button type="button" id="geste" class="${on ? "on" : ""}">${esc(on ? a.retour : a.geste)}</button>
+      <button type="button" id="pourquoi" aria-expanded="${sess.animAide ? "true" : "false"}">Pourquoi&nbsp;?</button>
+    </div>
+    ${sess.animAide ? `<p class="aide">${esc(a.aide)}</p>` : ""}
+  </div>`;
+}
+
 function lessonHTML(){
   const t = lessonTheme();
   const st = S.themes[t.id];
@@ -4774,6 +4875,7 @@ function lessonHTML(){
       <div class="kicker">${isNew ? "Nouvelle notion" : "On révise d'abord"} · ${SUB[t.subject].label} · ${esc(TIER[t.tier] || t.tier)}${daysToTest(t) === null ? "" : ` · <b>⚡ ${esc(testLabel(t))}</b>`}</div>
       <h3 style="color:var(--${shortVar(t.subject)})">${esc(t.t)}</h3>
       ${t.lesson.why ? `<div class="why">${esc(t.lesson.why)}</div>` : ""}
+      ${animPour(t) ? voirHTML(animPour(t)) : ""}
       <ul class="pts">
         ${t.lesson.pts.map(p => `<li><span class="d"></span><span>${fmt(p)}</span></li>`).join("")}
       </ul>
@@ -4784,6 +4886,13 @@ function lessonHTML(){
 }
 function bindLesson(){
   root.querySelector("#go").addEventListener("click", () => { sess.phase = "quiz"; render(); });
+  // le geste et l'aide vivent DANS la leçon : ils ne font jamais sortir de
+  // l'écran, et ne touchent ni au score, ni aux boîtes, ni au porte-monnaie —
+  // regarder n'est pas produire (décision D3 de Selma)
+  const g = root.querySelector("#geste");
+  if (g) g.addEventListener("click", () => { sess.anim = !sess.anim; renderSession(); });
+  const p = root.querySelector("#pourquoi");
+  if (p) p.addEventListener("click", () => { sess.animAide = !sess.animAide; renderSession(); });
 }
 
 /* Le palier : une respiration toutes les huit questions.
