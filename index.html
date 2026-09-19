@@ -2948,7 +2948,16 @@ const BOX_LABEL = ["neuf","chaque j.","3 jours","1 sem.","2 sem.","acquis"];
    passent donc deux fois par cycle de cinq. La révision et le défi mixte ne
    changent pas : eux suivent les boîtes. */
 const ORDER = ["francais","allemand","anglais","maths"];
-const ROTATION = ["francais","maths","allemand","maths","anglais"];
+/* 19 septembre 2026 — les maths UN JOUR SUR DEUX (décision D1 de Selma).
+   Le doublement du 25 août n'a pas suffi : trois semaines plus tard, toujours
+   2 notions de maths ouvertes sur 20 et 6 % de maîtrise, avec « Fractions » en
+   boîte 0 la veille de son test. Le calcul est arithmétique, pas pédagogique —
+   4 jours travaillés sur 10 × une leçon par jour × 2 chances sur 5 = moins
+   d'une notion de maths nouvelle par semaine, pour la matière la plus
+   cumulative du programme. Les langues perdent un cinquième de leur exposition
+   en leçon du jour ; elles la regagnent par les tests datés, qui priment
+   toujours sur la rotation (voir `urgentThemes`). */
+const ROTATION = ["maths","francais","maths","allemand","maths","anglais"];
 const SCHOOL_START = "2026-08-24";          // rentrée : la ligne d'arrivée
 const XP_RIGHT = 10, XP_COMBO = 5, XP_BLOCK = 25, XP_DAY = 50;
 
@@ -3509,6 +3518,15 @@ function todaysPlan(){
     // jour porte quand même sur la notion interrogée la plus fragile — pas sur
     // la rotation des matières : demain, c'est elle qui compte
     || (veille.length ? veille.slice().sort((a,b) => (mastery(a) || 0) - (mastery(b) || 0))[0] : null)
+    /* D1, 19 septembre 2026 — la seconde moitié de la décision. Ouvrir une
+       notion UNE FOIS ne suffit pas : `ma-frac` avait été ouverte, puis n'était
+       jamais revenue, et s'est retrouvée en boîte 1 la veille de son test. Tant
+       que la notion du thème que la classe travaille n'a pas atteint la
+       boîte 2, elle repasse donc en leçon du jour, la plus fragile d'abord.
+       Placée APRÈS la veille de test, et c'est voulu : un test daté prime
+       toujours — l'école ne consulte pas nos boîtes. */
+    || classeThemes().filter(t => S.themes[t.id].box === 1)
+         .sort((a,b) => (mastery(a) || 0) - (mastery(b) || 0))[0]
     || null;
   for (let k = 0; k < ROTATION.length && !lead; k++){
     const sk = ROTATION[(dayIx + k) % ROTATION.length];
