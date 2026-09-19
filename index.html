@@ -116,6 +116,72 @@ if ("serviceWorker" in navigator && location.protocol === "https:")
   --shadow-lift: 0 2px 4px rgba(20,29,38,.08), 0 14px 34px rgba(20,29,38,.12);
 }
 
+/* ============================================================
+   Les trois palettes au choix (19 septembre 2026)
+
+   Proposées par la maquette de Selma : Océan, Volcan, Nuit. Elles ne touchent
+   QUE la couleur d'accent — le fond, l'encre et les couleurs de matière ne
+   bougent pas, sinon quatre palettes × deux fonds deviendraient huit jeux à
+   maintenir, et les matières perdraient le code couleur déjà appris.
+
+   Chaque palette est déclarée TROIS fois, comme les jetons de base juste
+   au-dessus : une fois pour le fond clair, une fois pour le fond sombre du
+   système, une fois pour le fond sombre choisi à la main. Un accent qui n'est
+   défini que dans un bloc `@media` disparaît dès que l'élève choisit son fond.
+   ============================================================ */
+:root[data-couleurs="ocean"]{
+  --accent:#0F7490; --accent-2:#0A5468; --accent-ink:#FFFFFF; --accent-soft:#D6EDF4;
+}
+:root[data-couleurs="volcan"]{
+  --accent:#C2410C; --accent-2:#9A330A; --accent-ink:#FFFFFF; --accent-soft:#FCE4D6;
+}
+:root[data-couleurs="nuit"]{
+  --accent:#4C3FBF; --accent-2:#3A2F96; --accent-ink:#FFFFFF; --accent-soft:#E4E1F8;
+}
+@media (prefers-color-scheme: dark){
+  :root[data-couleurs="ocean"]:not([data-theme="light"]){
+    --accent:#49C3E0; --accent-2:#7FD6EC; --accent-ink:#06222B; --accent-soft:#0E2E38;
+  }
+  :root[data-couleurs="volcan"]:not([data-theme="light"]){
+    --accent:#FF8A4C; --accent-2:#FFA875; --accent-ink:#23120A; --accent-soft:#3A1D10;
+  }
+  :root[data-couleurs="nuit"]:not([data-theme="light"]){
+    --accent:#A79BFF; --accent-2:#C3BAFF; --accent-ink:#15102E; --accent-soft:#221C44;
+  }
+}
+:root[data-theme="dark"][data-couleurs="ocean"]{
+  --accent:#49C3E0; --accent-2:#7FD6EC; --accent-ink:#06222B; --accent-soft:#0E2E38;
+}
+:root[data-theme="dark"][data-couleurs="volcan"]{
+  --accent:#FF8A4C; --accent-2:#FFA875; --accent-ink:#23120A; --accent-soft:#3A1D10;
+}
+:root[data-theme="dark"][data-couleurs="nuit"]{
+  --accent:#A79BFF; --accent-2:#C3BAFF; --accent-ink:#15102E; --accent-soft:#221C44;
+}
+
+/* Le mode calme : la même règle que `prefers-reduced-motion`, mais choisie.
+   Le réglage du téléphone reste respecté par ailleurs — l'un n'annule pas
+   l'autre, ils s'additionnent. */
+:root[data-calme="1"] *{
+  animation-duration:.001ms !important; animation-iteration-count:1 !important;
+  transition-duration:.001ms !important;
+}
+
+/* les deux boutons de l'en-tête */
+.brand-act{display:flex; align-items:center; gap:8px;}
+
+/* le panneau de réglages */
+.reg-grp{display:flex; flex-direction:column; gap:7px; margin-bottom:14px;}
+.reg-lab{font-family:var(--display); text-transform:uppercase; letter-spacing:.08em;
+  font-size:11.5px; color:var(--ink-3);}
+.reg-opts{display:flex; flex-wrap:wrap; gap:7px;}
+.opt-reg{font-family:var(--body); font-size:14px; color:var(--ink);
+  background:var(--panel-2); border:1px solid var(--line); border-radius:999px;
+  padding:8px 14px; cursor:pointer;}
+.opt-reg.on{background:var(--accent); border-color:var(--accent); color:var(--accent-ink); font-weight:600;}
+.opt-reg:focus-visible{outline:2px solid var(--accent); outline-offset:2px;}
+.reg-note{font-size:12.5px; color:var(--ink-3); margin:0 0 4px;}
+
 *{box-sizing:border-box;}
 body{margin:0;}
 #onze{
@@ -3594,6 +3660,109 @@ function currentTheme(){
   return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
 }
 
+/* ============================================================
+   Les réglages (19 septembre 2026)
+
+   Ce que la maquette de Selma propose à l'élève : trois palettes et un mode
+   calme. Ils rejoignent ici le réglage clair/sombre qui existait déjà en
+   bouton, pour qu'il n'y ait qu'UN endroit où régler l'affichage.
+
+   ⚠ OÙ ILS VIVENT, ET POURQUOI. Dans leur propre clé `onze-prefs`, comme le
+   thème vit déjà dans `onze-theme` — et JAMAIS dans le carnet `S`. Le carnet se
+   fusionne entre deux appareils (fusion monotone, idempotente) ; un réglage
+   d'affichage n'a rien à y faire, et l'y mettre obligerait à faire avancer
+   ensemble la version de l'état, le format du bilan et `family_progress.py`.
+   Conséquence voulue : la progression, la série et le porte-monnaie ne peuvent
+   pas être abîmés par un réglage. Ils sont propres à l'appareil, comme le
+   thème : c'est aussi ce qu'on veut, le téléphone et l'ordinateur n'ont pas la
+   même lumière.
+   ============================================================ */
+const PREFS_KEY = "onze-prefs";
+const FONDS    = [ {id:"auto", t:"Comme le téléphone"}, {id:"light", t:"Clair"}, {id:"dark", t:"Sombre"} ];
+const COULEURS = [ {id:"onze", t:"Celles d'ONZE"}, {id:"ocean", t:"Océan"},
+                   {id:"volcan", t:"Volcan"}, {id:"nuit", t:"Nuit"} ];
+let prefs = { couleurs:"onze", calme:false };
+
+function chargerPrefs(){
+  try{
+    const o = JSON.parse(localStorage.getItem(PREFS_KEY) || "{}");
+    if (o && typeof o === "object"){
+      if (COULEURS.some(c => c.id === o.couleurs)) prefs.couleurs = o.couleurs;
+      prefs.calme = !!o.calme;
+    }
+  }catch(e){ /* navigation privée : les réglages par défaut suffisent */ }
+}
+function enregistrerPrefs(){
+  try{ localStorage.setItem(PREFS_KEY, JSON.stringify(prefs)); }catch(e){}
+}
+function appliquerPrefs(){
+  const r = document.documentElement;
+  if (prefs.couleurs && prefs.couleurs !== "onze") r.setAttribute("data-couleurs", prefs.couleurs);
+  else r.removeAttribute("data-couleurs");
+  if (prefs.calme) r.setAttribute("data-calme", "1");
+  else r.removeAttribute("data-calme");
+}
+
+/* Le fond a trois états, pas deux : « comme le téléphone » est le défaut, et le
+   bouton ☾/☀ ne savait pas l'exprimer — il ne faisait qu'alterner. */
+function fondActuel(){
+  const set = document.documentElement.getAttribute("data-theme");
+  return set === "dark" || set === "light" ? set : "auto";
+}
+function setFond(f){
+  if (f === "auto"){
+    document.documentElement.removeAttribute("data-theme");
+    try{ localStorage.removeItem("onze-theme"); }catch(e){}
+  } else setTheme(f);
+}
+
+function panneauReglages(){
+  const opt = (grp, id, t, actif) =>
+    `<button class="opt-reg${actif ? " on" : ""}" data-grp="${grp}" data-val="${esc(id)}">${esc(t)}</button>`;
+  const fond = document.createElement("div");
+  fond.className = "sheet";
+  fond.innerHTML = `
+    <div class="sheet-in">
+      <h3>Réglages</h3>
+      <p>Ils ne changent que l'affichage, et seulement sur cet appareil.
+         Ta progression, ta série et ton porte-monnaie ne bougent pas.</p>
+      <div class="reg-grp">
+        <span class="reg-lab">Fond</span>
+        <div class="reg-opts">${FONDS.map(f => opt("fond", f.id, f.t, fondActuel() === f.id)).join("")}</div>
+      </div>
+      <div class="reg-grp">
+        <span class="reg-lab">Couleurs</span>
+        <div class="reg-opts">${COULEURS.map(c => opt("couleurs", c.id, c.t, prefs.couleurs === c.id)).join("")}</div>
+      </div>
+      <div class="reg-grp">
+        <span class="reg-lab">Mode calme</span>
+        <div class="reg-opts">
+          ${opt("calme", "0", "Normal", !prefs.calme)}
+          ${opt("calme", "1", "Animations réduites", prefs.calme)}
+        </div>
+      </div>
+      <p class="reg-note">Le mode calme enlève les animations — quand ça fatigue, ou dans le train.</p>
+      <div class="cta-row"><button class="cta" id="regok">Fermer</button></div>
+    </div>`;
+  document.body.appendChild(fond);
+
+  fond.addEventListener("click", e => {
+    const b = e.target.closest(".opt-reg");
+    if (!b) return;
+    const grp = b.dataset.grp, val = b.dataset.val;
+    if (grp === "fond")      setFond(val);
+    if (grp === "couleurs"){ prefs.couleurs = val; appliquerPrefs(); enregistrerPrefs(); }
+    if (grp === "calme"){    prefs.calme = val === "1"; appliquerPrefs(); enregistrerPrefs(); }
+    // l'état des boutons se met à jour sur place : le changement se voit
+    // immédiatement derrière le panneau, sans le refermer
+    fond.querySelectorAll('.opt-reg[data-grp="' + grp + '"]').forEach(o => o.classList.remove("on"));
+    b.classList.add("on");
+    if (grp === "fond") fond.querySelector('.opt-reg[data-grp="fond"][data-val="' + fondActuel() + '"]').classList.add("on");
+    render();
+  });
+  fond.querySelector("#regok").addEventListener("click", () => fond.remove());
+}
+
 function render(){
   if (view.screen === "home")    root.innerHTML = homeHTML(), bindHome();
   else if (view.screen === "session") renderSession();
@@ -3627,7 +3796,10 @@ function homeHTML(){
         <h1>ON<span>ZE</span></h1>
         <div class="tag">Cap sur la 11<sup>e</sup></div>
       </div>
-      <button class="theme-btn" id="th" title="Clair / sombre" aria-label="Basculer clair ou sombre">${currentTheme() === "dark" ? "☀" : "☾"}</button>
+      <div class="brand-act">
+        <button class="theme-btn" id="cfg" title="Réglages" aria-label="Ouvrir les réglages">⚙</button>
+        <button class="theme-btn" id="th" title="Clair / sombre" aria-label="Basculer clair ou sombre">${currentTheme() === "dark" ? "☀" : "☾"}</button>
+      </div>
     </div>
     <div class="scores">
       <div class="score hot"><span class="k">Série</span><span class="v">${S.streak}<span style="font-size:12px;color:var(--ink-3)"> j</span></span></div>
@@ -3840,6 +4012,8 @@ function bindHome(){
   });
   const th = root.querySelector("#th");
   if (th) th.addEventListener("click", () => { setTheme(currentTheme() === "dark" ? "light" : "dark"); render(); });
+  const cfg = root.querySelector("#cfg");
+  if (cfg) cfg.addEventListener("click", panneauReglages);
   const bil = root.querySelector("#bil");
   if (bil) bil.addEventListener("click", envoyerBilan);
   const imp = root.querySelector("#imp"), impf = root.querySelector("#impf");
@@ -5061,6 +5235,7 @@ function bindDone(){
 /* ---------- démarrage ---------- */
 try{
   try{ const saved = localStorage.getItem("onze-theme"); if (saved) setTheme(saved); }catch(e){}
+  chargerPrefs(); appliquerPrefs();
   load();
   refreshBadges(); save();
   render();
