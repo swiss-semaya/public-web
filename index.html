@@ -251,7 +251,21 @@ body{margin:0;}
 .sec-h .note{font-size:11px; color:var(--ink-3); font-family:var(--mono);}
 
 /* ---------- Blocs du jour ---------- */
-.blocks{display:flex; flex-direction:column; gap:10px;}
+/* La journée se lit comme un CHEMIN (19 septembre 2026, maquette de Selma).
+   Trois étapes reliées par un rail, au lieu de trois cartes posées côte à côte :
+   on voit d'un coup d'œil où on en est et combien il reste. Tout est fait en
+   CSS — le balisage des blocs ne bouge pas d'une ligne, et les prises dont les
+   tests se servent (`.block`, `data-kind`, `.ttl`, `.sub`, `.chip`) sont
+   intactes. Un habillage ne doit pas obliger à réécrire la mesure. */
+.blocks{display:flex; flex-direction:column; gap:10px; position:relative;}
+.block{position:relative;}
+/* le rail : il relie le numéro d'une étape à la suivante, et s'arrête donc
+   avant la première (pas de `+` sur elle) */
+.block + .block::before{
+  content:""; position:absolute; left:26px; top:-11px; width:2px; height:11px;
+  background:var(--line); border-radius:2px;
+}
+.block + .block.done::before{background:var(--ok);}
 .block{
   width:100%; text-align:left; cursor:pointer;
   background:var(--panel); border:1px solid var(--line); border-radius:var(--r-l);
@@ -279,6 +293,15 @@ body{margin:0;}
 .block.done .go{background:var(--ok-soft); color:var(--ok);}
 .block .mid{min-width:0; overflow:hidden;}
 .block .chips{display:flex; gap:4px; flex-wrap:wrap; margin-top:7px; max-width:100%;}
+/* le numéro devient le jalon du chemin. Déclaré APRÈS `.block .num` plus haut :
+   même spécificité, donc c'est celui-ci qui gagne. */
+.block .num{
+  width:30px; height:30px; line-height:27px; font-size:16px; font-weight:700;
+  border:2px solid var(--line); border-radius:999px; background:var(--panel);
+  color:var(--ink-3);
+}
+.block.done .num{background:var(--ok-soft); border-color:var(--ok); color:var(--ok);}
+.block.or .num{border-color:var(--accent); background:var(--accent-soft);}
 
 .chip{
   font-family:var(--display); text-transform:uppercase; letter-spacing:.07em;
@@ -573,6 +596,22 @@ body{margin:0;}
 .move .ar{font-family:var(--mono); font-size:12px; color:var(--ink-3);}
 .move .up{color:var(--ok); font-weight:600;}
 .move .dn{color:var(--ko); font-weight:600;}
+
+/* « Ce que tu as appris » — la fin de bloc dit ce qui a été travaillé et ce qui
+   revient, pas seulement un pourcentage. */
+.appris{margin-top:20px; text-align:left; background:var(--panel); border-radius:var(--r-l);
+  border:1px solid var(--line); padding:14px 16px;}
+.appris h3{font-family:var(--display); text-transform:uppercase; letter-spacing:.08em;
+  font-size:11.5px; color:var(--ink-3); margin:0 0 10px;}
+.appris .li{display:flex; align-items:center; gap:9px; font-size:13.5px; padding:6px 0;
+  border-bottom:1px solid var(--line-soft);}
+.appris .li:last-of-type{border-bottom:none;}
+.appris .li .n{margin-left:auto; font-family:var(--mono); font-variant-numeric:tabular-nums;
+  font-size:12.5px; color:var(--ink-2); white-space:nowrap;}
+.appris .li .n b{color:var(--ok);}
+.revient{margin-top:12px; padding-top:10px; border-top:1px dashed var(--line);
+  font-size:12.5px; color:var(--ink-3); line-height:1.45;}
+.revient b{color:var(--ink-2); font-weight:600;}
 
 @media (prefers-reduced-motion: reduce){
   *{animation-duration:.001ms !important; animation-iteration-count:1 !important; transition-duration:.001ms !important;}
@@ -5171,9 +5210,63 @@ function finish(){
     right: sess.right, total: sess.total, xp: sess.xp, bonus: out.bonus,
     cts: (sess.cts || 0) + (sess.block.kind === "bonus" ? CTS_BONUS_BLOC : CTS_BLOC),
     ctsBloc: sess.block.kind === "bonus" ? CTS_BONUS_BLOC : CTS_BLOC,
-    bestCombo: sess.bestCombo, moves: out.moves, newBadges: out.newBadges, dayComplete: out.dayComplete
+    bestCombo: sess.bestCombo, moves: out.moves, newBadges: out.newBadges, dayComplete: out.dayComplete,
+    // ce qui permet de dire CE QUI A ÉTÉ TRAVAILLÉ, notion par notion, plutôt
+    // qu'un pourcentage global — voir apprisHTML()
+    byTheme: sess.byTheme
   }};
   sess = null; render();
+}
+
+/* ---------- « ce que tu as appris » (19 septembre 2026) ----------
+   La fin de bloc annonçait un pourcentage, des XP et des centimes — jamais ce
+   qui venait d'être travaillé. La maquette de Selma demande deux phrases de
+   plus : ce qu'on a fait, et ce qui revient.
+
+   ⚠ Les deux se LISENT dans les données, elles ne s'inventent pas :
+   · le compte par notion vient de `byTheme`, et on prend `pRight/pTotal` — les
+     PREMIERS PASSAGES seulement, exactement la règle de la mesure et du tarif.
+     Une reprise entraîne, elle ne compte pas ;
+   · « ce qui revient » vient des dates que `moveBox()` vient d'écrire dans les
+     boîtes. Si rien n'est prévu demain, on dit la vraie prochaine date plutôt
+     qu'une formule vague. */
+function apprisHTML(r){
+  const bt = r.byTheme || {};
+  const lignes = Object.keys(bt).map(id => {
+    const t = THEME_BY_ID[id];
+    if (!t) return null;
+    const v = bt[id] || {};
+    const tot = v.pTotal != null ? v.pTotal : v.total;
+    const bon = v.pTotal != null ? v.pRight : v.right;
+    return tot ? { t, bon, tot } : null;      // une notion vue seulement en reprise ne compte pas
+  }).filter(Boolean).sort((a, b) => b.tot - a.tot);
+  if (!lignes.length) return "";
+
+  const demain = addDays(today(), 1);
+  const revDemain = lignes.filter(l => (S.themes[l.t.id] || {}).due === demain).map(l => l.t.t);
+  let revient;
+  if (revDemain.length){
+    revient = "<b>Demain :</b> " + esc(revDemain.slice(0, 3).join(", "))
+            + (revDemain.length > 3 ? " et " + (revDemain.length - 3) + " autre"
+               + (revDemain.length > 4 ? "s" : "") : "") + ".";
+  } else {
+    const suivantes = lignes.map(l => (S.themes[l.t.id] || {}).due).filter(Boolean).sort();
+    revient = suivantes.length
+      ? "<b>Rien à revoir demain</b> — la prochaine de ces notions revient le "
+        + esc(frDate(suivantes[0])) + "."
+      : "";
+  }
+
+  return `<div class="appris">
+    <h3>Ce que tu as appris</h3>
+    ${lignes.map(l => `<div class="li">
+      <span class="chip ${l.t.subject}">${SUB[l.t.subject].short}</span>
+      <span>${esc(l.t.t)}</span>
+      <span class="n">${l.bon === l.tot ? "<b>" + l.bon + " / " + l.tot + "</b>"
+                                        : l.bon + " / " + l.tot}</span>
+    </div>`).join("")}
+    ${revient ? `<div class="revient">${revient}</div>` : ""}
+  </div>`;
 }
 
 /* ---------- bilan ---------- */
@@ -5219,6 +5312,7 @@ function doneHTML(){
       const b = BADGES.find(x => x.id === id);
       return `<div class="g" style="background:var(--accent-soft)"><div class="k">Nouveau trophée</div><div class="v" style="font-size:14px;color:var(--accent)">${b.em} ${esc(b.t)}</div></div>`;
     }).join("")}</div>` : ""}
+    ${apprisHTML(r)}
     <button class="cta" id="back" style="margin-top:24px">Retour au tableau</button>
     ${left > 0 ? `<button class="cta ghost" id="more" style="margin-top:10px">Enchaîner le bloc suivant →</button>` : ""}
   </div></div>`;
