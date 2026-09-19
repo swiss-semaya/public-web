@@ -616,6 +616,32 @@ body{margin:0;}
 .fb.ko{background:var(--ko-soft); color:var(--ko);}
 .fb .sol{color:var(--ink); font-weight:600;}
 .fb .exp{color:var(--ink-2); margin-top:4px;}
+/* le « truc » des homophones : un encart posé SUR le fond teinté de la
+   correction, donc il repeint son fond et son encre — sinon il hérite du vert
+   ou du rouge et la phrase d'essai devient illisible. */
+.fb .truc{
+  margin-top:9px; padding:9px 11px; border-radius:var(--r-s);
+  background:var(--panel); color:var(--ink);
+}
+.fb .truc .tt{
+  font-family:var(--display); text-transform:uppercase; letter-spacing:.09em;
+  font-size:10px; font-weight:700; color:var(--ink-2); margin-bottom:6px;
+}
+.fb .truc .ess{
+  display:flex; flex-wrap:wrap; align-items:baseline; gap:3px 8px;
+  padding:5px 0; border-top:1px solid var(--line);
+}
+.fb .truc .ess:first-of-type{border-top:0; padding-top:0;}
+.fb .truc .ph{color:var(--ink);}
+.fb .truc .ph em{
+  font-style:normal; font-weight:700; padding:0 4px; border-radius:4px;
+  background:var(--accent-soft); color:var(--accent);
+}
+.fb .truc .ver{font-size:12px; font-weight:600;}
+.fb .truc .va .ver{color:var(--ok);}
+.fb .truc .nova .ver{color:var(--ko);}
+.fb .truc .don{font-size:12px; color:var(--ink-2); margin-left:auto;}
+.fb .truc .don em{font-style:normal; font-weight:700; color:var(--ink);}
 @keyframes rise{from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:none;}}
 
 .toast{
@@ -757,14 +783,37 @@ BANK.francais = { label:"Français", short:"FR", themes:[
       "*leur* pronom (= à eux) ne prend jamais de -s ; *leurs* + nom pluriel."],
     ex:"« Il *a* pris son vélo pour aller *à* l'école » → « il *avait* pris » fonctionne, donc « a » sans accent." },
   items:[
-    {f:"qcm", acc:1, q:"Il ___ raison et il rentre ___ pied.", hint:"L'accent fait toute la différence.", o:["a / à","à / a","à / à"], a:"a / à", e:"« il avait raison » fonctionne → a sans accent ; « à pied » est une préposition."},
-    {f:"qcm", q:"Marie est partie avec ___ parents.", o:["ses","ces","c'est"], a:"ses", e:"Les siens → possessif « ses ». « ces parents » voudrait dire ceux-là."},
-    {f:"gap", acc:1, q:"___ que tu vas, je te suis.", hint:"Écris l'accent s'il en faut un.", a:"où", e:"Il s'agit du lieu → « où » avec accent."},
-    {f:"qcm", q:"Il ___ trompé. ___ dommage.", o:["s'est / C'est","c'est / S'est","s'est / S'est"], a:"s'est / C'est", e:"« il s'est trompé » (se tromper) ; « c'est dommage » = cela est dommage."},
-    {f:"gap", q:"Elles ___ arrivées en retard.", a:"sont", e:"« elles étaient arrivées » fonctionne → sont, verbe être."},
-    {f:"qcm", q:"Je ne sais pas si tu ___ prêt.", o:["es","est","et"], a:"es", e:"tu es → verbe être, 2e personne. « et » relie deux mots."},
-    {f:"qcm", q:"Quelle phrase est juste ?", o:["Je leur ai donné leurs cahiers.","Je leurs ai donné leur cahiers.","Je leur ai donné leur cahiers."], a:"Je leur ai donné leurs cahiers.", e:"« leur » pronom = à eux, invariable ; « leurs cahiers » = déterminant devant un nom pluriel."},
-    {f:"gap", acc:1, q:"Je ne l'ai pas vu, il n'était pas ___.", hint:"Écris l'accent s'il en faut un.", a:"là", e:"Le lieu → « là » avec accent."}
+    {f:"qcm", acc:1, q:"Il ___ raison et il rentre ___ pied.", hint:"L'accent fait toute la différence.", o:["a / à","à / a","à / à"], a:"a / à",
+     truc:[{mot:"a",  essai:"Il *avait* raison",       ok:true},
+           {mot:"à",  essai:"il rentre *avait* pied",  ok:false}],
+     e:"« il avait raison » fonctionne → a sans accent ; « à pied » est une préposition."},
+    {f:"qcm", q:"Marie est partie avec ___ parents.", o:["ses","ces","c'est"], a:"ses",
+     truc:[{mot:"ses", essai:"au singulier : avec *son* parent",     ok:true},
+           {mot:"ces", essai:"au singulier : avec *ce* parent-là",   ok:false}],
+     e:"Les siens → possessif « ses ». « ces parents » voudrait dire ceux-là."},
+    {f:"gap", acc:1, q:"___ que tu vas, je te suis.", hint:"Écris l'accent s'il en faut un.", a:"où",
+     truc:[{mot:"ou", essai:"*Ou bien* que tu vas, je te suis", ok:false},
+           {mot:"où", essai:"*L'endroit où* tu vas, je te suis", ok:true}],
+     e:"Il s'agit du lieu → « où » avec accent."},
+    {f:"qcm", q:"Il ___ trompé. ___ dommage.", o:["s'est / C'est","c'est / S'est","s'est / S'est"], a:"s'est / C'est",
+     truc:[{mot:"s'est", essai:"Il *se* trompe → il s'est trompé", ok:true},
+           {mot:"C'est", essai:"*Cela est* dommage",               ok:true}],
+     e:"« il s'est trompé » (se tromper) ; « c'est dommage » = cela est dommage."},
+    {f:"gap", q:"Elles ___ arrivées en retard.", a:"sont",
+     truc:[{mot:"sont", essai:"Elles *étaient* arrivées en retard", ok:true}],
+     e:"« elles étaient arrivées » fonctionne → sont, verbe être."},
+    {f:"qcm", q:"Je ne sais pas si tu ___ prêt.", o:["es","est","et"], a:"es",
+     truc:[{mot:"es", essai:"si tu *étais* prêt",   ok:true},
+           {mot:"et", essai:"si tu *et puis* prêt", ok:false}],
+     e:"tu es → verbe être, 2e personne. « et » relie deux mots."},
+    {f:"qcm", q:"Quelle phrase est juste ?", o:["Je leur ai donné leurs cahiers.","Je leurs ai donné leur cahiers.","Je leur ai donné leur cahiers."], a:"Je leur ai donné leurs cahiers.",
+     truc:[{mot:"leur",  essai:"J'ai donné *à eux* → jamais de -s",      ok:true},
+           {mot:"leurs", essai:"leurs *cahiers* → un nom pluriel derrière", ok:true}],
+     e:"« leur » pronom = à eux, invariable ; « leurs cahiers » = déterminant devant un nom pluriel."},
+    {f:"gap", acc:1, q:"Je ne l'ai pas vu, il n'était pas ___.", hint:"Écris l'accent s'il en faut un.", a:"là",
+     truc:[{mot:"là", essai:"il n'était pas *ici*",        ok:true},
+           {mot:"la", essai:"il n'était pas *la* — la quoi ?", ok:false}],
+     e:"Le lieu → « là » avec accent."}
   ]},
 
 { id:"fr-pp", t:"Accord du participe passé", tier:"consolidation",
@@ -5189,6 +5238,32 @@ function pairHTML(it){
     ${sess.answered ? "" : `<button class="cta" id="chk" ${tous ? "" : "disabled"}>Vérifier</button>`}`;
 }
 
+/* Les homophones ne se retiennent pas, ils se TESTENT (19 septembre 2026).
+
+   Le truc est une substitution : si « avait » tient dans la phrase, c'est le
+   verbe avoir, donc « a » sans accent. Les explications le disaient déjà — en
+   prose, sous la correction — et c'est justement ce qui ne passe pas : une
+   règle lue n'est pas un geste acquis. On la MONTRE donc sur la phrase même,
+   le mot d'essai en évidence, et on dit si ça tient.
+
+   Affiché aussi quand la réponse est JUSTE, contrairement à `accent` et
+   `artic` qui ne parlent que sur une faute : un élève qui a deviné juste est
+   exactement celui qui n'a pas le geste, et c'est le seul moment où il le lira.
+
+   Le truc est une donnée de l'item, pas un calcul sur la réponse — il ne passe
+   donc pas par `sess`, n'a aucun site de remise à zéro, et ne peut rien casser
+   sur une pause ou une reprise. */
+function trucHTML(it){
+  if (!it.truc || !it.truc.length) return "";
+  return `<div class="truc">
+    <div class="tt">Le truc — remplace, et écoute</div>
+    ${it.truc.map(t => `<div class="ess ${t.ok ? "va" : "nova"}">
+      <span class="ph">${fmt(t.essai)}</span>
+      <span class="ver">${t.ok ? "✓ ça tient" : "✗ ça ne tient pas"}</span>
+      <span class="don">donc <em>${esc(t.mot)}</em></span>
+    </div>`).join("")}
+  </div>`;
+}
 function fbHTML(it){
   const good = sess.correct;
   return `<div class="fb ${good ? "ok":"ko"}">
@@ -5200,6 +5275,7 @@ function fbHTML(it){
     ${good ? "" : `<div class="sol">${it.f === "pair"
         ? it.p.map(pr => esc(pr[0]) + " = " + esc(pr[1])).join("<br>")
         : fmt(Array.isArray(it.a) ? it.a[0] : it.a)}</div>`}
+    ${trucHTML(it)}
     ${it.e ? `<div class="exp">${fmt(it.e)}</div>` : ""}
   </div>`;
 }
