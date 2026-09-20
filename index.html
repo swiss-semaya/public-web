@@ -8,6 +8,15 @@
 <meta name="theme-color" content="#EFF2F6" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#0F151B" media="(prefers-color-scheme: dark)">
 <meta name="description" content="ONZE — entraînement quotidien : français, allemand, anglais, maths.">
+<script>
+// L'apparence est locale à l'appareil et INDÉPENDANTE du carnet — elle vit dans
+// sa propre clé, comme le thème et les réglages. Posée ici, avant le premier
+// rendu : lue après, la page s'afficherait une fraction de seconde dans la
+// mauvaise palette. Le `try` est indispensable — en navigation privée, lire
+// localStorage peut lever, et l'app doit s'ouvrir quand même.
+try { const d = localStorage.getItem('onze-design'); document.documentElement.dataset.design = ['maree','brume','atlas','classic'].includes(d) ? d : 'maree'; }
+catch (_) { document.documentElement.dataset.design = 'maree'; }
+</script>
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="manifest" href="manifest.webmanifest">
@@ -710,6 +719,264 @@ body{margin:0;}
 }
 </style>
 
+<style id="onze-appearance">
+/* ONZE appearance layer. All curriculum, scoring and storage remain in index.html. */
+:root[data-design="maree"]{
+  color-scheme:dark;--bg:#102b3b;--panel:#19394a;--panel-2:#214556;--line:#345563;--line-soft:#2b4b5b;
+  --ink:#edf7fa;--ink-2:#bbd0dc;--ink-3:#a7c1d0;
+  --accent:#b3e0e9;--accent-2:#d1eff4;--accent-ink:#133642;--accent-soft:#234e60;
+  --ok:#93d7bb;--ok-soft:#1b493f;--ko:#ffc0b5;--ko-soft:#56343c;
+  --fr:#d0c0eb;--fr-soft:#3a3e5a;--de:#e5d2a3;--de-soft:#43483d;
+  --en:#a8d0ed;--en-soft:#22465c;--ma:#9ddad9;--ma-soft:#22515a;--mix:#c6c8ed;--mix-soft:#394661;
+  --shadow:0 8px 28px #04192418;--shadow-lift:0 12px 32px #03142030;
+  --r-s:10px;--r-m:14px;--r-l:20px;--r-xl:26px;
+  --display:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+:root[data-design="brume"],:root[data-design="atlas"]{
+  color-scheme:light;--bg:#f2f7fb;--panel:#ffffff;--panel-2:#eaf3f8;--line:#d4e3ed;--line-soft:#e2ecf3;
+  --ink:#1c3d55;--ink-2:#506d83;--ink-3:#5b7388;
+  --accent:#326e97;--accent-2:#255779;--accent-ink:#ffffff;--accent-soft:#e1eff7;
+  --ok:#24684e;--ok-soft:#e0f1e9;--ko:#a33935;--ko-soft:#fae6e4;
+  --fr:#77598c;--fr-soft:#efe8f5;--de:#75602d;--de-soft:#f3eddb;
+  --en:#386892;--en-soft:#e3eef8;--ma:#2b707a;--ma-soft:#e0f0f2;--mix:#655d91;--mix-soft:#ebe9f6;
+  --shadow:0 5px 24px #27475806;--shadow-lift:0 10px 30px #27475813;
+  --r-s:10px;--r-m:14px;--r-l:20px;--r-xl:26px;
+  --display:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+:root[data-design="atlas"]{--bg:#f3f5fa;--panel-2:#edf0f8;--ink:#243c64;--ink-2:#526888;--ink-3:#61728d;--line:#d7dfec;--line-soft:#e4e8f0;--accent:#345b9b;--accent-2:#264674;--accent-soft:#e8edf8;--r-s:4px;--r-m:6px;--r-l:8px;--r-xl:10px;--shadow:none;--shadow-lift:0 8px 24px #273e6410}
+/* Specificity wins over legacy light/dark + accent combinations. */
+:root[data-design="maree"][data-couleurs]{--accent:#b3e0e9;--accent-2:#d1eff4;--accent-ink:#133642;--accent-soft:#234e60}
+:root[data-design="brume"][data-couleurs]{--accent:#326e97;--accent-2:#255779;--accent-ink:#fff;--accent-soft:#e1eff7}
+:root[data-design="atlas"][data-couleurs]{--accent:#345b9b;--accent-2:#264674;--accent-ink:#fff;--accent-soft:#e8edf8}
+body{background:var(--bg);color:var(--ink);font-family:var(--body)}
+[hidden]{display:none!important}
+.welcome,.learning-hero{display:none}
+.settings-trigger{width:auto;min-width:44px;min-height:44px;padding:8px 13px;display:flex;align-items:center;gap:8px;font:13px var(--body)}
+.settings-dialog{margin:0;width:100%;max-width:none;height:100%;max-height:none;border:0;color:var(--ink);font-family:var(--body);background:#04151f99;backdrop-filter:blur(7px)}
+.settings-dialog .sheet-in{width:min(540px,100%);max-height:90dvh;overflow-y:auto;padding:28px;box-shadow:0 25px 100px #0003;border:1px solid var(--line)}
+.settings-dialog .sheet-in h3{font-size:27px;font-weight:550;letter-spacing:-.7px;text-transform:none;line-height:1.2;margin:10px 0 12px}
+.settings-eyebrow{font-size:10px;font-weight:600;letter-spacing:.15em;color:var(--ink-3)}
+.design-options{display:grid;gap:9px;margin:24px 0}
+.design-option{display:flex;align-items:center;gap:14px;width:100%;text-align:left;border-radius:13px;padding:13px;min-height:76px;background:var(--panel);color:var(--ink)}
+.design-option.on{background:var(--panel-2);color:var(--ink);border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+.design-option b{display:block;font-weight:600;font-size:15px}.design-option small{display:block;font-size:12px;color:var(--ink-2);margin-top:3px;line-height:1.4;font-weight:400}
+.design-check{margin-left:auto;color:var(--accent);font-size:18px;min-width:15px}
+.design-swatch{width:58px;height:45px;flex-shrink:0;border-radius:7px;padding:9px;display:flex;align-items:end;gap:4px;border:1px solid #7893a555}
+.design-swatch i{height:20px;width:10px;border-radius:3px}.design-swatch i:nth-child(2){height:28px}.design-swatch i:nth-child(3){height:14px}
+.swatch-maree{background:#102b3b}.swatch-maree i{background:#b3e0e9}.swatch-brume{background:#eef6fb}.swatch-brume i{background:#639abc}.swatch-atlas{background:#e9edf6;border-radius:2px}.swatch-atlas i{background:#345b9b;border-radius:0}.swatch-classic{background:#eff2f6}.swatch-classic i{background:#d65b15}
+:root:not([data-design="classic"]) #onze{background:transparent}
+:root[data-design="maree"] body{background:radial-gradient(ellipse at 100% 0,#285967 0,transparent 48%),#102b3b;background-attachment:fixed}
+:root:not([data-design="classic"]) .board{padding:26px 0 0;background:transparent;border-bottom:1px solid var(--line)}
+:root:not([data-design="classic"]) .board-in{max-width:1120px;padding:0 28px 24px}
+:root:not([data-design="classic"]) .brand h1{font-size:29px;letter-spacing:-1px;text-transform:lowercase;font-weight:750;display:flex;align-items:center}
+:root:not([data-design="classic"]) .brand h1 span{color:inherit}
+:root:not([data-design="classic"]) .brand h1:before{content:"";display:inline-block;width:7px;height:24px;background:var(--ink);border-radius:4px;box-shadow:11px -4px var(--ink);margin-right:22px;transform:skewY(-17deg)}
+:root:not([data-design="classic"]) .brand .tag{margin-top:10px;font-size:10px;letter-spacing:.11em}
+:root:not([data-design="classic"]) .scores{gap:22px;margin:24px 0 0;grid-template-columns:repeat(4,1fr)}
+:root:not([data-design="classic"]) .score{border-radius:0;background:transparent;border-left:1px solid var(--line);padding:0 0 0 18px;gap:7px}
+:root:not([data-design="classic"]) .score:first-child{border:0;padding-left:0}
+:root:not([data-design="classic"]) .score .k{font-size:10px;letter-spacing:.09em}
+:root:not([data-design="classic"]) .score .v{font-size:23px;font-weight:500}
+:root:not([data-design="classic"]) .weekbar{margin-top:23px;max-width:100%}
+:root:not([data-design="classic"]) .weekbar .lab{font-size:10px;letter-spacing:.03em;flex-wrap:wrap;gap:7px}
+:root:not([data-design="classic"]) .weekbar .lab span{white-space:normal}
+:root:not([data-design="classic"]) .meter{height:4px}
+:root:not([data-design="classic"]) .home-layout{max-width:1120px;padding:34px 28px 60px;display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:25px 32px;align-items:start}
+:root:not([data-design="classic"]) .welcome{display:flex;grid-column:1/-1;align-items:end;justify-content:space-between;gap:16px;margin-bottom:5px}
+.welcome-kicker{font-size:10px;letter-spacing:.13em;font-weight:600;color:var(--ink-3)}
+.welcome h2{font-size:35px;line-height:1.15;letter-spacing:-1.25px;font-weight:550;margin:9px 0}
+.welcome p{font-size:13px;color:var(--ink-2);line-height:1.6;margin:0}
+.welcome-date{font-size:12px;color:var(--ink-3);white-space:nowrap}
+:root:not([data-design="classic"]) .learning-hero{display:block;grid-column:1;position:relative;overflow:hidden;border-radius:var(--r-l);border:1px solid var(--line);padding:30px;background:var(--accent-soft);min-height:265px}
+:root[data-design="maree"] .learning-hero{background:radial-gradient(ellipse at top right,#377381,transparent 70%),#164354}
+.hero-content{position:relative;z-index:1;max-width:72%}.hero-content .welcome-kicker{font-size:9px;line-height:1.7}
+.hero-content h2{font-size:32px;font-weight:550;letter-spacing:-.8px;line-height:1.12;margin:20px 0 12px}
+.hero-content p{font-size:13px;color:var(--ink-2);line-height:1.6;max-width:250px;margin:0;overflow-wrap:anywhere}
+.hero-content .hero-cta{width:auto;padding:14px 19px;border-radius:10px;font-size:13px;text-transform:none;letter-spacing:0;margin-top:23px;display:inline-flex;align-items:center;gap:25px}
+.hero-art{position:absolute;width:230px;height:230px;right:-48px;top:55px;transform:rotate(-18deg);opacity:.9}
+.hero-art i{position:absolute;inset:12px;border:1px solid color-mix(in srgb,var(--accent) 30%,transparent);border-radius:50%;transform:rotateY(30deg)}.hero-art i:nth-child(2){inset:30px;transform:rotateX(32deg)}.hero-art i:nth-child(3){inset:53px}
+.hero-art div{position:absolute;inset:68px;display:grid;place-items:center;border-radius:50%;background:radial-gradient(circle at 30% 20%,#d2eef3,#84b9c6 50%,#396e83);box-shadow:0 0 50px #7ed6ec22;font:27px Georgia,serif;color:#21475c;transform:rotate(18deg)}
+.hero-art span{position:absolute;top:20px;right:35px;width:15px;height:15px;border-radius:50%;background:#a3d7de}
+:root:not([data-design="classic"]) .home-layout>.sec{margin:0;min-width:0}
+:root:not([data-design="classic"]) .home-layout>.sec:nth-child(3){grid-column:1;grid-row:3}
+:root:not([data-design="classic"]) .home-layout>.sec:nth-child(4){grid-column:1;grid-row:4}
+:root:not([data-design="classic"]) .home-layout>.sec:nth-child(5){grid-column:2;grid-row:2/span 2}
+:root:not([data-design="classic"]) .home-layout>.sec:nth-child(6){grid-column:2;grid-row:4}
+:root:not([data-design="classic"]) .home-layout>.sec:nth-child(7){grid-column:1;grid-row:5}
+:root:not([data-design="classic"]) .home-layout>.sec:nth-child(8){grid-column:2;grid-row:5}
+:root:not([data-design="classic"]) .home-layout>.foot,:root:not([data-design="classic"]) .home-layout>.alerte{grid-column:1/-1}
+:root:not([data-design="classic"]) .sec-h{margin-bottom:14px;flex-wrap:wrap;gap:5px}
+:root:not([data-design="classic"]) .sec-h h2{font-size:14px;letter-spacing:0;text-transform:none;font-weight:600;color:var(--ink)}
+:root:not([data-design="classic"]) .sec-h .note{font-family:var(--body);font-size:11px}
+:root:not([data-design="classic"]) .card{padding:22px}
+:root:not([data-design="classic"]) .block{padding:18px 16px;gap:12px;box-shadow:none}
+:root:not([data-design="classic"]) .block .ttl{font-size:15px;text-transform:none;letter-spacing:0;font-weight:600;line-height:1.35}
+:root:not([data-design="classic"]) .block .sub{font-size:12px;line-height:1.6}
+:root:not([data-design="classic"]) .block .go{padding:10px 12px;letter-spacing:0;text-transform:none;font-size:12px}
+:root:not([data-design="classic"]) .block .num{width:31px;height:31px;line-height:28px;font-size:12px;border-width:1px}
+:root:not([data-design="classic"]) .block + .block:before{left:31px}
+:root:not([data-design="classic"]) .mrow{grid-template-columns:87px minmax(20px,1fr) 85px;padding:17px 0;gap:10px}
+:root:not([data-design="classic"]) .mrow .nm{text-transform:none;letter-spacing:0;font-size:12px;font-weight:550}
+:root:not([data-design="classic"]) .mrow .val{font-size:11px}.mrow .bar{height:5px}
+:root:not([data-design="classic"]) .ile{padding:13px 5px 9px;min-height:83px}
+:root:not([data-design="classic"]) .ile .l{font-size:10px;letter-spacing:0;text-transform:none}
+:root:not([data-design="classic"]) .iles{gap:8px}
+:root:not([data-design="classic"]) .ile.ici{border-color:var(--accent)}
+:root:not([data-design="classic"]) .wrap:not(.home-layout){max-width:760px;padding-left:24px;padding-right:24px}
+:root:not([data-design="classic"]) .lesson h3,:root:not([data-design="classic"]) .q .txt{font-size:clamp(22px,3vw,30px);line-height:1.4;letter-spacing:-.45px;text-transform:none;font-weight:550}
+:root:not([data-design="classic"]) .lesson .why{line-height:1.8;font-size:14px}
+:root:not([data-design="classic"]) .exbox{padding:22px;border-radius:var(--r-l);line-height:1.8}
+:root:not([data-design="classic"]) .cta{min-height:46px;border-radius:12px;text-transform:none;letter-spacing:0;font-size:14px}
+:root:not([data-design="classic"]) .q{padding-bottom:20px}
+:root[data-design="atlas"] .welcome h2,:root[data-design="atlas"] .hero-content h2,:root[data-design="atlas"] .lesson h3{font-family:Georgia,"Times New Roman",serif;font-weight:400}
+:root[data-design="atlas"] .hero-art i{border-radius:3px;transform:rotate(30deg)}
+:root[data-design="atlas"] .hero-art div{border-radius:4px;background:#b4c4df}
+:root[data-design="atlas"] .cta{border-radius:5px}
+:root[data-design="brume"] .hero-art div{border-radius:24px}
+@media(max-width:780px){
+  :root:not([data-design="classic"]) .home-layout{display:flex;flex-direction:column;gap:26px;max-width:580px;padding:27px 20px 50px}
+  :root:not([data-design="classic"]) .home-layout>*{width:100%}
+  :root:not([data-design="classic"]) .board-in{max-width:580px;padding:0 20px 22px}
+  .welcome-date{display:none}.welcome h2{font-size:30px}.welcome p{font-size:13px}
+  :root:not([data-design="classic"]) .learning-hero{padding:25px;min-height:270px}
+  .hero-content h2{font-size:30px}.hero-art{right:-51px;top:56px;width:220px;height:220px}
+  :root:not([data-design="classic"]) .scores{gap:12px}.score .k{white-space:nowrap}
+  :root:not([data-design="classic"]) .score{padding-left:12px}
+  :root:not([data-design="classic"]) .score .v{font-size:20px}
+  :root:not([data-design="classic"]) .card{padding:18px}
+}
+@media(max-width:390px){
+  .settings-dialog .sheet-in{padding:20px}.design-swatch{width:42px;padding:6px;gap:3px}.design-option{gap:10px}.design-option small{font-size:11px}
+  :root:not([data-design="classic"]) .board-in{padding-left:16px;padding-right:16px}
+  :root:not([data-design="classic"]) .home-layout{padding-left:16px;padding-right:16px}
+  :root:not([data-design="classic"]) .score .v{font-size:18px}.score .k{font-size:9px!important}
+  :root:not([data-design="classic"]) .block{gap:9px;padding:16px 12px}.block .go{font-size:11px!important;padding:9px!important}
+  :root:not([data-design="classic"]) .mrow{grid-template-columns:72px minmax(10px,1fr) 76px;gap:6px}
+  :root:not([data-design="classic"]) .iles{gap:5px}.hero-content{max-width:75%}.hero-art{opacity:.55;right:-67px}
+}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+
+</style>
+<style>
+.horizon-nav{display:flex;gap:7px;margin:24px 0 0;flex-wrap:wrap}.horizon-nav button,.lab-back{font:13px var(--body);color:var(--ink-2);background:transparent;border:1px solid var(--line);border-radius:9px;padding:11px 15px;min-height:44px;cursor:pointer}.horizon-nav button.active{background:var(--panel-2);color:var(--ink);border-color:var(--accent)}
+.discovery-strip{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:20px 23px;border:1px solid var(--line);border-radius:var(--r-l);background:var(--panel);grid-column:1/-1!important}.discovery-strip h3{font-size:18px;font-weight:550;letter-spacing:-.3px;margin:0 0 5px}.discovery-strip p{font-size:12px;color:var(--ink-2);line-height:1.6;margin:0}.discovery-strip .cta{width:auto;white-space:nowrap;margin:0;font-size:13px}
+.explore-wrap{max-width:1120px!important;padding-top:26px!important}.explore-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:25px}.explore-wrap h1{font-size:36px;line-height:1.15;letter-spacing:-1.1px;font-weight:550;margin:14px 0}.explore-lead{font-size:14px;color:var(--ink-2);max-width:620px;line-height:1.8;margin-bottom:28px}.workshop-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:19px}.workshop-card{display:flex;flex-direction:column;text-align:left;cursor:pointer;border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:var(--r-l);padding:22px;font:inherit;min-width:0;transition:transform .15s,border-color .15s}.workshop-card:hover{transform:translateY(-3px);border-color:var(--accent)}.workshop-symbol{font:34px Georgia,serif;min-height:90px;display:flex;align-items:center;color:var(--accent);background:radial-gradient(ellipse at 90% 50%,var(--accent-soft),transparent 75%);margin-bottom:18px}.workshop-card .welcome-kicker{font-size:9px}.workshop-card h2{font-size:20px;line-height:1.3;letter-spacing:-.4px;font-weight:550;margin:10px 0}.workshop-card p{font-size:13px;line-height:1.7;color:var(--ink-2);margin:0 0 22px}.workshop-card footer{display:flex;justify-content:space-between;align-items:center;gap:12px;font-size:11px;color:var(--ink-3);margin-top:auto}.workshop-card footer b{font-size:17px;color:var(--accent)}
+.atelier-wrap{max-width:780px!important;padding-top:24px!important}.atelier-top{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:28px}.atelier-mode{font-size:11px;color:var(--ink-3)}.lab-steps{display:flex;gap:8px;margin:0 0 32px}.lab-steps button{flex:1;display:flex;align-items:center;justify-content:center;gap:9px;font:12px var(--body);background:var(--panel);color:var(--ink-2);border:1px solid var(--line);border-radius:10px;min-height:48px;cursor:pointer}.lab-steps button span{display:grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--panel-2);font-size:11px}.lab-steps button[aria-pressed=true]{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}.lab-steps button[aria-pressed=true] span{background:transparent;border:1px solid currentColor}.atelier-title{font-size:32px;line-height:1.2;letter-spacing:-.8px;font-weight:550;margin:12px 0}.atelier-title:focus{outline:none}.atelier-lead{font-size:14px;color:var(--ink-2);line-height:1.7;margin:0 0 25px}.lab-canvas{border:1px solid var(--line);background:var(--panel);border-radius:var(--r-l);padding:28px;text-align:center;min-height:190px}.lab-canvas svg{width:100%;max-width:470px;height:auto;display:block;margin:auto}.lab-range{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;color:var(--ink-2);font-size:13px;margin:22px 0 10px}.lab-range b{color:var(--ink)}.lab-range input{width:100%;accent-color:var(--accent);height:26px}.lab-range select{background:var(--panel);color:var(--ink);border:1px solid var(--line);padding:12px;font:16px var(--body);border-radius:8px;max-width:100%}.lab-feedback{background:var(--accent-soft);color:var(--ink);border-left:3px solid var(--accent);border-radius:0 9px 9px 0;padding:15px 18px;font-size:13px;line-height:1.7;min-height:55px}.lab-pills{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0}.lab-pills button,.lab-answers button{font:13px var(--body);background:var(--panel);border:1px solid var(--line);color:var(--ink);border-radius:9px;min-height:44px;padding:11px 15px;cursor:pointer}.lab-pills button[aria-pressed=true],.lab-answers button[aria-pressed=true]{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent);background:var(--accent-soft)}.lab-pills button:disabled{opacity:.4;cursor:default}.lab-number{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:14px;font:clamp(24px,5vw,38px) Georgia,serif;overflow-wrap:anywhere}.lab-number sup{color:var(--accent)}.lab-equation{font:clamp(23px,4vw,31px) Georgia,serif;margin:12px 0 25px;line-height:1.5}.lab-subtle{font-size:12px;color:var(--ink-3);line-height:1.7}.lab-sentence{display:grid;place-items:center;font:clamp(23px,4vw,31px) Georgia,serif}.numberline{display:grid;grid-template-columns:repeat(11,1fr);gap:2px;border-bottom:2px solid var(--line);margin:25px 0 12px;padding-bottom:8px}.numberline button{border:1px solid transparent;background:var(--panel-2);color:var(--ink);font:13px var(--body);padding:12px 0;min-height:44px;border-radius:6px;cursor:pointer}.numberline button.departure{border-color:var(--ma)}.numberline button[aria-pressed=true]{outline:2px solid var(--accent)}.numberline button.arrival{background:var(--accent);color:var(--accent-ink)}.jump{padding:17px;color:var(--accent);font-size:18px}.lab-answers{display:grid;gap:10px}.lab-answers button{font:20px Georgia,serif;padding:17px}.atelier-foot{display:flex;align-items:center;justify-content:space-between;gap:18px;border-top:1px solid var(--line);margin:28px 0 15px;padding-top:20px}.atelier-foot>span{font-size:11px;color:var(--ink-3)}.atelier-foot .cta{width:auto;margin:0;max-width:65%}.lab-spelling{display:flex;flex-direction:column;align-items:center;justify-content:center}.lab-spelling>span{font:clamp(26px,5vw,38px) Georgia,serif;overflow-wrap:anywhere;max-width:100%}.lab-spelling p{color:var(--ink-2);font-size:13px;margin-top:22px}.lab-flow{display:flex;gap:8px;justify-content:space-between;margin:22px 0;color:var(--ink-2);font-size:12px}.flash-head{display:flex;justify-content:space-between;gap:12px;color:var(--ink-3);font-size:11px;margin:20px 0 12px}.letter-diff{font:clamp(26px,5vw,36px) var(--body);overflow-wrap:anywhere;letter-spacing:2px;line-height:1.8}.letter-diff mark{background:var(--ko-soft);color:var(--ko);border-bottom:2px solid var(--ko);padding:0 2px}.letter-diff del{color:var(--ko);font-size:.8em}.sr-lab{display:block;font-size:12px;color:var(--ink-2);margin-bottom:12px}.accents{justify-content:center}.accents button{font-size:17px}.lab-canvas .inp{font-size:21px;max-width:100%}.lab-canvas form{margin-top:20px}.lab-canvas form p{font-size:12px}.progress-context{margin-top:20px;padding:18px;background:var(--panel-2);border-radius:12px;color:var(--ink-2);font-size:12px;line-height:1.8}.progress-context b{color:var(--ink)}.session-reward{display:flex;justify-content:space-between;gap:15px;color:var(--ink-3);font-size:11px;border-bottom:1px solid var(--line);padding:12px 0}.session-reward b{color:var(--ink)}.review-lesson{margin:15px 0 0;background:transparent;border:1px solid var(--line);color:var(--ink-2);border-radius:9px;padding:10px 14px;min-height:44px;font:12px var(--body);cursor:pointer}
+.island-card{border:0;background:transparent;color:var(--ink);font:inherit;width:100%;text-align:left;cursor:pointer;padding:0}.island-row{display:flex;align-items:center;gap:14px;border-bottom:1px solid var(--line);padding:15px 0}.island-row:nth-child(even){padding-left:23px}.island-circle{width:47px;height:47px;display:grid;place-items:center;flex-shrink:0;border-radius:50%;border:1px solid var(--line);background:var(--panel-2);font-size:15px;position:relative}.island-row.current .island-circle{border:2px solid var(--accent);box-shadow:0 0 0 5px var(--accent-soft)}.island-info{min-width:0}.island-info b{display:block;font-size:12px;font-weight:550;line-height:1.4}.island-info small{display:block;color:var(--ink-3);font-size:10px;margin-top:5px}.island-info .meter{margin-top:8px;width:120px;height:3px}.island-row>span:last-child{margin-left:auto;font-size:11px;color:var(--ink-3)}.journey-map{margin-bottom:20px}.journey-map>summary{font-size:12px;color:var(--ink-2);padding:14px 0;cursor:pointer}.theme-detail{padding:22px 0;border-bottom:1px solid var(--line)}.theme-detail h2{font-size:18px;font-weight:550}.theme-detail p{font-size:13px;line-height:1.8;color:var(--ink-2)}.theme-detail .cta{width:auto}.overview-note{font-size:12px;color:var(--ink-3);margin-top:22px;line-height:1.8}
+.hero-explore{display:block;border:0;background:transparent;color:var(--ink-2);font:12px var(--body);line-height:1.6;cursor:pointer;text-align:left;margin-top:13px;padding:8px 0;min-height:44px}.hero-explore:hover{color:var(--ink)}.numberline{display:none}.prediction-line{margin-top:20px!important}.programme-reference{border-top:1px solid var(--line);margin-top:25px;padding-top:20px}.programme-reference summary{cursor:pointer;font-size:13px;color:var(--ink-2);padding:10px 0}.programme-reference .pts{font-size:13px;line-height:1.8}.programme-reference .pts li{display:list-item;margin:10px 0}
+@media(min-width:781px){.discovery-strip{grid-row:6}}
+@media(max-width:780px){.workshop-grid{grid-template-columns:repeat(2,1fr)}.explore-wrap h1{font-size:30px}.workshop-card{padding:19px}.workshop-card h2{font-size:18px}.discovery-strip{flex-direction:column;align-items:start}.discovery-strip .cta{width:100%;text-align:center}.atelier-title{font-size:28px}}
+@media(max-width:480px){.workshop-grid{grid-template-columns:1fr}.workshop-card{display:grid;grid-template-columns:65px 1fr;gap:0 17px}.workshop-symbol{grid-row:1/5;min-height:0;font-size:23px;margin:0}.workshop-card p{margin-bottom:13px}.atelier-top{align-items:start;gap:10px}.atelier-mode{max-width:130px;text-align:right;line-height:1.5}.lab-canvas{padding:18px 12px}.lab-steps{gap:5px}.lab-steps button{gap:5px;font-size:11px}.lab-steps button span{width:18px;height:18px;font-size:10px}.numberline{grid-template-columns:repeat(6,1fr);border-bottom:0;gap:6px}.numberline button{border-bottom:2px solid var(--line)}.atelier-foot{align-items:start;flex-direction:column;gap:15px}.atelier-foot .cta{width:100%;max-width:100%}.lab-flow{font-size:11px}.horizon-nav{gap:5px}.horizon-nav button{padding:10px 12px;font-size:12px}.session-reward{font-size:10px;flex-wrap:wrap}}
+
+</style>
+<script>
+/* Hands-on preparation. No writes to learner progress or wallet. */
+window.ONZEAteliers = (() => {
+  const catalog = [
+    {id:'ma-frac', title:'Des parts qui se rencontrent', topic:'Fractions', symbol:'½ + ⅓', desc:'Trouve le découpage qui permet d’additionner.', subject:'Mathématiques'},
+    {id:'ma-lit', title:'Le calcul prend forme', topic:'Calcul littéral', symbol:'(x + 2)²', desc:'Découpe, assemble et fais varier un rectangle.', subject:'Mathématiques'},
+    {id:'ma-pow', title:'Une virgule en voyage', topic:'Notation scientifique', symbol:'× 10ⁿ', desc:'Déplace la virgule et compte les rangs.', subject:'Mathématiques'},
+    {id:'ma-rel', title:'Trouve ton point d’arrivée', topic:'Nombres relatifs', symbol:'−3 → 2', desc:'Prédis un déplacement avant de le voir.', subject:'Mathématiques'},
+    {id:'fr-orth', title:'Les mots restent en tête', topic:'Dictée flash', symbol:'Aa', desc:'Observe, écris de mémoire, retrouve les mots à revoir.', subject:'Français'},
+    {id:'fr-homo', title:'Le bon mot, par la preuve', topic:'Homophones', symbol:'a / à', desc:'Remplace un mot pour comprendre son rôle.', subject:'Français'}
+  ];
+  const escape = value => String(value).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const label = ['Voir','Toucher','S’entraîner'];
+  const lessons = {
+    'ma-frac':['On ne compte ensemble que des parts de même taille.','Déplace le curseur. Cherche un découpage qui tombe juste pour le demi ET le tiers.','Un demi plus un tiers : quel résultat obtiens-tu ?'],
+    'ma-lit':['Développer, c’est compter la même aire en plusieurs morceaux.','Change x et l’expression. Chaque morceau doit être compté.','Quel est le développement de (x + 3)² ?'],
+    'ma-pow':['Un même nombre peut s’écrire avec une puissance de dix.','Place la virgule pour laisser un seul chiffre non nul avant elle.','Comment écrire 0,00034 en notation scientifique ?'],
+    'ma-rel':['Soustraire un négatif, c’est avancer sur la droite.','Choisis ton point d’arrivée avant de révéler le saut.','Quelle est la valeur de (−3)² ?'],
+    'fr-orth':['On observe le mot, on le cache, puis on l’écrit de mémoire.','Choisis ton temps d’observation. Les accents et les lettres comptent.','Les mots à revoir reviennent plus loin dans la séance.'],
+    'fr-homo':['Un mot de remplacement permet de tester ton choix.','Essaie « avait » ou « était ». La phrase fonctionne-t-elle encore ?','Complète : « Il ___ raison et rentre ___ pied. »']
+  };
+  const checks={
+    'ma-frac':{options:['2/5','5/6','2/6'],correct:1,why:'½ = 3/6 et ⅓ = 2/6. On additionne 3 + 2 sixièmes.'},
+    'ma-lit':{options:['x² + 9','x² + 3x + 9','x² + 6x + 9'],correct:2,why:'Il faut compter x², deux rectangles de 3x et le carré de 9.'},
+    'ma-pow':{options:['3,4 × 10⁻⁴','34 × 10⁻⁵','3,4 × 10⁴'],correct:0,why:'3,4 est entre 1 et 10. Multiplier par 10⁻⁴ redonne 0,00034.'},
+    'ma-rel':{options:['−9','9','6'],correct:1,why:'Les parenthèses incluent le signe : (−3) × (−3) = 9. En revanche, −3² = −9.'},
+    'fr-homo':{options:['a / à','à / a','a / a'],correct:0,why:'« Il avait raison » fonctionne ; « rentre avait pied » ne fonctionne pas.'}
+  };
+  function mount(host, config){
+    const meta=catalog.find(c=>c.id===config.id); if(!meta)throw new Error('Unknown workshop');
+    const state={stage:0,n:2,x:4,model:0,cut:false,assembly:false,tiles:[],shift:0,sci:0,guess:null,reveal:false,homo:0,replace:false,choice:null,checked:false,seconds:3,flash:null};
+    let timer=null,disposed=false;
+    const sci=[{digits:'000034',start:1,target:5,name:'0,00034'}, {digits:'4500',start:4,target:1,name:'4 500'}, {digits:'1200000',start:7,target:1,name:'1 200 000'}];
+    const words=(config.words||[]).filter(w=>w.word&&w.word.length<40);
+    const gcd=(a,b)=>b?gcd(b,a%b):a;
+    const fmt=n=>n<0?'−'+Math.abs(n):String(n);
+    const stop=()=>{if(timer!==null)clearTimeout(timer);timer=null;};
+    function fractions(){
+      const n=state.stage===0?(state.cut?6:2):state.n, exact=n%6===0;
+      const bar=(y,num,den,title)=>`<text x="18" y="${y-10}" fill="var(--ink-2)" font-size="14">${title}${n*num%den===0?' = '+(n*num/den)+'/'+n:''}</text><rect x="18" y="${y}" width="320" height="32" rx="5" fill="var(--panel-2)"/><rect x="18" y="${y}" width="${320*num/den}" height="32" rx="5" fill="${den===2?'var(--accent)':'var(--ma)'}"/>${Array.from({length:n-1},(_,i)=>`<path d="M${18+320*(i+1)/n} ${y}v32" stroke="var(--bg)" stroke-width="2"/>`).join('')}`;
+      return `<div class="lab-canvas"><svg viewBox="0 0 356 210" role="img" aria-label="Un demi et un tiers découpés en ${n} parts égales">${bar(33,1,2,'½')}${bar(103,1,3,'⅓')}<text x="178" y="188" text-anchor="middle" fill="var(--ink)" font-size="20">${exact?'3/6 + 2/6 = 5/6':'Des parts de même taille ?'}</text></svg></div>${state.stage===0?'<button class="cta" data-lab="cut">'+(state.cut?'Revenir au départ':'Découper en sixièmes')+'</button>':`<label class="lab-range">Découpage <b>${n} parts</b><input aria-label="Nombre de parts" type="range" min="2" max="12" value="${n}" data-input="parts"></label>`}<p class="lab-feedback" aria-live="polite">${exact?'✓ Les deux bords tombent sur un trait. Tu peux additionner les parts : '+(n/2)+' + '+(n/3)+' = '+(5*n/6)+' parts sur '+n+'.':'Les bords ne s’alignent pas encore tous les deux. Essaie un multiple de 2 et de 3.'}</p>`;
+    }
+    function algebra(){
+      const x=state.x,m=state.model,split=state.stage===1||state.cut;
+      const width=x+ (m===2?3:2),height=m===0?3:x+3,unit=220/9;
+      const a=x*unit,b=(m===2?3:2)*unit,h=(m===0?3:x)*unit,k=m===0?0:3*unit;
+      let tileIndex=0;const rect=(X,Y,W,H,color,text)=>{const missing=state.assembly&&!state.tiles.includes(tileIndex++);return `<rect x="${X}" y="${Y}" width="${W}" height="${H}" fill="${missing?'var(--panel-2)':color}" stroke="${missing?'var(--line)':'var(--panel)'}" stroke-width="3" ${missing?'stroke-dasharray="5 5"':''} rx="3"/><text x="${X+W/2}" y="${Y+H/2+5}" text-anchor="middle" fill="var(--ink)" font-size="16">${missing?'?':text}</text>`;};
+      const exp=['3(x + 2)','(x + 2)(x + 3)','(x + 3)²'][m];
+      return `${state.stage===1?`<div class="lab-pills">${['3(x + 2)','(x + 2)(x + 3)','(x + 3)²'].map((v,i)=>`<button data-model="${i}" aria-pressed="${m===i}">${v}</button>`).join('')}</div>`:''}<div class="lab-canvas"><svg viewBox="0 0 300 270" role="img" aria-label="${escape(exp)} représenté par un rectangle, x vaut ${x}"><text x="145" y="20" text-anchor="middle" fill="var(--ink-2)" font-size="14">${m===2?'x + 3':'x + 2'}</text>${split?rect(30,35,a,h,'var(--ma-soft)',m===0?'3x':'x²')+rect(30+a,35,b,h,'var(--accent-soft)',m===0?'6':(m===2?'3x':'2x'))+(m===0?'':rect(30,35+h,a,k,'var(--accent-soft)','3x')+rect(30+a,35+h,b,k,'var(--ma-soft)',m===2?'9':'6')):rect(30,35,a+b,h+k,'var(--ma-soft)',exp)}<text x="150" y="262" text-anchor="middle" fill="var(--ink)" font-size="17">${exp} = ${m===0?'3x + 6':m===1?'x² + 5x + 6':'x² + 6x + 9'}</text></svg></div>${state.stage===0?`<button class="cta" data-lab="cut">${state.cut?'Recoller':'Découper le rectangle'}</button>`:`<label class="lab-range">Fais varier x <b>x = ${x}</b><input type="range" min="1" max="6" value="${x}" aria-label="Valeur de x" data-input="x"></label>`}<p class="lab-feedback">Pour x = ${x}, l’aire vaut ${width*height}. ${m===2?'N’oublie pas les deux rectangles de 3x.':'Les morceaux réunis forment exactement le même rectangle.'}</p>`;
+    }
+    function scientific(){
+      const a=sci[state.sci],pos=a.start+state.shift;
+      let s=a.digits.slice(0,pos)+','+a.digits.slice(pos);s=s.replace(/^0+(?=\d)/,'').replace(/,$/,'');if(s.startsWith(','))s='0'+s;
+      return `<div class="lab-pills">${sci.map((v,i)=>`<button data-sci="${i}" aria-pressed="${state.sci===i}">${v.name}</button>`).join('')}</div><div class="lab-canvas lab-number"><span>${escape(s)}</span><span>× 10<sup>${fmt(-state.shift)}</sup></span></div><div class="lab-pills"><button data-lab="left" ${pos<=1?'disabled':''}>← Virgule à gauche</button><button data-lab="right" ${pos>=a.digits.length?'disabled':''}>Virgule à droite →</button></div><p class="lab-feedback" aria-live="polite">${pos===a.target?'✓ Un seul chiffre non nul avant la virgule : c’est la notation scientifique.':'La valeur reste '+a.name+'. Cherche une écriture dont le premier facteur est entre 1 et 10.'}</p>`;
+    }
+    function relatives(){return `<div class="lab-canvas"><div class="lab-equation">−3 − (−5) = ${state.reveal?'2':'?'}</div><p class="lab-subtle">${state.stage===0?'Enlever une dette de 5, c’est gagner 5.':'Choisis un point sur la droite.'}</p><div class="numberline">${Array.from({length:11},(_,i)=>i-5).map(n=>`<button data-point="${n}" aria-label="Position ${n}" aria-pressed="${state.guess===n}" class="${n===-3?'departure':''} ${state.reveal&&n===2?'arrival':''}">${fmt(n)}</button>`).join('')}</div>${state.reveal?'<div class="jump">−3 &nbsp; → &nbsp; +5 pas &nbsp; → &nbsp; 2</div>':''}</div><button class="cta" data-lab="reveal">${state.stage===0?'Montrer le déplacement':'Vérifier ma prédiction'}</button><p class="lab-feedback" aria-live="polite">${state.reveal?(state.guess===2?'✓ Bien vu. ':state.guess===null?'':'Repars de −3. ')+'Soustraire −5, c’est ajouter 5. On arrive à 2.':'Le point de départ est −3. Tu gardes la main sur le dessin.'}</p>`;}
+    function homo(){
+      const examples=[['Il a raison.','Il avait raison.','La phrase fonctionne : a est le verbe avoir.'],['Il rentre à pied.','Il rentre avait pied.','La phrase ne fonctionne pas : à est une préposition.'],['Elle est prête.','Elle était prête.','La phrase fonctionne : est est le verbe être.']];const e=examples[state.homo];
+      return `<div class="lab-pills">${['a','à','est'].map((v,i)=>`<button data-homo="${i}" aria-pressed="${state.homo===i}">${v}</button>`).join('')}</div><div class="lab-canvas lab-sentence">${state.replace?e[1]:e[0]}</div><button class="cta" data-lab="replace">${state.replace?'Revenir à la phrase':'Essayer le remplacement'}</button><p class="lab-feedback" aria-live="polite">${state.replace?e[2]:'Essaie un autre temps du verbe, puis écoute la phrase.'}</p>`;
+    }
+    function spelling(){
+      if(state.stage===0)return `<div class="lab-canvas lab-spelling"><span>chevaux</span><p>cheval → chevaux</p></div><div class="lab-flow"><span>1. Observe</span><span>2. Cache</span><span>3. Écris</span></div><p class="lab-feedback">Les mots viennent de la banque d’orthographe d’ONZE. Ici, tu entraînes ta mémoire sans modifier tes points ni ton porte-monnaie.</p>`;
+      if(state.stage===1)return `<div class="lab-canvas"><div class="lab-spelling"><span>À ton rythme.</span></div><label class="lab-range" for="flash-time">Temps d’observation <select id="flash-time" data-input="seconds"><option value="3" ${state.seconds===3?'selected':''}>3 secondes</option><option value="5" ${state.seconds===5?'selected':''}>5 secondes</option><option value="0" ${state.seconds===0?'selected':''}>Je cache moi-même</option></select></label></div><p class="lab-feedback">Une erreur ? La correction montre les lettres à reprendre. Le mot revient après trois autres mots, ou en fin de séance si la liste est plus courte. Une nouvelle réussite est ensuite espacée de huit mots quand la liste le permet.</p>`;
+      if(!words.length)return '<p>La banque de mots n’est pas disponible.</p>';
+      if(!state.flash)return `<div class="lab-canvas"><div class="lab-spelling"><span>${words.length} mots</span></div><p class="lab-subtle">Une courte séance de mémoire, sans chronomètre pour répondre.</p></div><button class="cta" data-lab="flash-start">Commencer la dictée flash</button>`;
+      const f=state.flash,item=f.queue[f.i];
+      if(!item)return `<div class="lab-canvas"><div class="lab-equation">Séance terminée ✓</div><p>${f.firstRight} / ${words.length} mots justes au premier essai.</p><p>${f.retryCount} reprise${f.retryCount>1?'s':''} travaillée${f.retryCount>1?'s':''}.</p></div><p class="lab-feedback">${f.missed.size?'À revoir : '+[...f.missed].map(escape).join(', ')+'.':'Tu as retrouvé tous les mots.'} Ce bilan concerne cet atelier ; la maîtrise officielle vient des exercices du programme.</p><button class="cta ghost" data-lab="flash-start">Recommencer</button>`;
+      return `<div class="flash-head"><span>Mot ${f.i+1} / ${f.queue.length}${item.retry?' · reprise':''}</span><span>${f.firstRight} premiers essais justes</span></div>${f.phase==='show'?`<div class="lab-canvas lab-spelling"><span>${escape(item.word)}</span><p>${escape(item.rule)}</p></div><button class="cta" data-lab="hide-word">Je suis prêt · cacher le mot</button>`:f.phase==='type'?`<div class="lab-canvas"><p>Écris le mot de mémoire.</p><form id="flash-form"><label class="sr-lab" for="flash-answer">Le mot mémorisé</label><input id="flash-answer" class="inp" autocomplete="off" autocapitalize="off" spellcheck="false"><div class="lab-pills accents">${['é','è','ê','à','ç','ù'].map(v=>`<button type="button" data-accent="${v}">${v}</button>`).join('')}</div><button class="cta" type="submit">Vérifier le mot</button><p id="flash-empty" role="status"></p></form></div>`:`<div class="lab-canvas"><div class="lab-equation">${f.correct?'✓ Bien mémorisé':'À reprendre, tranquillement'}</div><div class="letter-diff">${diff(f.typed,item.word)}</div><p>${escape(item.rule)}</p></div><p class="lab-feedback">${escape(f.message)}</p><button class="cta" data-lab="flash-next">${f.i+1<f.queue.length?'Mot suivant →':'Voir mon bilan'}</button>`}`;
+    }
+    function diff(got,wanted){
+      const a=Array.from(got),b=Array.from(wanted),dp=Array.from({length:a.length+1},()=>Array(b.length+1).fill(0));
+      for(let i=0;i<=a.length;i++)dp[i][0]=i;for(let j=0;j<=b.length;j++)dp[0][j]=j;
+      for(let i=1;i<=a.length;i++)for(let j=1;j<=b.length;j++)dp[i][j]=Math.min(dp[i-1][j]+1,dp[i][j-1]+1,dp[i-1][j-1]+(a[i-1]===b[j-1]?0:1));
+      const out=[];let i=a.length,j=b.length;while(i||j){if(i&&j&&dp[i][j]===dp[i-1][j-1]+(a[i-1]===b[j-1]?0:1)){out.push(a[i-1]===b[j-1]?escape(b[j-1]):`<mark>${escape(b[j-1])}</mark>`);i--;j--;}else if(j&&dp[i][j]===dp[i][j-1]+1){out.push(`<mark>${escape(b[--j])}</mark>`);}else{out.push(`<del>${escape(a[--i])}</del>`);}}return out.reverse().join('');
+    }
+    function check(){const c=checks[meta.id],formula={'ma-frac':'½ + ⅓ = ?','ma-lit':'(x + 3)² = ?','ma-pow':'0,00034 = ?','ma-rel':'(−3)² = ?','fr-homo':'Il … raison et rentre … pied.'}[meta.id];return `<div class="lab-canvas"><div class="lab-equation">${escape(formula)}</div><div class="lab-answers">${c.options.map((v,i)=>`<button data-choice="${i}" aria-pressed="${state.choice===i}">${escape(v)}</button>`).join('')}</div></div><button class="cta" data-lab="check">Vérifier mon idée</button><p class="lab-feedback" aria-live="polite">${state.checked?(state.choice===c.correct?'✓ Exactement. ':'Pas encore. ')+c.why:'Choisis une réponse. Tu peux revenir au dessin à tout moment.'}</p>`;}
+    function render(focusHeading=false){
+      stop();if(disposed)return;
+      const body=meta.id==='fr-orth'?spelling():state.stage===2?check():({'ma-frac':fractions,'ma-lit':algebra,'ma-pow':scientific,'ma-rel':relatives,'fr-homo':homo}[meta.id])();
+      host.innerHTML=`<div class="wrap atelier-wrap"><div class="atelier-top"><button class="lab-back" data-lab="exit">← ${config.returnLabel||'Les ateliers'}</button><span class="atelier-mode">${config.onTrain?'Préparation de ta leçon':'Exploration libre · sans points'}</span></div><nav class="lab-steps" aria-label="Étapes de l’atelier">${label.map((v,i)=>`<button data-stage="${i}" aria-pressed="${state.stage===i}"><span>${i+1}</span>${v}</button>`).join('')}</nav><div class="welcome-kicker">${meta.subject} · ${meta.topic}</div><h1 class="atelier-title" tabindex="-1">${meta.title}</h1><p class="atelier-lead">${lessons[meta.id][state.stage]}</p>${body}<div class="atelier-foot"><span>${state.stage+1} / 3 · avance à ton rythme</span>${state.stage<2?'<button class="cta" data-lab="next">'+(state.stage===0?'À moi de toucher':'Je teste mon idée')+' →</button>':`<button class="cta ${config.onTrain?'':'ghost'}" data-lab="finish">${config.onTrain?'Passer aux exercices du programme →':'Retour aux ateliers'}</button>`}</div>${config.onTrain?'<p class="lab-subtle">Ici, tu explores. Les points et les gains commencent dans les exercices du programme.</p>':''}</div>`;
+      if(meta.id==='ma-lit'&&state.stage===1){const pieces=state.model===0?['3x','6']:state.model===1?['x²','2x','3x','6']:['x²','3x','3x','9'];host.querySelector('.lab-canvas').insertAdjacentHTML('afterend',`<div class="lab-pills"><button data-lab="assembly">${state.assembly?'Voir le rectangle complet':'Assembler les morceaux'}</button></div>${state.assembly?`<p class="lab-subtle">Touche chaque pièce pour reconstruire la surface : ${state.tiles.length} / ${pieces.length} pièces posées.</p><div class="lab-pills">${pieces.map((v,i)=>`<button data-tile="${i}" ${state.tiles.includes(i)?'disabled':''}>${v}${state.tiles.includes(i)?' ✓':''}</button>`).join('')}</div>`:''}`);}
+      if(meta.id==='ma-rel'&&state.stage<2){const px=n=>25+(n+5)*25;host.querySelector('.numberline').insertAdjacentHTML('beforebegin',`<svg class="prediction-line" viewBox="0 0 300 120" role="img" aria-label="Droite de moins cinq à cinq, départ moins trois${state.reveal?', arrivée deux':''}"><path d="M25 65H275" stroke="var(--line)" stroke-width="2"/>${Array.from({length:11},(_,i)=>i-5).map(n=>`<path d="M${px(n)} 59v12" stroke="var(--ink-3)"/><text x="${px(n)}" y="92" font-size="12" fill="var(--ink-2)" text-anchor="middle">${fmt(n)}</text>`).join('')}<circle cx="${px(-3)}" cy="65" r="7" fill="var(--ma)"/>${state.guess!==null?`<circle cx="${px(state.guess)}" cy="65" r="11" fill="none" stroke="var(--accent)" stroke-width="2"/>`:''}${state.reveal?`<path d="M${px(-3)} 52Q${px(-.5)} 0 ${px(2)} 52" stroke="var(--accent)" fill="none" stroke-width="2"/><circle cx="${px(2)}" cy="65" r="7" fill="var(--accent)"/><text x="${px(-.5)}" y="22" text-anchor="middle" font-size="14" fill="var(--ink)">+5</text>`:''}</svg>${state.stage===1?`<label class="lab-range">Ma prédiction : <b>${state.guess===null?'à choisir':fmt(state.guess)}</b><input type="range" min="-5" max="5" value="${state.guess??-3}" data-input="prediction" aria-label="Prédiction du point d’arrivée"></label>`:''}`);}
+      if(config.reference)host.querySelector('.atelier-wrap').insertAdjacentHTML('beforeend',`<details class="programme-reference"><summary>Fiche complète du programme</summary>${config.reference}</details>`);
+      if(!config.onTrain&&config.returnLabel){const finish=host.querySelector('[data-lab="finish"]');if(finish)finish.textContent=config.returnLabel;}
+      if(focusHeading){host.querySelector('.atelier-title').focus({preventScroll:true});window.scrollTo?.({top:0,behavior:'instant'});}
+      if(meta.id==='fr-orth'&&state.stage===2&&state.flash?.phase==='show'&&state.flash.queue[state.flash.i]&&state.seconds>0&&document.documentElement.dataset.calme!=='1')timer=setTimeout(()=>{state.flash.phase='type';render();host.querySelector('#flash-answer')?.focus({preventScroll:true});},state.seconds*1000);
+    }
+    function startFlash(){state.flash={queue:words.map(w=>({...w,retry:0})),i:0,phase:'show',firstRight:0,retryCount:0,missed:new Set(),message:'',typed:''};}
+    const click=e=>{const b=e.target.closest('button');if(!b||!host.contains(b))return;
+      if(b.dataset.accent){const input=host.querySelector('#flash-answer'),p=input.selectionStart,q=input.selectionEnd;input.setRangeText(b.dataset.accent,p,q,'end');input.focus();return;}
+      if(b.dataset.stage!==undefined){state.stage=+b.dataset.stage;state.assembly=false;render(true);return;}
+      if(b.dataset.tile!==undefined){const n=+b.dataset.tile;if(!state.tiles.includes(n))state.tiles.push(n);render();return;}
+      if(b.dataset.lab==='assembly'){state.assembly=!state.assembly;state.tiles=[];render();return;}
+      if(b.dataset.model!==undefined){state.model=+b.dataset.model;state.tiles=[];render();return;}
+      if(b.dataset.sci!==undefined){state.sci=+b.dataset.sci;state.shift=0;render();return;}
+      if(b.dataset.point!==undefined){state.guess=+b.dataset.point;state.reveal=false;render();return;}
+      if(b.dataset.homo!==undefined){state.homo=+b.dataset.homo;state.replace=false;render();return;}
+      if(b.dataset.choice!==undefined){state.choice=+b.dataset.choice;state.checked=false;render();return;}
+      switch(b.dataset.lab){case 'exit':stop();config.onExit();return;case 'finish':stop();(config.onTrain||config.onExit)();return;case 'next':state.stage++;render(true);return;case 'cut':state.cut=!state.cut;break;case 'left':state.shift--;break;case 'right':state.shift++;break;case 'reveal':if(state.stage===1&&state.guess===null){host.querySelector('.lab-feedback').textContent='Choisis d’abord ton point d’arrivée sur la droite.';return;}state.reveal=true;break;case 'replace':state.replace=!state.replace;break;case 'check':if(state.choice===null){host.querySelector('.lab-feedback').textContent='Choisis d’abord une réponse.';return;}state.checked=true;break;case 'flash-start':startFlash();break;case 'hide-word':state.flash.phase='type';break;case 'flash-next':state.flash.i++;state.flash.phase='show';break;default:return;}render();if(b.dataset.lab==='hide-word')host.querySelector('#flash-answer')?.focus({preventScroll:true});};
+    const change=e=>{const k=e.target.dataset.input;if(!k)return;if(k==='parts')state.n=+e.target.value;if(k==='x')state.x=+e.target.value;if(k==='prediction'){state.guess=+e.target.value;state.reveal=false;}if(k==='seconds')state.seconds=+e.target.value;render();host.querySelector(`[data-input="${k}"]`)?.focus({preventScroll:true});};
+    const submit=e=>{if(e.target.id!=='flash-form')return;e.preventDefault();const typed=host.querySelector('#flash-answer').value.trim().normalize('NFC').toLocaleLowerCase('fr');if(!typed){host.querySelector('#flash-empty').textContent='Écris le mot avant de vérifier.';return;}const f=state.flash,item=f.queue[f.i];f.typed=typed;f.correct=typed===item.word.toLocaleLowerCase('fr').normalize('NFC');if(!item.retry&&f.correct)f.firstRight++;if(item.retry)f.retryCount++;if(!f.correct)f.missed.add(item.word);else f.missed.delete(item.word);let gap=null;if(!f.correct&&item.retry<2)gap=3;else if(f.correct&&item.retry===1)gap=8;if(gap!==null){const pos=Math.min(f.i+gap+1,f.queue.length);f.queue.splice(pos,0,{...item,retry:item.retry+1});const between=pos-f.i-1;f.message=`Ce mot revient ${between?'après '+between+' autre'+(between>1?'s mots':' mot'):'juste après'}, pour le consolider.`;}else f.message=f.correct?'✓ Le mot est juste, accents compris.':'Le mot restera dans ton bilan « à revoir ». Les lettres surlignées indiquent les corrections, les lettres barrées sont en trop.';f.phase='feedback';render();};
+    host.addEventListener('click',click);host.addEventListener('change',change);host.addEventListener('submit',submit);render();
+    return ()=>{disposed=true;stop();host.removeEventListener('click',click);host.removeEventListener('change',change);host.removeEventListener('submit',submit);};
+  }
+  return {catalog,mount};
+})();
+
+</script>
 <div id="onze"></div>
 
 <script>
@@ -3815,12 +4082,38 @@ function recordBlock(block, res){
    ============================================================ */
 const root = document.getElementById("onze");
 let view = { screen:"home" };
+let disposeAtelier = null;
+const ATELIERS = window.ONZEAteliers;
+function atelierFor(t){ return t && ATELIERS.catalog.find(a => a.id === (t.anim || t.id)); }
+function atelierWords(){
+  const t = THEME_BY_ID['fr-orth'];
+  return (t ? t.items : []).map(it => ({word:String(it.a).replace(/^des /,''),rule:it.e||''}));
+}
+function horizonNav(){ return `<nav class="horizon-nav" aria-label="Navigation principale"><button data-horizon="today" class="active">Aujourd’hui</button><button data-horizon="explore">Explorer</button><button data-horizon="progress">Mes progrès</button><button data-horizon="wallet">Mes gains</button></nav>`; }
+function openAtelier(id, onTrain, onExit, returnLabel){
+  if(disposeAtelier){disposeAtelier();disposeAtelier=null;}
+  const t=THEMES.find(t=>(t.anim||t.id)===id);
+  const reference=t?.lesson?`<ul class="pts">${t.lesson.pts.map(p=>'<li>'+fmt(p)+'</li>').join('')}</ul>${t.lesson.ex?'<div class="exbox">'+fmt(t.lesson.ex)+'</div>':''}`:'';
+  disposeAtelier=ATELIERS.mount(root,{id,words:atelierWords(),reference,onTrain,onExit,returnLabel});
+  window.scrollTo(0,0);
+}
+function exploreHTML(){
+  return `<div class="wrap explore-wrap"><header class="explore-header"><button class="lab-back" id="explore-back">← Mon espace</button><span class="welcome-kicker">LE LABORATOIRE ONZE</span></header><h1>Comprendre, du bout des doigts.</h1><p class="explore-lead">Six ateliers pour voir une idée, la manipuler, puis vérifier ce que tu as compris. Explore librement ; tes exercices du jour restent le rendez-vous qui fait avancer ta maîtrise et tes gains.</p><div class="workshop-grid">${ATELIERS.catalog.map(a=>{const t=THEMES.find(t=>(t.anim||t.id)===a.id),st=t&&S.themes[t.id];return `<button class="workshop-card" data-atelier="${a.id}"><span class="workshop-symbol" aria-hidden="true">${esc(a.symbol)}</span><span class="welcome-kicker">${a.subject} · ${a.topic}</span><h2>${a.title}</h2><p>${a.desc}</p><footer><span>${st&&st.seen?'Programme : '+st.right+'/'+st.seen+' réponses justes':'Notion à découvrir dans ton programme'}</span><b aria-hidden="true">↗</b></footer></button>`;}).join('')}</div><p class="overview-note">Exploration sans points ni argent. Ces ateliers s’ouvrent aussi en préparation des leçons correspondantes du programme.</p></div>`;
+}
+function bindExplore(){root.querySelector('#explore-back').onclick=()=>{view={screen:'home'};render();};root.querySelectorAll('[data-atelier]').forEach(b=>b.onclick=()=>{view={screen:'atelier',id:b.dataset.atelier};render();});}
+function islandDetailHTML(name){
+  const themes=THEMES.filter(t=>fenetres(t).some(f=>f.t===name));
+  return `<div class="wrap explore-wrap"><button class="lab-back" id="island-back">← Mes progrès</button><h1>${esc(name)}</h1><p class="explore-lead">Ta maîtrise vient des exercices du programme. Les ateliers t’aident à comprendre avant de te lancer.</p>${themes.map(t=>{const st=S.themes[t.id],a=atelierFor(t);return `<section class="theme-detail"><span class="chip maths">${st.box===5?'Acquis':st.box?'Boîte '+st.box:'À découvrir'}</span><h2>${esc(t.t)}</h2><p>${st.seen?st.right+' réponses justes sur '+st.seen+' · prochaine révision '+frDate(st.due):'Aucun exercice évalué pour cette notion.'}</p>${a?`<button class="cta ghost" data-atelier="${a.id}">Explorer l’atelier →</button>`:`<details><summary>Lire la leçon</summary><p>${esc(t.lesson?.why||'')}</p><ul class="pts">${(t.lesson?.pts||[]).map(p=>'<li>'+fmt(p)+'</li>').join('')}</ul></details>`}</section>`;}).join('')}</div>`;
+}
 
 function setTheme(t){
   document.documentElement.setAttribute("data-theme", t);
   try{ localStorage.setItem("onze-theme", t); }catch(e){}
 }
 function currentTheme(){
+  const design = document.documentElement.dataset.design;
+  if (design === "maree") return "dark";
+  if (design === "brume" || design === "atlas") return "light";
   const set = document.documentElement.getAttribute("data-theme");
   if (set) return set;
   return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
@@ -3884,14 +4177,20 @@ function setFond(f){
 
 function panneauReglages(){
   const opt = (grp, id, t, actif) =>
-    `<button class="opt-reg${actif ? " on" : ""}" data-grp="${grp}" data-val="${esc(id)}">${esc(t)}</button>`;
-  const fond = document.createElement("div");
-  fond.className = "sheet";
+    `<button class="opt-reg${actif ? " on" : ""}" aria-pressed="${actif}" data-grp="${grp}" data-val="${esc(id)}">${esc(t)}</button>`;
+  const design = () => document.documentElement.dataset.design || "maree";
+  const fond = document.createElement("dialog");
+  fond.className = "sheet settings-dialog";
+  fond.setAttribute("aria-labelledby", "settings-title");
   fond.innerHTML = `
     <div class="sheet-in">
-      <h3>Réglages</h3>
-      <p>Ils ne changent que l'affichage, et seulement sur cet appareil.
-         Ta progression, ta série et ton porte-monnaie ne bougent pas.</p>
+      <div class="settings-eyebrow">TON ESPACE, À TA FAÇON</div>
+      <h3 id="settings-title">Trouve ton atmosphère.</h3>
+      <p>Choisis l’univers dans lequel tu aimes apprendre. Ton choix est retenu sur cet appareil.</p>
+      <div class="design-options" aria-label="Apparence">
+        ${[{id:"maree",t:"Marée",d:"Bleu profond · une bulle de calme"},{id:"brume",t:"Brume",d:"Bleu poudré · lumineux et doux"},{id:"atlas",t:"Atlas",d:"Bleu encre · un esprit carnet"},{id:"classic",t:"ONZE classique",d:"L’apparence d’origine"}].map(v => `<button class="opt-reg design-option${design()===v.id?' on':''}" data-grp="design" data-val="${v.id}" aria-pressed="${design()===v.id}"><span class="design-swatch swatch-${v.id}" aria-hidden="true"><i></i><i></i><i></i></span><span><b>${v.t}</b><small>${v.d}</small></span><span class="design-check" aria-hidden="true">${design()===v.id?'✓':''}</span></button>`).join("")}
+      </div>
+      <div class="classic-controls" ${design()!=="classic"?'hidden':''}>
       <div class="reg-grp">
         <span class="reg-lab">Fond</span>
         <div class="reg-opts">${FONDS.map(f => opt("fond", f.id, f.t, fondActuel() === f.id)).join("")}</div>
@@ -3900,6 +4199,7 @@ function panneauReglages(){
         <span class="reg-lab">Couleurs</span>
         <div class="reg-opts">${COULEURS.map(c => opt("couleurs", c.id, c.t, prefs.couleurs === c.id)).join("")}</div>
       </div>
+      </div>
       <div class="reg-grp">
         <span class="reg-lab">Mode calme</span>
         <div class="reg-opts">
@@ -3907,30 +4207,47 @@ function panneauReglages(){
           ${opt("calme", "1", "Animations réduites", prefs.calme)}
         </div>
       </div>
-      <p class="reg-note">Le mode calme enlève les animations — quand ça fatigue, ou dans le train.</p>
+      <p class="reg-note" id="appearance-status" aria-live="polite">L’apparence ne change ni ta progression, ni tes récompenses.</p>
       <div class="cta-row"><button class="cta" id="regok">Fermer</button></div>
     </div>`;
   document.body.appendChild(fond);
+  fond.showModal();
 
   fond.addEventListener("click", e => {
     const b = e.target.closest(".opt-reg");
     if (!b) return;
     const grp = b.dataset.grp, val = b.dataset.val;
+    if (grp === "design"){
+      document.documentElement.dataset.design = val;
+      try { localStorage.setItem("onze-design", val); }
+      catch (_) { fond.querySelector("#appearance-status").textContent = "Choix appliqué pour cette visite. Ce navigateur ne permet pas de le mémoriser."; }
+      fond.querySelector(".classic-controls").hidden = val !== "classic";
+      fond.querySelectorAll('.design-check').forEach(o => o.textContent = "");
+      b.querySelector('.design-check').textContent = "✓";
+    }
     if (grp === "fond")      setFond(val);
     if (grp === "couleurs"){ prefs.couleurs = val; appliquerPrefs(); enregistrerPrefs(); }
     if (grp === "calme"){    prefs.calme = val === "1"; appliquerPrefs(); enregistrerPrefs(); }
     // l'état des boutons se met à jour sur place : le changement se voit
     // immédiatement derrière le panneau, sans le refermer
-    fond.querySelectorAll('.opt-reg[data-grp="' + grp + '"]').forEach(o => o.classList.remove("on"));
+    fond.querySelectorAll('.opt-reg[data-grp="' + grp + '"]').forEach(o => { o.classList.remove("on"); o.setAttribute("aria-pressed", "false"); });
     b.classList.add("on");
+    b.setAttribute("aria-pressed", "true");
     if (grp === "fond") fond.querySelector('.opt-reg[data-grp="fond"][data-val="' + fondActuel() + '"]').classList.add("on");
     render();
   });
-  fond.querySelector("#regok").addEventListener("click", () => fond.remove());
+  const close = () => { fond.close(); fond.remove(); root.querySelector("#cfg")?.focus(); };
+  fond.querySelector("#regok").addEventListener("click", close);
+  fond.addEventListener("cancel", e => { e.preventDefault(); close(); });
+  fond.addEventListener("click", e => { if (e.target === fond) close(); });
 }
 
 function render(){
+  if(disposeAtelier){disposeAtelier();disposeAtelier=null;}
   if (view.screen === "home")    root.innerHTML = homeHTML(), bindHome();
+  else if(view.screen === 'explore'){root.innerHTML=exploreHTML();bindExplore();}
+  else if(view.screen === 'atelier'){openAtelier(view.id,null,()=>{view={screen:'explore'};render();});}
+  else if(view.screen === 'island'){root.innerHTML=islandDetailHTML(view.name);root.querySelector('#island-back').onclick=()=>{view={screen:'home'};render();root.querySelector('#progress-section').scrollIntoView({block:'start'});};root.querySelectorAll('[data-atelier]').forEach(b=>b.onclick=()=>{view={screen:'atelier',id:b.dataset.atelier};render();});}
   else if (view.screen === "session") renderSession();
   else if (view.screen === "done")    root.innerHTML = doneHTML(), bindDone();
   window.scrollTo(0, 0);
@@ -3963,8 +4280,7 @@ function homeHTML(){
         <div class="tag">Cap sur la 11<sup>e</sup></div>
       </div>
       <div class="brand-act">
-        <button class="theme-btn" id="cfg" title="Réglages" aria-label="Ouvrir les réglages">⚙</button>
-        <button class="theme-btn" id="th" title="Clair / sombre" aria-label="Basculer clair ou sombre">${currentTheme() === "dark" ? "☀" : "☾"}</button>
+        <button class="theme-btn settings-trigger" id="cfg" title="Réglages" aria-label="Ouvrir les réglages">⚙ <span>Réglages</span></button>
       </div>
     </div>
     <div class="scores">
@@ -3977,9 +4293,20 @@ function homeHTML(){
       <div class="lab"><span>Semaine · ${weekDone}/5 jours</span><span>${esc(countdown)}</span></div>
       <div class="meter"><i style="width:${Math.min(100, weekDone/5*100)}%"></i></div>
     </div>
+    ${horizonNav()}
   </div></div>
 
-  <div class="wrap">
+  <div class="wrap home-layout">
+    <section class="welcome">
+      <div><div class="welcome-kicker">CHAQUE PETIT PAS COMPTE</div><h2>Bonjour.</h2><p>Un peu de curiosité. Une nouvelle idée à comprendre.</p></div>
+      <span class="welcome-date">${frDate(t0)}</span>
+    </section>
+    <section class="learning-hero">
+      <div class="hero-content"><div class="welcome-kicker">TON RENDEZ-VOUS AVEC LA CURIOSITÉ</div><h2>Une idée<br>devient claire.</h2><p>${esc((plan.find(b => !b.done) || {}).sub || "Chaque notion comprise ouvre un nouvel horizon.")}</p>
+      ${plan.some(b => !b.done) ? `<button class="cta hero-cta" data-resume="${esc(plan.find(b => !b.done).kind)}">${esc(plan.find(b => !b.done).title)} <span aria-hidden="true">→</span></button>` : '<p class="hero-complete">✓ Ton chemin du jour est terminé. Bravo !</p>'}
+      <button class="hero-explore" data-horizon="explore">Ou explorer les ateliers interactifs ↗</button>
+      </div><div class="hero-art" aria-hidden="true"><i></i><i></i><i></i><div>x + 2</div><span></span></div>
+    </section>
     <div class="sec">
       <div class="sec-h">
         <h2>Aujourd'hui · ${frDate(t0)}</h2>
@@ -3990,13 +4317,13 @@ function homeHTML(){
       </div>
     </div>
 
-    <div class="sec">
-      <div class="sec-h"><h2>Porte-monnaie</h2><span class="note">${chf((S.wallet||{}).cts||0)} CHF gagnés en tout</span></div>
+    <div class="sec" id="wallet-section">
+      <div class="sec-h"><h2>Ce que ton travail rapporte</h2><span class="note">${chf((S.wallet||{}).cts||0)} CHF gagnés en tout</span></div>
       <div class="card">${porteMonnaieHTML()}</div>
     </div>
 
-    <div class="sec">
-      <div class="sec-h"><h2>Maîtrise</h2><span class="note">${THEMES.length} notions</span></div>
+    <div class="sec" id="progress-section">
+      <div class="sec-h"><h2>Ton archipel de connaissances</h2><span class="note">${THEMES.length} notions</span></div>
       <div class="card">
         ${ilesHTML()}
         ${ORDER.map(sk => {
@@ -4014,6 +4341,7 @@ function homeHTML(){
             return `<div class="boxcell${b===5?" b5":""}"><div class="n">${n}</div><div class="l">${BOX_LABEL[b]}</div></div>`;
           }).join("")}
         </div>
+        <div class="progress-context"><b>${dueThemes().length} notion${dueThemes().length>1?'s':''} à réviser maintenant.</b><br>${dueThemes().length?esc(dueThemes().slice(0,3).map(t=>t.t).join(' · ')):'Les prochaines révisions apparaîtront après tes premiers exercices.'}<br>Les boîtes suivent la solidité de tes acquis, pas seulement le nombre de questions.</div>
       </div>
     </div>
 
@@ -4034,6 +4362,7 @@ function homeHTML(){
       </div>
     </div>
 
+    <section class="discovery-strip"><div><h3>Et si tu pouvais toucher une idée ?</h3><p>Fractions, calcul littéral, dictée flash… découvre les six ateliers interactifs.</p></div><button class="cta" data-horizon="explore">Entrer dans le laboratoire ↗</button></section>
     ${memoireOk ? "" : `<div class="alerte">
       <b>Ce navigateur ne retient rien.</b> Tu peux travailler, mais tout sera
       effacé en fermant la page. Envoie ton bilan avant de partir, ou ouvre
@@ -4072,23 +4401,16 @@ function ilesHTML(){
   const t0 = today();
   const iles = [...par.values()].sort((a, b) => a.f.from.localeCompare(b.f.from));
 
-  return `<div class="iles-lab">L'année en dix thèmes</div>
-  <div class="iles">${iles.map(({ f, ids }) => {
+  const island = ({ f, ids }) => {
     const boxes = ids.map(id => (S.themes[id] || {}).box || 0);
     const vus = boxes.filter(b => b >= 1).length;
     const plein = Math.round(100 * boxes.reduce((s, b) => s + b, 0) / (boxes.length * 5));
     const ici = f.from <= t0 && t0 <= f.to;
     const num = (f.t.match(/Thème (\d+)/) || [, "?"])[1];
     const nom = f.t.replace(/^Thème \d+ · /, "");
-    return `<div class="ile${ici ? " ici" : ""}"
-      title="${esc(f.t)} — ${vus} notion${vus > 1 ? "s" : ""} sur ${ids.length} vue${vus > 1 ? "s" : ""}${ici ? ", en classe en ce moment" : ""}"
-      aria-label="${esc(f.t)} : ${vus} sur ${ids.length} vues${ici ? ", en classe" : ""}">
-      <span class="fill" style="height:${plein}%"></span>
-      <span class="n">${num}</span>
-      <span class="l">${esc(nom.split(/[ ,]/)[0])}</span>
-      <span class="c">${vus}/${ids.length}</span>
-    </div>`;
-  }).join("")}</div>`;
+    return `<button class="island-card" data-island="${esc(f.t)}" aria-label="${esc(f.t)} : ${vus} sur ${ids.length} notions vues${ici?', en classe':''}"><span class="island-row${ici?' current':''}"><span class="island-circle">${num}</span><span class="island-info"><b>${esc(nom)}</b><small>${ici?'En classe · ':''}${vus}/${ids.length} notions vues · ${plein}% consolidé</small><span class="meter"><i style="width:${plein}%"></i></span></span><span aria-hidden="true">↗</span></span></button>`;
+  };
+  return `<div class="iles-lab">L’année en dix escales · touche une île</div><div class="journey-map">${iles.slice(0,3).map(island).join('')}<details><summary>Voir les 7 autres étapes de l’année</summary>${iles.slice(3).map(island).join('')}</details></div>`;
 }
 
 function blockHTML(b){
@@ -4213,6 +4535,9 @@ function weekCount(){
 }
 
 function bindHome(){
+  root.querySelectorAll('[data-horizon]').forEach(b=>b.onclick=()=>{const p=b.dataset.horizon;if(p==='explore'){view={screen:'explore'};render();}else if(p==='progress'||p==='wallet'){root.querySelector(p==='progress'?'#progress-section':'#wallet-section').scrollIntoView({block:'start',behavior:document.documentElement.dataset.calme==='1'?'instant':'smooth'});}else window.scrollTo({top:0});});
+  root.querySelectorAll('[data-island]').forEach(b=>b.onclick=()=>{view={screen:'island',name:b.dataset.island};render();});
+  root.querySelector('[data-resume]')?.addEventListener('click', e => startBlock(e.currentTarget.dataset.resume));
   root.querySelectorAll(".block:not(:disabled)").forEach(el => {
     el.addEventListener("click", () => startBlock(el.dataset.kind));
   });
@@ -4898,6 +5223,10 @@ function lessonTheme(){
 }
 
 function renderSession(){
+  if(disposeAtelier){disposeAtelier();disposeAtelier=null;}
+  if(sess.phase === 'lesson' && atelierFor(lessonTheme())){
+    openAtelier(atelierFor(lessonTheme()).id,()=>{sess.phase='quiz';render();},quitSession,'Quitter la leçon');return;
+  }
   if (sess.phase === "lesson"){ root.innerHTML = lessonHTML(); bindLesson(); return; }
   if (sess.phase === "palier"){ root.innerHTML = palierHTML(); bindPalier(); return; }
   const it = sess.items[sess.i];
@@ -5162,6 +5491,8 @@ function quizHTML(){
 
   return `<div class="wrap">
     ${topHTML(sess.i / sess.items.length)}
+    <div class="session-reward"><span>Bloc en cours · <b>${sess.xp} XP</b></span><span><b>${chf(sess.cts)} CHF</b> · crédités à la fin du bloc</span></div>
+    ${atelierFor(t)?'<button class="review-lesson" id="review-atelier">Revoir et manipuler la notion</button>':''}
     <div class="q">
       <div class="meta">
         <span class="chip ${sk}">${SUB[sk].short}</span>
@@ -5282,6 +5613,7 @@ function fbHTML(it){
 
 function bindQuiz(){
   const it = sess.items[sess.i];
+  root.querySelector('#review-atelier')?.addEventListener('click',()=>{const a=atelierFor(THEME_BY_ID[it.theme]);openAtelier(a.id,null,()=>renderSession(),'Revenir à ma question');});
   root.querySelector("#quit").addEventListener("click", quitSession);
 
   if (!sess.answered){
