@@ -321,6 +321,10 @@ body{margin:0;}
 .chip.allemand{background:var(--de-soft); color:var(--de);}
 .chip.anglais{background:var(--en-soft); color:var(--en);}
 .chip.maths{background:var(--ma-soft); color:var(--ma);}
+/* citoyenneté (27 sept. 2026) : une couleur pour toutes les palettes — les
+   quatre matières d'origine en ont une par thème, celle-ci n'en a pas besoin. */
+:root{--ci:#8A5A9E; --ci-soft:rgba(138,90,158,.16);}
+.chip.citoyennete{background:var(--ci-soft); color:var(--ci);}
 .chip.mix{background:var(--mix-soft); color:var(--mix);}
 
 /* ---------- Maîtrise ---------- */
@@ -427,6 +431,18 @@ body{margin:0;}
   position:sticky; top:0; z-index:5; background:var(--bg);
   padding:12px 0 10px; border-bottom:1px solid var(--line-soft);
 }
+/* 27 septembre 2026 — « des fonctions trop haut, inaccessibles ». L'app iPhone
+   affiche la page SOUS la barre d'état et l'îlot (ignoresSafeArea, et
+   viewport-fit=cover) : le bouton ✕ d'un bloc, collé en haut, tombait sous
+   l'heure et la batterie, où le doigt ne l'atteint pas. On descend donc la page
+   de la hauteur de la zone sûre, la barre de séance s'accroche SOUS elle, et un
+   bandeau plein masque ce qui défile derrière la barre d'état. Hors iPhone,
+   env() vaut 0 : rien ne bouge. */
+body{padding-top:env(safe-area-inset-top, 0px); padding-bottom:env(safe-area-inset-bottom, 0px);}
+body::before{content:""; position:fixed; left:0; right:0; top:0; height:env(safe-area-inset-top, 0px);
+  background:var(--bg); z-index:50; pointer-events:none;}
+.s-top{top:env(safe-area-inset-top, 0px);}
+.sheet{padding-top:calc(16px + env(safe-area-inset-top, 0px)); padding-bottom:calc(16px + env(safe-area-inset-bottom, 0px));}
 .s-top-in{display:flex; align-items:center; gap:12px;}
 .quit{
   background:transparent; border:1px solid var(--line); color:var(--ink-2); cursor:pointer;
@@ -964,7 +980,7 @@ window.ONZEAteliers = (() => {
       if(!state.flash)return `<div class="lab-canvas"><div class="lab-spelling"><span>${words.length} mots</span></div><p class="lab-subtle">Une courte séance de mémoire, sans chronomètre pour répondre.</p></div><button class="cta" data-lab="flash-start">Commencer la dictée flash</button>`;
       const f=state.flash,item=f.queue[f.i];
       if(!item)return `<div class="lab-canvas"><div class="lab-equation">Séance terminée ✓</div><p>${f.firstRight} / ${words.length} mots justes au premier essai.</p><p>${f.retryCount} reprise${f.retryCount>1?'s':''} travaillée${f.retryCount>1?'s':''}.</p></div><p class="lab-feedback">${f.missed.size?'À revoir : '+[...f.missed].map(escape).join(', ')+'.':'Tu as retrouvé tous les mots.'} Ce bilan concerne cet atelier ; la maîtrise officielle vient des exercices du programme.</p><button class="cta ghost" data-lab="flash-start">Recommencer</button>`;
-      return `<div class="flash-head"><span>Mot ${f.i+1} / ${f.queue.length}${item.retry?' · reprise':''}</span><span>${f.firstRight} premiers essais justes</span></div>${f.phase==='show'?`<div class="lab-canvas lab-spelling"><span>${escape(item.word)}</span><p>${escape(item.rule)}</p></div><button class="cta" data-lab="hide-word">Je suis prêt · cacher le mot</button>`:f.phase==='type'?`<div class="lab-canvas"><p>Écris le mot de mémoire.</p><form id="flash-form"><label class="sr-lab" for="flash-answer">Le mot mémorisé</label><input id="flash-answer" class="inp" autocomplete="off" autocapitalize="off" spellcheck="false"><div class="lab-pills accents">${['é','è','ê','à','ç','ù'].map(v=>`<button type="button" data-accent="${v}">${v}</button>`).join('')}</div><button class="cta" type="submit">Vérifier le mot</button><p id="flash-empty" role="status"></p></form></div>`:`<div class="lab-canvas"><div class="lab-equation">${f.correct?'✓ Bien mémorisé':'À reprendre, tranquillement'}</div><div class="letter-diff">${diff(f.typed,item.word)}</div><p>${escape(item.rule)}</p></div><p class="lab-feedback">${escape(f.message)}</p><button class="cta" data-lab="flash-next">${f.i+1<f.queue.length?'Mot suivant →':'Voir mon bilan'}</button>`}`;
+      return `<div class="flash-head"><span>Mot ${f.i+1} / ${f.queue.length}${item.retry?' · reprise':''}</span><span>${f.firstRight} premiers essais justes</span></div>${f.phase==='show'?`<div class="lab-canvas lab-spelling"><span>${escape(item.word)}</span><p>${escape(item.rule)}</p></div><button class="cta" data-lab="hide-word">Je suis prêt · cacher le mot</button>`:f.phase==='type'?`<div class="lab-canvas"><p>Écris le mot de mémoire.</p><form id="flash-form"><label class="sr-lab" for="flash-answer">Le mot mémorisé</label><input id="flash-answer" class="inp" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"><div class="lab-pills accents">${['é','è','ê','à','ç','ù'].map(v=>`<button type="button" data-accent="${v}">${v}</button>`).join('')}</div><button class="cta" type="submit">Vérifier le mot</button><p id="flash-empty" role="status"></p></form></div>`:`<div class="lab-canvas"><div class="lab-equation">${f.correct?'✓ Bien mémorisé':'À reprendre, tranquillement'}</div><div class="letter-diff">${diff(f.typed,item.word)}</div><p>${escape(item.rule)}</p></div><p class="lab-feedback">${escape(f.message)}</p><button class="cta" data-lab="flash-next">${f.i+1<f.queue.length?'Mot suivant →':'Voir mon bilan'}</button>`}`;
     }
     function diff(got,wanted){
       const a=Array.from(got),b=Array.from(wanted),dp=Array.from({length:a.length+1},()=>Array(b.length+1).fill(0));
@@ -2922,6 +2938,37 @@ BANK.maths = { label:"Maths", short:"MA", themes:[
     {f:"txt", m:1, q:"Factorise : x² + 6x + 9", a:"(x+3)^2", alt:["(x+3)(x+3)","(x+3)²"], e:"9 = 3² et 6x = 2 × x × 3 : c'est (x + 3)²."}
   ]},
 
+/* Calé sur les photos du Livre du 25 septembre 2026 : la classe est à
+   « Additions et soustractions de polynômes » et « Valeur numérique » (Livre
+   pp. 125-128, devoirs FA 165 et FA 179 dans l'agenda). Nombres NOUVEAUX,
+   pas ceux du livre : l'app ne doit jamais donner les réponses d'un devoir. */
+{ id:"ma-poly", t:"Thème 2 · Additions, soustractions et valeur numérique", tier:"programme",
+  from:"2026-09-14", ecole:MA_ANNEE.T2,
+  lesson:{ why:"C'est exactement ce que la classe travaille en ce moment (Livre pp. 125-128). Le piège du chapitre tient en un signe : le moins devant une parenthèse.",
+    pts:["*Additionner* deux polynômes : on enlève les parenthèses et on réduit les termes semblables — les x² ensemble, les x ensemble, les nombres ensemble.",
+      "*Soustraire* : le signe − devant une parenthèse change *tous* les signes à l'intérieur. (5x + 4) − (2x − 3) = 5x + 4 *− 2x + 3*.",
+      "L'*opposé* d'un polynôme : on change le signe de chaque terme. L'opposé de 6c − 4 est *−6c + 4*.",
+      "*Réduit et ordonné* : plus de termes semblables, et les puissances de x rangées de la plus grande à la plus petite : 4x³ − x² + 2x − 7.",
+      "*Valeur numérique* : on remplace x par le nombre, *entre parenthèses*. Pour x = −2 : 3x² = 3 · (−2)² = 3 · 4 = *12*.",
+      "Attention : −x² veut dire −(x²). Pour x = 3, −x² = *−9*, pas 9."],
+    ex:"(5x + 4) − (2x − 3) = 5x + 4 − 2x + 3 = *3x + 7*." },
+  items:[
+    {f:"txt", m:1, q:"Supprime les parenthèses et réduis : (5x + 4) − (2x − 3)", a:"3x+7", alt:["7+3x"], e:"Le − change les deux signes : 5x + 4 − 2x + 3 = 3x + 7."},
+    {f:"txt", m:1, q:"Supprime les parenthèses et réduis : (7a − 2) − (4a + 5)", a:"3a-7", alt:["-7+3a"], e:"7a − 2 − 4a − 5 = 3a − 7."},
+    {f:"txt", m:1, q:"Réduis : (3y + 8) + (−5y + 1)", a:"-2y+9", alt:["9-2y"], e:"Devant la parenthèse, un + ne change rien : 3y − 5y = −2y et 8 + 1 = 9."},
+    {f:"qcm", q:"(4x − 1) − (x + 6) = ?", o:["3x − 7","3x + 5","5x − 7"], a:"3x − 7", e:"4x − 1 − x − 6 : le 6 devient −6. « 3x + 5 » est l'erreur classique — on a oublié de changer le signe."},
+    {f:"qcm", q:"L'opposé de 6c − 4 est…", o:["−6c + 4","−6c − 4","6c + 4"], a:"−6c + 4", e:"On change le signe de CHAQUE terme, pas seulement du premier."},
+    {f:"txt", m:1, q:"Écris l'opposé de −3x + 7", a:"3x-7", alt:["-7+3x"], e:"−3x devient 3x, +7 devient −7."},
+    {f:"qcm", q:"A = 2x² − 3x + 1 et B = x² + 4x − 5. Que vaut A + B ?", o:["3x² + x − 4","3x² − 7x + 6","x² + x − 4"], a:"3x² + x − 4", e:"2x² + x² = 3x², −3x + 4x = x, 1 − 5 = −4."},
+    {f:"qcm", q:"A = 2x² − 3x + 1 et B = x² + 4x − 5. Que vaut A − B ?", o:["x² − 7x + 6","x² + x − 4","x² − 7x − 4"], a:"x² − 7x + 6", e:"A − B = 2x² − 3x + 1 − x² − 4x + 5 : le −5 de B devient +5."},
+    {f:"txt", m:1, q:"Réduis et ordonne : 4x² + 3x − x² + 5 − 7x", a:"3x^2-4x+5", alt:["3x²-4x+5"], e:"4x² − x² = 3x², 3x − 7x = −4x, puis le nombre."},
+    {f:"qcm", q:"Quelle expression est réduite ET ordonnée ?", o:["4x³ − x² + 2x − 7","2x − 7 + 4x³ − x²","4x³ + 2x − x² − 7"], a:"4x³ − x² + 2x − 7", e:"Ordonnée = puissances de x de la plus grande à la plus petite : x³, x², x, puis le nombre."},
+    {f:"txt", m:1, q:"Valeur numérique de 3x² pour x = −2", a:"12", e:"(−2)² = 4, puis 3 · 4 = 12. Le carré d'un nombre négatif est positif."},
+    {f:"txt", m:1, q:"Valeur numérique de −x² pour x = 3", a:"-9", e:"−x² = −(x²) : on calcule 3² = 9, puis on prend l'opposé."},
+    {f:"txt", m:1, q:"Valeur numérique de 2x² − 5x + 1 pour x = −1", a:"8", e:"2 · (−1)² − 5 · (−1) + 1 = 2 + 5 + 1 = 8. Les parenthèses autour de −1 évitent les deux pièges."},
+    {f:"txt", m:1, q:"Valeur numérique de 0,5x² − x + 4 pour x = 4", a:"8", e:"0,5 · 16 − 4 + 4 = 8 − 4 + 4 = 8."}
+  ]},
+
 { id:"ma-fig", t:"Thème 3 · Figures géométriques planes", tier:"programme",
   from:"2026-10-26", ecole:MA_ANNEE.T3,
   lesson:{ why:"Presque tout se déduit de deux nombres — 180° dans un triangle, 360° dans un quadrilatère — et d'un vocabulaire précis qu'il faut employer juste.",
@@ -3329,6 +3376,104 @@ BANK.maths = { label:"Maths", short:"MA", themes:[
   };
 })();
 </script>
+<script>
+/* ===================== CITOYENNETÉ (27 septembre 2026) =====================
+   Une cinquième matière, pour UN test daté : « TS Citoyenneté 11VG1 : Thème
+   n°1 — Les 3 pouvoirs, les votations du 27 septembre 2026 et les droits
+   politiques », le 6 octobre (fiche d'objectifs photographiée par le père).
+   Hors de la rotation des leçons (ROTATION n'en parle pas) : ces notions
+   n'entrent dans la journée que par leur date de test, comme une liste de
+   vocabulaire. Faits vérifiés le 27 septembre 2026 : composition du Conseil
+   fédéral 2026 (admin.ch), objets et résultat de la votation (admin.ch,
+   RTS). Les photos des conseillers ne sont PAS dans l'app (droits) : les
+   reconnaître se travaille sur admin.ch. */
+BANK.citoyennete = { label:"Citoyenneté", short:"CI", themes:[
+
+{ id:"ci-pouvoirs", t:"Les trois pouvoirs et leurs institutions", tier:"programme",
+  from:"2026-09-27", tests:["2026-10-06"],
+  lesson:{ why:"Test de citoyenneté le 6 octobre. Premier objectif de la fiche : nommer les trois pouvoirs, dire ce que fait chacun, et qui l'exerce — Confédération, canton, commune.",
+    pts:["*Législatif* : il fait les lois. *Exécutif* : il applique les lois et gouverne. *Judiciaire* : il juge et veille au respect des lois.",
+      "Les trois sont *séparés* — aucune autorité ne détient tout le pouvoir : c'est la *séparation des pouvoirs*.",
+      "Confédération : législatif = *Assemblée fédérale* (Conseil national + Conseil des États) ; exécutif = *Conseil fédéral* (7 membres) ; judiciaire = *Tribunal fédéral*, à Lausanne.",
+      "Le *Conseil national* (200 membres) représente le peuple : chaque canton a des sièges selon sa population. Le *Conseil des États* (46 membres) représente les cantons : 2 par canton, 1 pour chacun des six anciens demi-cantons.",
+      "Le Conseil fédéral est élu par l'*Assemblée fédérale* (les deux chambres réunies), pour 4 ans. Le *président de la Confédération* change chaque année.",
+      "Vaud : législatif = *Grand Conseil* (150 députés) ; exécutif = *Conseil d'État* (7 membres, élus par le peuple) ; judiciaire = *Tribunal cantonal*.",
+      "Commune : législatif = *conseil communal* (ou *conseil général* dans les petites communes) ; exécutif = *Municipalité*, présidée par le *syndic*."],
+    ex:"Le Parlement vote une loi (législatif), le Conseil fédéral la met en œuvre (exécutif), le Tribunal fédéral tranche un litige à son sujet (judiciaire)." },
+  items:[
+    {f:"qcm", q:"Quel pouvoir fait les lois ?", o:["le législatif","l'exécutif","le judiciaire"], a:"le législatif", e:"Législatif = qui fait les lois (le Parlement)."},
+    {f:"qcm", q:"Quel pouvoir applique les lois et gouverne ?", o:["l'exécutif","le législatif","le judiciaire"], a:"l'exécutif", e:"Exécutif = qui exécute, qui applique (le gouvernement)."},
+    {f:"qcm", q:"Le Tribunal fédéral exerce le pouvoir…", o:["judiciaire","législatif","exécutif"], a:"judiciaire", e:"Un tribunal juge : pouvoir judiciaire."},
+    {f:"pair", q:"Relie chaque institution fédérale à son pouvoir :", p:[["Assemblée fédérale","législatif"],["Conseil fédéral","exécutif"],["Tribunal fédéral","judiciaire"]], e:"Les trois pouvoirs au niveau de la Confédération."},
+    {f:"pair", q:"Relie chaque autorité vaudoise ou communale à son rôle :", p:[["Grand Conseil","législatif cantonal"],["Conseil d'État","exécutif cantonal"],["Municipalité","exécutif communal"],["conseil communal","législatif communal"]], e:"Le même partage des pouvoirs, à chaque niveau."},
+    {f:"qcm", q:"Combien de membres au Conseil national ?", o:["200","46","246"], a:"200", e:"200 au National, 46 aux États — 246 ensemble à l'Assemblée fédérale."},
+    {f:"qcm", q:"Combien de membres au Conseil des États ?", o:["46","200","26"], a:"46", e:"2 par canton, 1 pour chacun des six anciens demi-cantons : 46."},
+    {f:"qcm", q:"Le Conseil national et le Conseil des États forment ensemble…", o:["l'Assemblée fédérale","le Conseil fédéral","le Grand Conseil"], a:"l'Assemblée fédérale", e:"Les deux chambres du Parlement fédéral = l'Assemblée fédérale."},
+    {f:"qcm", q:"Qui élit les membres du Conseil fédéral ?", o:["l'Assemblée fédérale","le peuple","les gouvernements cantonaux"], a:"l'Assemblée fédérale", e:"Les deux chambres réunies élisent les 7 conseillers fédéraux, pour 4 ans."},
+    {f:"qcm", q:"Où siège le Tribunal fédéral ?", o:["à Lausanne","à Berne","à Genève"], a:"à Lausanne", e:"Le Parlement et le gouvernement sont à Berne ; le Tribunal fédéral à Lausanne."},
+    {f:"qcm", q:"Quelle chambre représente les CANTONS ?", o:["le Conseil des États","le Conseil national","le Conseil fédéral"], a:"le Conseil des États", e:"Le National représente le peuple, les États représentent les cantons."},
+    {f:"qcm", q:"Combien de députés compte le Grand Conseil vaudois ?", o:["150","200","100"], a:"150", e:"150 députés, élus par le peuple vaudois."},
+    {f:"qcm", q:"Qui préside la Municipalité d'une commune vaudoise ?", o:["le syndic","le préfet","le conseiller d'État"], a:"le syndic", e:"Dans le canton de Vaud, le syndic préside la Municipalité (l'exécutif communal)."},
+    {f:"qcm", q:"Pourquoi sépare-t-on les trois pouvoirs ?", o:["pour qu'aucune autorité ne détienne tout le pouvoir","pour que les lois se votent plus vite","parce que la Suisse a plusieurs langues"], a:"pour qu'aucune autorité ne détienne tout le pouvoir", e:"Chaque pouvoir contrôle les autres : c'est la protection contre l'abus de pouvoir."}
+  ]},
+
+{ id:"ci-droits", t:"Démocraties, élections et droits politiques", tier:"programme",
+  from:"2026-09-27", tests:["2026-10-06"],
+  lesson:{ why:"Test du 6 octobre : les deux formes d'élection avec leur vocabulaire, les types de démocratie, et les droits politiques suisses.",
+    pts:["*Démocratie directe* : le peuple décide lui-même (la *Landsgemeinde* de Glaris et d'Appenzell Rhodes-Intérieures). *Démocratie représentative* (ou indirecte) : le peuple élit des représentants qui décident.",
+      "La Suisse est une *démocratie semi-directe* : on élit des représentants, ET on peut voter soi-même sur la Constitution et les lois.",
+      "*Système majoritaire* : est élu qui obtient le plus de voix — majorité *absolue* au 1er tour, *relative* au 2e. Ex. : Conseil des États, Conseil d'État, Conseil fédéral.",
+      "*Système proportionnel* : les sièges sont partagés entre les listes selon leur pourcentage de voix. Ex. : Conseil national, Grand Conseil.",
+      "Vocabulaire du proportionnel : *liste* (les candidats d'un parti), *panacher* (ajouter des candidats d'autres listes), *cumuler* (écrire deux fois le même nom), *biffer* (rayer un nom).",
+      "Droits politiques des Suisses dès 18 ans : *droit de vote* (se prononcer sur un objet), *droit d'élire*, et *droit d'être élu* (éligibilité).",
+      "*Initiative populaire* : 100 000 signatures en 18 mois pour proposer une modification de la Constitution ; acceptée seulement avec la *double majorité* — le peuple ET les cantons.",
+      "*Référendum facultatif* : 50 000 signatures en 100 jours pour qu'une loi votée par le Parlement passe devant le peuple. *Référendum obligatoire* : toute modification de la Constitution passe automatiquement devant le peuple et les cantons.",
+      "*Pétition* : tout le monde peut en signer une, même sans être majeur ni suisse ; l'autorité doit en prendre connaissance, mais n'est pas obligée d'y donner suite."],
+    ex:"Élire le Conseil national (proportionnel), puis voter sur une initiative (double majorité) : les deux faces de la démocratie semi-directe." },
+  items:[
+    {f:"qcm", q:"La Suisse est une démocratie…", o:["semi-directe","directe","représentative seulement"], a:"semi-directe", e:"On élit des représentants ET on vote soi-même sur des objets : semi-directe."},
+    {f:"qcm", q:"Dans une démocratie directe…", o:["le peuple décide lui-même","le peuple élit des représentants qui décident","un seul chef décide"], a:"le peuple décide lui-même", e:"Exemple suisse : la Landsgemeinde de Glaris et d'Appenzell Rhodes-Intérieures."},
+    {f:"qcm", q:"Le Conseil national est élu au système…", o:["proportionnel","majoritaire","tirage au sort"], a:"proportionnel", e:"Les sièges sont partagés entre les listes selon leur pourcentage de voix."},
+    {f:"qcm", q:"Le Conseil des États (dans le canton de Vaud) est élu au système…", o:["majoritaire","proportionnel","tirage au sort"], a:"majoritaire", e:"Deux sièges : sont élus ceux qui ont le plus de voix."},
+    {f:"qcm", q:"Au 1er tour d'une élection majoritaire, il faut obtenir…", o:["la majorité absolue","la majorité relative","un tiers des voix"], a:"la majorité absolue", e:"Absolue = plus de la moitié des voix. Au 2e tour, la relative suffit : le plus de voix."},
+    {f:"pair", q:"Relie chaque mot du vote proportionnel à son sens :", p:[["panacher","ajouter des candidats d'autres listes"],["cumuler","écrire deux fois le même nom"],["biffer","rayer un nom"],["liste","les candidats d'un parti"]], e:"Le vocabulaire des bulletins du Conseil national et du Grand Conseil."},
+    {f:"qcm", q:"Combien de signatures pour une initiative populaire fédérale ?", o:["100 000 en 18 mois","50 000 en 100 jours","10 000 en 1 an"], a:"100 000 en 18 mois", e:"50 000 en 100 jours, c'est le référendum facultatif."},
+    {f:"qcm", q:"Combien de signatures pour un référendum facultatif ?", o:["50 000 en 100 jours","100 000 en 18 mois","200 000 en 2 ans"], a:"50 000 en 100 jours", e:"Il permet de faire voter le peuple sur une loi que le Parlement a adoptée."},
+    {f:"qcm", q:"Une initiative populaire est acceptée si…", o:["le peuple ET les cantons disent oui","le peuple dit oui","le Conseil fédéral dit oui"], a:"le peuple ET les cantons disent oui", e:"C'est la double majorité : elle modifie la Constitution."},
+    {f:"qcm", q:"Une modification de la Constitution passe devant le peuple…", o:["toujours — c'est le référendum obligatoire","seulement si 50 000 personnes le demandent","jamais"], a:"toujours — c'est le référendum obligatoire", e:"Référendum obligatoire : automatique, avec la double majorité."},
+    {f:"qcm", q:"Qui peut signer une pétition ?", o:["tout le monde, même mineur ou étranger","seulement les Suisses de plus de 18 ans","seulement les parlementaires"], a:"tout le monde, même mineur ou étranger", e:"L'autorité doit la lire, mais n'est pas obligée d'y donner suite."},
+    {f:"qcm", q:"À partir de quel âge un Suisse peut-il voter au niveau fédéral ?", o:["18 ans","16 ans","20 ans"], a:"18 ans", e:"Droit de vote et d'éligibilité fédéraux : dès 18 ans."},
+    {f:"qcm", q:"Le droit d'être élu s'appelle…", o:["l'éligibilité","la pétition","le panachage"], a:"l'éligibilité", e:"Droit d'élire (voter pour quelqu'un) et droit d'être élu (éligibilité)."}
+  ]},
+
+{ id:"ci-votation", t:"Votations du 27 septembre 2026 et Conseil fédéral", tier:"programme",
+  from:"2026-09-27", tests:["2026-10-06"],
+  lesson:{ why:"Test du 6 octobre : expliquer les deux objets fédéraux du 27 septembre avec deux arguments pour et deux contre chacun, et connaître les 7 conseillers fédéraux (prénom ET nom).",
+    pts:["Le 27 septembre 2026, deux *initiatives populaires* fédérales : l'*initiative sur la neutralité* (« Sauvegarder la neutralité suisse ») et l'*initiative sur l'alimentation* (« Pour une alimentation sûre »).",
+      "Neutralité — elle voulait inscrire dans la Constitution une neutralité *perpétuelle et armée*, plus stricte (pas d'alliance militaire, limites aux sanctions). POUR : clarifier la neutralité ; éviter « deux poids deux mesures » dans les sanctions ; fixer des limites avec l'OTAN. CONTRE : moins de marge de manœuvre pour défendre les intérêts suisses ; la neutralité actuelle fonctionne et est reconnue dans le monde.",
+      "Alimentation — elle voulait porter l'*autosuffisance* alimentaire à au moins *70 %*, avec plus d'aliments végétaux et une eau potable protégée. POUR : la Suisse doit pouvoir se nourrir en cas de crise ; protéger sols, biodiversité et eau. CONTRE : 70 %, c'est irréaliste ; l'État dicterait ce qu'on mange.",
+      "Le Conseil fédéral et le Parlement s'y opposaient. Résultat : les deux ont été *rejetées*, avec plus de 70 % de non et dans tous les cantons.",
+      "Les 7 conseillers fédéraux en 2026 : *Guy Parmelin* (UDC, VD) — Économie, formation et recherche, *président de la Confédération 2026* ; *Ignazio Cassis* (PLR, TI) — Affaires étrangères, vice-président ; *Karin Keller-Sutter* (PLR, SG) — Finances.",
+      "*Albert Rösti* (UDC, BE) — Environnement, transports, énergie et communication ; *Elisabeth Baume-Schneider* (PS, JU) — Intérieur ; *Beat Jans* (PS, BS) — Justice et police ; *Martin Pfister* (Le Centre, ZG) — Défense, protection de la population et sports.",
+      "Les reconnaître en photo : regarde la photo officielle du Conseil fédéral sur admin.ch — l'app ne montre pas les visages."],
+    ex:"Initiative = proposition du peuple de modifier la Constitution : il fallait le oui du peuple ET des cantons. Le 27 septembre, ni l'un ni l'autre." },
+  items:[
+    {f:"qcm", q:"Qui est président de la Confédération en 2026 ?", o:["Guy Parmelin","Ignazio Cassis","Karin Keller-Sutter"], a:"Guy Parmelin", e:"Guy Parmelin (UDC, Vaud). Ignazio Cassis est vice-président."},
+    {f:"qcm", q:"Combien de membres compte le Conseil fédéral ?", o:["7","9","5"], a:"7", e:"Sept conseillers fédéraux, chacun à la tête d'un département."},
+    {f:"pair", q:"Relie le prénom au nom :", p:[["Elisabeth","Baume-Schneider"],["Beat","Jans"],["Albert","Rösti"],["Martin","Pfister"]], e:"La fiche demande prénom ET nom."},
+    {f:"pair", q:"Relie le prénom au nom :", p:[["Guy","Parmelin"],["Ignazio","Cassis"],["Karin","Keller-Sutter"],["Beat","Jans"]], e:"La fiche demande prénom ET nom."},
+    {f:"pair", q:"Relie chaque conseiller fédéral à son département :", p:[["Karin Keller-Sutter","Finances"],["Ignazio Cassis","Affaires étrangères"],["Beat Jans","Justice et police"],["Martin Pfister","Défense"]], e:"Un département chacun."},
+    {f:"pair", q:"Relie chaque conseiller fédéral à son parti :", p:[["Guy Parmelin","UDC"],["Elisabeth Baume-Schneider","PS"],["Karin Keller-Sutter","PLR"],["Martin Pfister","Le Centre"]], e:"UDC, PS, PLR : deux sièges chacun ; Le Centre : un."},
+    {f:"qcm", q:"Quel conseiller fédéral vient du canton de Vaud ?", o:["Guy Parmelin","Albert Rösti","Beat Jans"], a:"Guy Parmelin", e:"Parmelin (VD) ; Rösti vient de Berne, Jans de Bâle-Ville."},
+    {f:"qcm", q:"Que demandait l'initiative sur l'alimentation ?", o:["porter l'autosuffisance alimentaire à au moins 70 %","interdire la viande en Suisse","baisser le prix des aliments"], a:"porter l'autosuffisance alimentaire à au moins 70 %", e:"Plus d'aliments végétaux produits en Suisse, et une eau potable protégée."},
+    {f:"qcm", q:"Que demandait l'initiative sur la neutralité ?", o:["inscrire une neutralité perpétuelle et armée, plus stricte, dans la Constitution","faire entrer la Suisse dans l'OTAN","supprimer l'armée suisse"], a:"inscrire une neutralité perpétuelle et armée, plus stricte, dans la Constitution", e:"Pas d'alliance militaire, et des limites aux sanctions contre des pays en guerre."},
+    {f:"qcm", q:"Un argument POUR l'initiative sur l'alimentation :", o:["la Suisse doit pouvoir se nourrir en cas de crise","l'objectif de 70 % est irréaliste","l'État dicterait ce qu'on mange"], a:"la Suisse doit pouvoir se nourrir en cas de crise", e:"Les deux autres sont des arguments CONTRE."},
+    {f:"qcm", q:"Un argument CONTRE l'initiative sur la neutralité :", o:["elle réduirait la marge de manœuvre de la Suisse","elle clarifierait ce qu'est la neutralité","elle éviterait les sanctions « deux poids deux mesures »"], a:"elle réduirait la marge de manœuvre de la Suisse", e:"Les deux autres sont des arguments POUR."},
+    {f:"qcm", q:"Résultat des votations du 27 septembre 2026 :", o:["les deux initiatives ont été rejetées","les deux ont été acceptées","la neutralité acceptée, l'alimentation rejetée"], a:"les deux initiatives ont été rejetées", e:"Plus de 70 % de non pour chacune, dans tous les cantons."},
+    {f:"qcm", q:"Les deux objets du 27 septembre étaient des…", o:["initiatives populaires","référendums facultatifs","élections"], a:"initiatives populaires", e:"Des propositions venues du peuple (100 000 signatures) pour modifier la Constitution."}
+  ]}
+]};
+</script>
 <!-- CONTENT_SLOT -->
 <script>
 /* ============================================================
@@ -3351,7 +3496,7 @@ const BOX_LABEL = ["neuf","chaque j.","3 jours","1 sem.","2 sem.","acquis"];
    matière la plus cumulative du programme était la moins servie. Les maths
    passent donc deux fois par cycle de cinq. La révision et le défi mixte ne
    changent pas : eux suivent les boîtes. */
-const ORDER = ["francais","allemand","anglais","maths"];
+const ORDER = ["francais","allemand","anglais","maths","citoyennete"];   // citoyenneté : 27 sept. 2026, hors ROTATION
 /* 19 septembre 2026 — les maths UN JOUR SUR DEUX (décision D1 de Selma).
    Le doublement du 25 août n'a pas suffi : trois semaines plus tard, toujours
    2 notions de maths ouvertes sur 20 et 6 % de maîtrise, avec « Fractions » en
@@ -3552,7 +3697,8 @@ const SUB = {
   francais:{label:"Français", short:"FR"},
   allemand:{label:"Allemand", short:"DE"},
   anglais: {label:"Anglais",  short:"EN"},
-  maths:   {label:"Maths",    short:"MA"}
+  maths:   {label:"Maths",    short:"MA"},
+  citoyennete:{label:"Citoyenneté", short:"CI"}
 };
 
 /* ---------- état ---------- */
@@ -3633,9 +3779,13 @@ function newThemes(sk){ return THEMES.filter(t => S.themes[t.id].box === 0 && is
 const URGENT_DAYS = 8;                     // fenêtre de révision avant un test
 function isOpen(t){ return !t.from || t.from <= today(); }
 function nextTest(t){                      // prochaine date de test encore devant
-  if (!t.tests || !t.tests.length) return null;
+  // `avant` (27 sept. 2026) : révisée à l'approche d'un test de l'agenda dont
+  // le contenu n'est pas encore connu (voir AGENDA_TESTS.reviser) — même
+  // priorité qu'un test, sans prétendre que la notion y est interrogée.
+  const dates = (t.tests || []).concat(t.avant || []);
+  if (!dates.length) return null;
   const t0 = today();
-  return t.tests.filter(d => d >= t0).sort()[0] || null;
+  return dates.filter(d => d >= t0).sort()[0] || null;
 }
 function daysToTest(t){                    // jours avant ce test, ou null
   const d = nextTest(t);
@@ -3850,6 +4000,22 @@ function markUsed(item){
 }
 
 /* ---------- le plan du jour ---------- */
+/* 27 septembre 2026 — la leçon du jour rend sa place aux maths. Tant qu'aucun
+   test n'est à 3 jours ou moins, elle va à la notion de maths que la classe
+   travaille et qui n'est pas encore installée (boîte < 2), dans l'ordre du
+   Livre — pas dans l'ordre de la banque, où les identités remarquables
+   précèdent les additions de polynômes alors que la classe fait l'inverse.
+   À 2 jours d'un test, la matière interrogée reprend la main (pas avant :
+   avec l'allemand, l'anglais et la citoyenneté datés la même quinzaine, un
+   seuil plus large ne laissait presque plus un jour aux maths). */
+const MATHS_EN_COURS = ["ma-poly", "ma-lit", "ma-ident"];   // Livre 11e, Calcul littéral, pp. 123-139
+function mathsDuMoment(){
+  const proche = urgentThemes().some(t => { const d = daysToTest(t); return d !== null && d <= 2; });
+  if (proche) return null;
+  return MATHS_EN_COURS.map(id => THEME_BY_ID[id])
+    .filter(t => t && isOpen(t) && enClasse(t) && S.themes[t.id].box < 2)[0] || null;
+}
+
 function todaysPlan(){
   const t0 = today();
   const dayIx = Math.max(0, diffDays(S.start, t0));
@@ -3885,6 +4051,18 @@ function todaysPlan(){
     // cinq notions au lieu de quatre depuis le 29 août : le bloc s'est allongé,
     // et l'élargir plutôt que de le creuser sert la couverture des matières
     .slice(0, 5);
+  /* 27 septembre 2026 — « remets les maths » (les parents). Hors veille de
+     test, le bloc de révision garde TOUJOURS une notion de maths de ce que la
+     classe travaille, dès qu'elle a été vue une fois : les listes datées ne
+     doivent plus l'évincer (mesuré le 19 : 0 jour de maths sur 10). */
+  if (!veille.length){
+    const m = classeThemes().filter(t => t.subject === "maths" && S.themes[t.id].box >= 1)
+      .sort((a,b) => (mastery(a) || 0) - (mastery(b) || 0))[0];
+    if (m && !due.some(t => t.subject === "maths")){
+      if (due.length >= 5) due.pop();
+      due.push(m);
+    }
+  }
   const tete = veille[0] || forced[0];
   const rev = { kind:"revision", n:1, title: veille.length ? "Révision du test" : "Révision",
     themes: due.map(t => t.id),
@@ -3917,7 +4095,8 @@ function todaysPlan(){
   // 2. Leçon du jour : une notion jamais vue dont le test approche — ou que la
   // classe travaille en ce moment — passe devant la rotation ; sinon, nouvelle
   // notion, matières en rotation
-  let lead = devant.filter(t => S.themes[t.id].box === 0)[0]
+  let lead = mathsDuMoment()
+    || devant.filter(t => S.themes[t.id].box === 0)[0]
     // la veille du test, si tout a déjà été vu au moins une fois, la leçon du
     // jour porte quand même sur la notion interrogée la plus fragile — pas sur
     // la rotation des matières : demain, c'est elle qui compte
@@ -4559,11 +4738,17 @@ function homeHTML(){
     <div class="sec">
       <div class="sec-h">
         <h2>Aujourd'hui · ${frDate(t0)}</h2>
-        <span class="note">${blocsOrdinaires(d)}/3 · ${d.xp} XP</span>
+        <span class="note">${blocsOrdinaires(d)}/3 · ${d.xp} XP · ${minutesJour(t0)} min</span>
       </div>
+      ${tauxHTML()}
       <div class="blocks">
         ${plan.map(blockHTML).join("")}
       </div>
+    </div>
+
+    <div class="sec" id="tests-section">
+      <div class="sec-h"><h2>Tests à venir</h2><span class="note">3 semaines</span></div>
+      <div class="card">${testsHTML()}</div>
     </div>
 
     <div class="sec" id="wallet-section">
@@ -4621,6 +4806,7 @@ function homeHTML(){
     <div class="foot">
       ${depotHTML()}
       <button class="link" id="imp">Reprendre ma progression</button>
+      ${pontParents() ? `<button class="link" id="par">Envoyer à papa et maman</button>` : ""}
       <button class="link" id="bil">Envoyer mon bilan</button>
       <button class="link" id="rst">Tout remettre à zéro</button>
     </div>
@@ -4628,7 +4814,7 @@ function homeHTML(){
            style="position:absolute;width:1px;height:1px;opacity:0;pointer-events:none">
   </div>`;
 }
-function shortVar(sk){ return { francais:"fr", allemand:"de", anglais:"en", maths:"ma" }[sk]; }
+function shortVar(sk){ return { francais:"fr", allemand:"de", anglais:"en", maths:"ma", citoyennete:"ci" }[sk]; }
 
 /* ---------- la carte en îles ----------
    Les dix thèmes du découpage annuel, reconstitués depuis les fenêtres `ecole`
@@ -4699,9 +4885,29 @@ function jourTypique(){
   const q = (BLOC_LONG * 2 + BLOC_DEFI) * 0.9;          // ~10 % des créneaux en reprises
   return Math.round(q * (CTS_JUSTE * 0.8 + CTS_ESSAI * 0.2)) + 3 * CTS_BLOC;
 }
+/* le bandeau du taux, au-dessus des blocs du jour : le taux d'aujourd'hui, et
+   ce qu'il devient demain dans les deux cas — l'enjeu de la journée en un coup
+   d'œil. Hors des `.block` : les tests s'accrochent à leur balisage. */
+function tauxHTML(){
+  if (today() < TAUX_DEPUIS) return "";
+  const x = tauxDemain();
+  const etat = x.complet
+    ? `<b>Journée complète ✓</b> — demain ton taux passe à <b>${fmtTaux(x.si_complet)}</b>.`
+    : `Termine tes 3 blocs : demain <b>${fmtTaux(x.si_complet)}</b>.
+       Sinon il tombe à <b>${fmtTaux(x.sinon)}</b>.`;
+  return `<div class="card taux" style="margin-bottom:12px;display:flex;gap:14px;align-items:center">
+    <div style="text-align:center;min-width:72px">
+      <div style="font-size:11px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.06em">Ton taux</div>
+      <div style="font-size:26px;font-weight:700;color:${x.aujourdhui >= 1 ? "var(--ok)" : "var(--ko)"}">${fmtTaux(x.aujourdhui)}</div>
+    </div>
+    <div style="font-size:13.5px;line-height:1.45">Tout ce que tu gagnes aujourd'hui est multiplié par ton taux.
+      ${etat}</div>
+  </div>`;
+}
 function porteMonnaieHTML(){
   const w = S.wallet || {};
   const t0 = today();
+  const tx = tauxJour(S.days, t0);
   const jours = Object.keys(S.days || {}).sort().slice(-7).reverse();
   return `
   <div class="pm">
@@ -4714,20 +4920,107 @@ function porteMonnaieHTML(){
   </div>
   <div class="pm-tarif">
     <b>${CTS_JUSTE} ct</b> par bonne réponse · <b>${CTS_ESSAI} ct</b> par essai, même faux ·
-    <b>${CTS_BLOC} ct</b> par bloc terminé. Une journée complète vaut environ
-    <b>${chf(jourTypique())} CHF</b>, et <b>${chf(jourMax())} CHF</b> si tout est juste.
+    <b>${CTS_BLOC} ct</b> par bloc terminé, le tout multiplié par ton taux
+    (<b>${fmtTaux(tx)}</b> aujourd'hui). Une journée complète vaut aujourd'hui environ
+    <b>${chf(Math.round(jourTypique() * tx))} CHF</b>, et <b>${chf(Math.round(jourMax() * tx))} CHF</b> si tout est juste.
     Les questions qui reviennent dans le bloc ne sont pas payées une seconde fois.
+  </div>
+  <div class="pm-tarif">
+    <b>Le taux.</b> Chaque journée complète (3 blocs) le multiplie par 1,05, jusqu'à
+    <b>${fmtTaux(TAUX_MAX)}</b> — 9 jours de suite suffisent. Chaque jour sans journée
+    complète, week-end et vacances compris, le divise par 1,05 : un jour manqué efface
+    un jour fait. Plancher <b>${fmtTaux(TAUX_MIN)}</b>. Ce que tu as déjà gagné ne baisse jamais.
   </div>
   ${jours.length ? `<div class="pm-jours">${jours.map(d => {
     const j = S.days[d] || {};
+    const td = tauxJour(S.days, d);
     return `<div class="pm-lig"><span>${d === t0 ? "Aujourd'hui" : frDate(d)}
-      <small style="color:var(--ink-3)">· ${j.right || 0}/${j.total || 0}</small></span>
-      <b>${chf(ctsJour(j, d))}</b></div>`;
+      <small style="color:var(--ink-3)">· ${j.right || 0}/${j.total || 0}${d >= TAUX_DEPUIS ? " · " + fmtTaux(td) : ""}</small></span>
+      <b>${chf(ctsPayeJour(S.days, d))}</b></div>`;
   }).join("")}</div>` : ""}
   ${(S.retraits || []).length ? `<div class="pm-jours">${(S.retraits || []).slice(-4).reverse().map(r =>
     `<div class="pm-lig"><span>Retrait demandé le ${frDate(r.d)}</span><b>−${chf(r.cts)}</b></div>`
   ).join("")}</div>` : ""}
   <button class="cta ghost" id="paye">Je retire mon argent</button>`;
+}
+
+/* ---------- les tests de l'école (26 septembre 2026) ----------
+   Demande des parents : une section « Tests à venir », et savoir ce qu'il doit
+   connaître pour chacun. Deux sources, une seule liste :
+   · les notions de l'app qui portent `tests` (le vocabulaire d'allemand…) —
+     ce qu'il faut savoir se lit dans leur leçon, pas dans un second texte qui
+     pourrait diverger ;
+   · AGENDA_TESTS : les tests des matières que l'app n'entraîne pas
+     (instruction civique, musique, sciences…), recopiés de l'agenda ou de ce
+     que les parents transmettent.
+   ⚠ Une entrée sans date SÛRE n'entre pas : un test inventé s'afficherait à
+   l'élève comme un fait (même règle que MA_ANNEE). */
+/* « ETA » dans l'agenda = Élément de Test Assimilé, un test noté (précisé par
+   les parents le 26 septembre 2026). */
+const AGENDA_TESTS = [
+  // { date:"2026-10-07", matiere:"Instruction civique", titre:"…",
+  //   savoir:["point 1", "point 2"] },
+  // Agenda, semaine 7 : « Ang : eta » le jeudi 1er octobre. Date sûre, contenu
+  // pas encore transmis (la liste arrive le 28) — l'app ne devine pas l'unité.
+  // En attendant, `reviser` : vocabulaire et grammaire généraux, demandés par
+  // le père le 27 septembre, remontés en priorité jusqu'au test.
+  { date:"2026-10-01", matiere:"Anglais", titre:"ETA (test)",
+    savoir:["Le vocabulaire de ce test arrive le 28 septembre : il sera ajouté dès réception.",
+            "En attendant, l'app révise en priorité : vocabulaire du voyage (Unit 1), phrases utiles, present simple, past simple, questions."],
+    reviser:["en-u1-transport", "en-u1-phrases", "en-present", "en-past", "en-quest"] },
+];
+AGENDA_TESTS.forEach(a => (a.reviser || []).forEach(id => {
+  const t = THEME_BY_ID[id];
+  if (t && !(t.avant || []).includes(a.date)) t.avant = (t.avant || []).concat(a.date);
+}));
+const HORIZON_AGENDA = 21;               // jours : au-delà, un test n'est pas un sujet
+
+function sansMarques(s){ return String(s == null ? "" : s).replace(/\*/g, ""); }
+function jourSemaine(s){
+  return ["dimanche","lundi","mardi","mercredi","jeudi","vendredi","samedi"][parse(s).getDay()];
+}
+function dansJours(n){
+  return n <= 0 ? "aujourd'hui" : n === 1 ? "demain" : "dans " + n + " j";
+}
+
+function testsAVenir(jours){
+  const t0 = today(), fin = addDays(t0, jours);
+  const out = [];
+  THEMES.forEach(t => (t.tests || []).forEach(d => {
+    if (d < t0 || d > fin) return;
+    out.push({ date:d, matiere:SUB[t.subject].label, sub:t.subject, titre:t.t, id:t.id,
+               savoir:((t.lesson || {}).pts || []).map(sansMarques), maitrise:mastery(t) });
+  }));
+  AGENDA_TESTS.forEach(a => {
+    if (a.date < t0 || a.date > fin) return;
+    out.push({ date:a.date, matiere:a.matiere, sub:null, titre:a.titre, id:null,
+               savoir:(a.savoir || []).map(sansMarques), maitrise:null });
+  });
+  return out.sort((a, b) => a.date.localeCompare(b.date) || a.matiere.localeCompare(b.matiere));
+}
+
+function testsHTML(){
+  const L = testsAVenir(HORIZON_AGENDA);
+  if (!L.length) return `<div class="empty">Aucun test connu dans les trois semaines. Un test noté dans ton agenda ? Dis-le à papa ou maman : il sera ajouté ici.</div>`;
+  const t0 = today();
+  const dates = [...new Set(L.map(x => x.date))];
+  return dates.map(d => `
+    <div class="test-jour" style="margin:4px 0 14px">
+      <div style="font-weight:600;margin-bottom:6px">${esc(jourSemaine(d))} ${esc(frDate(d))}
+        <span style="color:var(--ink-3);font-weight:400"> · ${esc(dansJours(diffDays(t0, d)))}</span></div>
+      ${L.filter(x => x.date === d).map(x => `
+        <details style="margin:0 0 8px">
+          <summary style="cursor:pointer;display:flex;gap:8px;align-items:center">
+            ${x.sub ? `<span class="chip ${x.sub}">${SUB[x.sub].short}</span>`
+                    : `<span class="chip" style="background:var(--panel-2);color:var(--ink-2)">${esc(x.matiere.slice(0, 3).toUpperCase())}</span>`}
+            <span style="flex:1">${esc(x.titre)}</span>
+            <span style="font-size:12.5px;color:var(--ink-3)">${x.maitrise === null ? (x.sub ? "pas encore travaillé" : "") : x.maitrise + " %"}</span>
+          </summary>
+          ${x.savoir.length ? `<ul style="margin:8px 0 0 18px;font-size:14px;line-height:1.5">
+            ${x.savoir.map(p => `<li>${esc(p)}</li>`).join("")}</ul>`
+            : `<div style="margin:8px 0 0;font-size:13.5px;color:var(--ink-3)">Contenu pas encore transmis.</div>`}
+        </details>`).join("")}
+    </div>`).join("");
 }
 
 function weakHTML(){
@@ -4796,6 +5089,8 @@ function bindHome(){
   if (cfg) cfg.addEventListener("click", panneauReglages);
   const bil = root.querySelector("#bil");
   if (bil) bil.addEventListener("click", envoyerBilan);
+  const par = root.querySelector("#par");
+  if (par) par.addEventListener("click", envoyerAuxParents);
   const imp = root.querySelector("#imp"), impf = root.querySelector("#impf");
   if (imp && impf){
     imp.addEventListener("click", () => impf.click());
@@ -4891,7 +5186,9 @@ function bilan(){
   const activite = Object.keys(S.days).sort().slice(-21).map(d => ({
     jour: d, blocs: (S.days[d].blocks || []).length,
     justes: S.days[d].right, questions: S.days[d].total, xp: S.days[d].xp,
-    cts: ctsJour(S.days[d], d)
+    cts: ctsPayeJour(S.days, d),         // payé, taux du jour compris (12 octobre 2026)
+    taux: tauxJour(S.days, d),
+    minutes: minutesJour(d)            // mesuré depuis le 27 septembre 2026
   }));
 
   // les fautes récentes, en clair : question, bonne réponse, réponse donnée
@@ -4936,7 +5233,9 @@ function bilan(){
       gagne_cts: (S.wallet || {}).cts || 0,
       verse_cts: (S.wallet || {}).verse || 0,
       a_verser_cts: aVerser(),
-      tarif: { juste: CTS_JUSTE, essai: CTS_ESSAI, bloc: CTS_BLOC }
+      tarif: { juste: CTS_JUSTE, essai: CTS_ESSAI, bloc: CTS_BLOC },
+      taux: Object.assign(tauxDemain(), { regle: { depuis: REGIME_ACTUEL.depuis, hausse: TAUX_HAUSSE,
+              baisse: TAUX_BAISSE, max: TAUX_MAX, min: TAUX_MIN } })
     },
     // ce qu'il a demandé à retirer, et quand : c'est LUI qui choisit le moment
     retraits: (S.retraits || []).map(r => ({ date: r.d, cts: r.cts })),
@@ -4951,6 +5250,8 @@ function bilan(){
     fautes: fautes,
     progres: progres,
     programme: programme,
+    // tous les tests connus des 21 jours, matières hors app comprises (additif)
+    agenda: testsAVenir(HORIZON_AGENDA),
     activite: activite,
     trophees: S.badges,
     // sauvegarde intégrale : sans elle, vider le navigateur efface tout sans retour
@@ -4984,6 +5285,127 @@ function envoyerBilan(){
 
   telecharger(blob, nom, txt);
 }
+
+/* ---------- « Envoyer à papa et maman » (26 septembre 2026) ----------
+   Demande du père : suivre la progression par courriel, lui et la mère de
+   l'élève. Trois règles qui décident de tout :
+   · c'est l'ÉLÈVE qui envoie, depuis son téléphone, et il voit ce qui part.
+     Rien ne part jamais en silence — même doctrine que le dépôt automatique
+     (« automatique mais jamais invisible »). Le serveur, lui, n'envoie aucun
+     courriel, par principe ;
+   · les ADRESSES ne sont pas ici : elles vivent dans l'enveloppe iOS, privée,
+     pour que le build public n'en porte aucune. Hors de l'app, le pont
+     n'existe pas et le bouton n'apparaît pas ;
+   · le résumé se LIT dans `bilan()` — mêmes chiffres que le fichier joint,
+     aucun calcul parallèle qui pourrait diverger. */
+function pontParents(){
+  try { return window.webkit && window.webkit.messageHandlers && window.webkit.messageHandlers.parents; }
+  catch (_) { return null; }
+}
+
+function resumeParents(data){
+  const j = data.genere;
+  const jour = S.days[j] || {};
+  const pc = (a, b) => b ? Math.round(100 * a / b) + " %" : "—";
+  const L = [];
+
+  if (jour.total){
+    L.push("Aujourd'hui : " + blocsOrdinaires(jour) + " bloc(s) sur 3, "
+      + jour.right + " juste(s) sur " + jour.total + " (" + pc(jour.right, jour.total) + "), +"
+      + (jour.xp || 0) + " XP, " + chf(ctsPayeJour(S.days, j)) + " CHF gagnés (taux "
+      + fmtTaux(tauxJour(S.days, j)) + ").");
+  } else {
+    L.push("Aujourd'hui : aucun bloc pour l'instant.");
+  }
+
+  const semaine = data.activite.filter(a => diffDays(a.jour, j) < 7);
+  const q = semaine.reduce((s, a) => s + (a.questions || 0), 0);
+  const r = semaine.reduce((s, a) => s + (a.justes || 0), 0);
+  L.push("Sur 7 jours : " + semaine.filter(a => a.questions).length + " jour(s) travaillé(s), "
+    + q + " questions, " + pc(r, q) + " de réussite. Série : " + data.serie.actuelle
+    + " j (record " + data.serie.record + ").");
+  // Le temps, jour par jour : mesuré depuis le 27 septembre 2026 seulement —
+  // les jours d'avant n'ont pas de chrono, on ne les chiffre pas à zéro.
+  // Un jour SANS travail n'a pas d'entrée dans le carnet : on parcourt donc les
+  // dates elles-mêmes, pour qu'un jour vide s'affiche « 0 min » au lieu de
+  // disparaître.
+  const chrono = [6,5,4,3,2,1,0].map(k => addDays(j, -k)).filter(d => d >= TEMPS_DEPUIS);
+  if (chrono.length){
+    const tot = chrono.reduce((s, d) => s + minutesJour(d), 0);
+    L.push("Temps de travail : " + minutesJour(j) + " min aujourd'hui · " + tot + " min sur "
+      + chrono.length + " jour(s) mesuré(s) ("
+      + chrono.map(d => jourSemaine(d).slice(0, 3) + ". " + minutesJour(d) + " min").join(", ") + ").");
+  }
+  L.push("Porte-monnaie : " + chf(data.porte_monnaie.a_verser_cts) + " CHF à verser.");
+
+  // Le briefing des tests : le prochain en tête, puis chacun avec ce qu'il
+  // doit savoir — la même liste que la section « Tests à venir » de l'app.
+  const tests = testsAVenir(14);
+  L.push("");
+  if (tests.length){
+    const p0 = tests[0];
+    L.push("PROCHAIN TEST : " + p0.matiere + " · " + p0.titre + " — " + jourSemaine(p0.date)
+      + " " + frDate(p0.date) + " (" + dansJours(diffDays(j, p0.date)) + ")");
+    L.push("");
+    L.push("Tests des 14 prochains jours, et ce qu'il doit savoir :");
+    // Les TA de l'école sont cumulatifs : une liste revient à deux dates. Le
+    // contenu n'est écrit qu'une fois, la seconde date y renvoie.
+    const deja = {};
+    tests.forEach(x => {
+      L.push("");
+      L.push("• " + jourSemaine(x.date) + " " + frDate(x.date) + " — " + x.matiere + " · " + x.titre
+        + (x.sub ? " — maîtrise " + (x.maitrise === null ? "pas encore travaillée" : x.maitrise + " %") : ""));
+      if (x.id && deja[x.id]) L.push("   – même contenu que le " + frDate(deja[x.id]) + " (révision cumulative)");
+      else if (x.savoir.length) x.savoir.forEach(s => L.push("   – " + s));
+      else L.push("   – contenu pas encore transmis à l'app");
+      if (x.id && !deja[x.id]) deja[x.id] = x.date;
+    });
+  } else {
+    L.push("Aucun test connu dans les 14 jours.");
+  }
+
+  if (data.fragiles.length){
+    L.push("");
+    L.push("À retravailler :");
+    data.fragiles.slice(0, 3).forEach(f => L.push("• " + f.matiere + " · " + f.notion
+      + " — " + f.maitrise + " % (" + f.reussite + ")"));
+  }
+
+  L.push("");
+  L.push("Le fichier joint contient le bilan complet.");
+  return L.join("\n");
+}
+
+function envoyerAuxParents(){
+  const pont = pontParents();
+  if (!pont){ envoyerBilan(); return; }
+  let data, txt;
+  try{
+    data = bilan();
+    txt = JSON.stringify(data, null, 2);
+  }catch(e){
+    toast("Le bilan n'a pas pu être préparé. Montre l'app à un adulte.");
+    return;
+  }
+  const qui = ELEVE ? ELEVE.charAt(0).toUpperCase() + ELEVE.slice(1) : "";
+  pont.postMessage({
+    sujet: "Bilan ONZE" + (qui ? " de " + qui : "") + " — " + frDate(data.genere),
+    corps: resumeParents(data),
+    nom: "ONZE_bilan_" + (ELEVE || "eleve") + "_" + data.genere + ".json",
+    json: txt
+  });
+}
+
+// L'enveloppe rappelle ceci une fois le courriel envoyé, annulé ou refusé.
+window.onzeParentsResultat = function(etat){
+  toast({
+    envoye:  "Bilan envoyé à papa et maman. Bravo !",
+    brouillon: "Courriel gardé en brouillon — pense à l'envoyer.",
+    annule:  "Envoi annulé : rien n'est parti.",
+    partage: "Bilan partagé.",
+    echec:   "L'envoi a échoué. Réessaie, ou montre l'app à un adulte."
+  }[etat] || "Bilan : " + etat);
+};
 
 function telecharger(blob, nom, txt){
   /* Dans un CADRE — c'est le cas de la page publiée en artefact — le
@@ -5184,11 +5606,96 @@ function ctsJour(j, d){
   if (d && d < ARGENT_DEPUIS) return 0;
   return j.cts || 0;
 }
+/* LE TAUX DU JOUR (12 octobre 2026, décision du parent) : « il doit utiliser
+   l'app chaque jour ; s'il le fait, l'argent se compose, sinon ce qu'il peut
+   gagner diminue ».
+
+   · Chaque journée COMPLÈTE (les 3 blocs ordinaires — le grand défi ne compte
+     pas, même règle que `blocsOrdinaires`) multiplie le taux par 1,03 ;
+   · chaque jour calendaire SANS journée complète — week-ends et vacances
+     compris — le multiplie par 0,85 ;
+   · plafond ×1,50 (atteint après 14 jours de suite), plancher ×0,50.
+
+   Le taux d'un jour ne dépend QUE des jours d'avant : il est connu dès le matin
+   et ne bouge plus de la journée. Il s'applique à tout ce que la journée
+   rapporte (réponses, blocs, grand défi).
+
+   ⚠ Le taux ne touche JAMAIS l'argent déjà gagné : un jour manqué abaisse ce que
+   rapporteront les jours SUIVANTS, il ne retire rien. « Gagné ne baisse jamais »
+   tient toujours, et la fusion reste monotone — une journée ajoutée par un
+   autre support ne peut que relever les taux qui la suivent.
+   ⚠ `ctsJour` reste le montant BRUT (au tarif) : c'est lui que la fusion
+   stocke. Le montant payé se recalcule ici, comme les XP, depuis `days`.
+   Avant TAUX_DEPUIS, tout vaut ×1 : changer la règle ne rétro-tarife rien.
+
+   RÉGIMES (15 octobre 2026, décision du parent) : le taux repart à ×1,00 le
+   15 octobre, puis ×1,05 par journée complète et ÷1,05 par jour manqué
+   (symétrique : un jour manqué annule exactement un jour fait), plafond ×1,50.
+   Chaque régime garde ses dates : les 12–14 octobre restent payés à l'ancienne
+   règle, rien de gagné n'est rétro-tarifé. Au début d'un régime, le taux
+   repart à 1. Changer encore la règle = AJOUTER un régime, jamais modifier un
+   régime passé. */
+const REGIMES_TAUX = [
+  { depuis:"2026-10-12", hausse:1.03, baisse:0.85,     max:1.5, min:0.5 },
+  { depuis:"2026-10-15", hausse:1.05, baisse:1 / 1.05, max:1.5, min:0.5 },
+];
+const TAUX_DEPUIS = REGIMES_TAUX[0].depuis;
+const REGIME_ACTUEL = REGIMES_TAUX[REGIMES_TAUX.length - 1];
+const TAUX_HAUSSE = REGIME_ACTUEL.hausse, TAUX_BAISSE = REGIME_ACTUEL.baisse,
+      TAUX_MAX = REGIME_ACTUEL.max, TAUX_MIN = REGIME_ACTUEL.min;
+function regimeDu(d){
+  let r = REGIMES_TAUX[0];
+  REGIMES_TAUX.forEach(x => { if (d >= x.depuis) r = x; });
+  return r;
+}
+function journeeComplete(j){ return blocsOrdinaires(j) >= 3; }
+function tauxSuivant(t, complete, regime){
+  const g = regime || REGIME_ACTUEL;
+  const n = complete ? Math.min(g.max, t * g.hausse) : Math.max(g.min, t * g.baisse);
+  return Math.round(n * 10000) / 10000;     // arrondi à chaque pas : même résultat sur tout support
+}
+/* taux de chaque jour de TAUX_DEPUIS à `fin` compris, en un seul passage */
+function tableTaux(days, fin){
+  const out = {};
+  const debuts = new Set(REGIMES_TAUX.map(x => x.depuis));
+  let t = 1;
+  for (let x = TAUX_DEPUIS; x <= fin; x = addDays(x, 1)){
+    if (debuts.has(x)) t = 1;               // nouveau régime : on repart de ×1
+    out[x] = t;
+    t = tauxSuivant(t, journeeComplete((days || {})[x]), regimeDu(x));
+  }
+  return out;
+}
+function tauxJour(days, d){
+  if (!d || d < TAUX_DEPUIS) return 1;
+  return tableTaux(days, d)[d];
+}
+function ctsPayeJour(days, d, table){
+  const brut = ctsJour((days || {})[d], d);
+  if (!brut || d < TAUX_DEPUIS) return brut;
+  const t = table ? table[d] : tauxJour(days, d);
+  return Math.round(brut * (t == null ? 1 : t));
+}
 function ctsDepuisJours(days){
+  const cles = Object.keys(days || {}).sort();
+  const table = cles.length ? tableTaux(days, cles[cles.length - 1]) : {};
   let c = 0;
-  Object.keys(days || {}).forEach(d => { c += ctsJour(days[d], d); });
+  cles.forEach(d => { c += ctsPayeJour(days, d, table); });
   return c;
 }
+/* ce que le taux sera demain, selon ce qu'il fait aujourd'hui — c'est le
+   chiffre qui doit le décider à ouvrir l'app */
+function tauxApres(t, complete, d){
+  const dem = addDays(d, 1);
+  if (REGIMES_TAUX.some(x => x.depuis === dem)) return 1;   // demain, un régime neuf repart de ×1
+  return tauxSuivant(t, complete, regimeDu(d));
+}
+function tauxDemain(){
+  const t0 = today(), t = tauxJour(S.days, t0);
+  return { aujourdhui: t, si_complet: tauxApres(t, true, t0), sinon: tauxApres(t, false, t0),
+           complet: journeeComplete(S.days[t0]) };
+}
+function fmtTaux(t){ return "×" + t.toFixed(2).replace(".", ","); }
 
 function xpDepuisJours(days){
   let x = 0;
@@ -5457,7 +5964,7 @@ function startBlock(kind){
     errs:[], itemLog:[],
     reprises:[], paliersVus:[], dernierRep:null, reprisesFaites:0,
     cts:0, vides:0, artic:null,
-    phase:"quiz"
+    phase:"quiz", tLast: Date.now()
   };
   const first = THEME_BY_ID[block.themes[0]];
   if (block.kind === "lesson" || (block.kind === "revision" && first && S.themes[first.id].box <= 1)) sess.phase = "lesson";
@@ -5774,7 +6281,7 @@ function inputHTML(it){
   const vide = !String(sess.typed || "").trim();
   return `<input class="${cls}" id="ans" value="${esc(sess.typed || "")}" ${sess.answered ? "disabled":""}
       placeholder="${it.f === "gap" ? "le mot qui manque" : "ta réponse"}" autocomplete="off"
-      autocapitalize="off" spellcheck="false" inputmode="${it.num ? "text" : "text"}">
+      autocorrect="off" autocapitalize="off" spellcheck="false" inputmode="${it.num ? "text" : "text"}">
     ${sess.answered ? "" : `<button class="cta${vide ? " off" : ""}" id="chk">Vérifier</button>
     <div class="vide" id="vidmsg" hidden></div>`}`;
 }
@@ -5950,7 +6457,30 @@ function bindQuiz(){
   }
 }
 
+/* ---------- le temps de travail (27 septembre 2026) ----------
+   « Ce week-end, seulement 10 minutes » : les parents voyaient le résultat, pas
+   le temps. On le mesure donc, réponse par réponse : l'écart depuis l'action
+   précédente, PLAFONNÉ à 2 minutes — au-delà, c'est une pause (le téléphone
+   posé), pas du travail, et la compter gonflerait le chiffre qu'on veut
+   justement rendre honnête. Écrit à chaque réponse : un bloc abandonné a
+   quand même pris du temps. */
+const TEMPS_MAX_MS = 120000;
+const TEMPS_DEPUIS = "2026-09-27";       // avant : aucun chrono, donc aucun chiffre
+function compterTemps(){
+  if (!sess) return;
+  const now = Date.now();
+  const dt = Math.min(TEMPS_MAX_MS, now - (sess.tLast || now));
+  sess.tLast = now;
+  if (dt <= 0) return;
+  const j = today();
+  const d = S.days[j] || (S.days[j] = { blocks:[], xp:0, right:0, total:0, cts:0 });
+  d.sec = (d.sec || 0) + Math.round(dt / 1000);
+  save();
+}
+function minutesJour(d){ return Math.round((((S.days[d] || {}).sec) || 0) / 60); }
+
 function grade(ok){
+  compterTemps();
   const it = sess.items[sess.i];
   sess.answered = true; sess.correct = ok;
   // un accent oublié : faux, mais on nomme la raison
@@ -6139,7 +6669,7 @@ function reprendreDefi(){
     dernierRep: d.dernierRep == null ? null : d.dernierRep,
     reprisesFaites: d.reprisesFaites || 0,
     cts: d.cts || 0, vides:0, artic:null,
-    phase:"quiz"
+    phase:"quiz", tLast: Date.now()
   };
   view = { screen:"session" };
   render();
@@ -6166,7 +6696,11 @@ function finish(){
   view = { screen:"done", res:{
     kind: sess.block.kind, title: sess.block.title,
     right: sess.right, total: sess.total, xp: sess.xp, bonus: out.bonus,
-    cts: (sess.cts || 0) + (sess.block.kind === "bonus" ? CTS_BONUS_BLOC : CTS_BLOC),
+    // ce que ce bloc a rapporté, au taux du jour (connu dès le matin, il ne
+    // bouge pas de la journée)
+    cts: Math.round(((sess.cts || 0) + (sess.block.kind === "bonus" ? CTS_BONUS_BLOC : CTS_BLOC))
+                    * (today() < TAUX_DEPUIS ? 1 : tauxJour(S.days, today()))),
+    taux: today() < TAUX_DEPUIS ? 1 : tauxJour(S.days, today()),
     ctsBloc: sess.block.kind === "bonus" ? CTS_BONUS_BLOC : CTS_BLOC,
     bestCombo: sess.bestCombo, moves: out.moves, newBadges: out.newBadges, dayComplete: out.dayComplete,
     // ce qui permet de dire CE QUI A ÉTÉ TRAVAILLÉ, notion par notion, plutôt
@@ -6258,9 +6792,11 @@ function doneHTML(){
       <div class="g"><div class="k">Série</div><div class="v">${S.streak} j</div></div>
     </div>
     <div class="line" style="font-size:12.5px;color:var(--ink-3)">
-      dont ${r.ctsBloc} ct parce que tu es allé au bout du bloc ·
+      dont ${r.ctsBloc} ct parce que tu es allé au bout du bloc${r.taux && r.taux !== 1 ? " · taux du jour " + fmtTaux(r.taux) : ""} ·
       à toucher en tout : <b>${chf(aVerser())} CHF</b>
     </div>
+    ${r.dayComplete && today() >= TAUX_DEPUIS ? `<div class="line" style="font-size:13px">
+      Journée complète : demain ton taux passe à <b>${fmtTaux(tauxApres(r.taux || 1, true, today()))}</b> 📈</div>` : ""}
     ${r.moves.length ? `<div class="moves">${r.moves.map(m => {
       const t = THEME_BY_ID[m.id];
       const up = m.to > m.from;
@@ -6275,12 +6811,15 @@ function doneHTML(){
       return `<div class="g" style="background:var(--accent-soft)"><div class="k">Nouveau trophée</div><div class="v" style="font-size:14px;color:var(--accent)">${b.em} ${esc(b.t)}</div></div>`;
     }).join("")}</div>` : ""}
     ${apprisHTML(r)}
-    <button class="cta" id="back" style="margin-top:24px">Retour au tableau</button>
+    ${r.dayComplete && pontParents() ? `<button class="cta" id="par" style="margin-top:24px">Envoyer ma journée à papa et maman ✉︎</button>` : ""}
+    <button class="cta${r.dayComplete && pontParents() ? " ghost" : ""}" id="back" style="margin-top:${r.dayComplete && pontParents() ? 10 : 24}px">Retour au tableau</button>
     ${left > 0 ? `<button class="cta ghost" id="more" style="margin-top:10px">Enchaîner le bloc suivant →</button>` : ""}
   </div></div>`;
 }
 function bindDone(){
   root.querySelector("#back").addEventListener("click", () => { view = { screen:"home" }; render(); });
+  const par = root.querySelector("#par");
+  if (par) par.addEventListener("click", envoyerAuxParents);
   const more = root.querySelector("#more");
   if (more) more.addEventListener("click", () => {
     const nxt = todaysPlan().find(b => !b.done);
